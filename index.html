@@ -3,313 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoS : Boolean Solver (Dinamis)</title>
+    <title>BoS - Boolean Optimization System</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div class="dashboard-container">
-        
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo-container-center">
-                    <img src="logositus.png" alt="Logo BoS" class="site-logo">
-                </div>
-                <h2 class="sidebar-title">BoS Panel</h2>
+            <div class="logo-container-center">
+                <img src="logo.png" alt="Logo BoS" class="site-logo">
             </div>
+            <h2 class="sidebar-title">BoS Panel</h2>
             
             <nav class="sidebar-menu">
                 <ul>
                     <li>
-                        <a href="#bagian-hukum">
-                            <img src="ikonhukum.png" alt="Ikon Hukum" class="menu-illustration">
-                            <span>Hukum Aljabar Boolean</span>
+                        <a href="#seksi-hukum">
+                            <img src="hukum-icon.png" alt="Icon" class="menu-illustration">
+                            <span>Hukum De Morgan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#bagian-fungsi">
-                            <img src="fungsibool.png" alt="Ikon Fungsi" class="menu-illustration">
-                            <span>Fungsi Boolean</span>
+                        <a href="#seksi-fungsi">
+                            <img src="fungsi-icon.png" alt="Icon" class="menu-illustration">
+                            <span>Evaluator Fungsi</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#bagian-tabel">
-                            <img src="tabelkebenaran.png" alt="Ikon Tabel" class="menu-illustration">
+                        <a href="#seksi-tabel">
+                            <img src="tabel-icon.png" alt="Icon" class="menu-illustration">
                             <span>Tabel Kebenaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#bagian-rangkaian">
-                            <img src="rangkaianlogika.png" alt="Ikon Rangkaian" class="menu-illustration">
-                            <span>Rangkaian & Gerbang Logika</span>
+                        <a href="#seksi-rangkaian">
+                            <img src="sirkuit-icon.png" alt="Icon" class="menu-illustration">
+                            <span>Rangkaian Logika</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#bagian-kmap">
-                            <img src="kmap.png" alt="Ikon KMap" class="menu-illustration">
-                            <span>Penyederhanaan Fungsi Boolean dengan K-Map</span>
+                        <a href="#seksi-kmap">
+                            <img src="kmap-icon.png" alt="Icon" class="menu-illustration">
+                            <span>Peta Karnaugh (K-Map)</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <p>Powered by Grace Valentine</p>
-            </div>
+            
+            <footer class="sidebar-footer">
+                <p>© 2026 BoS Developer Team</p>
+            </footer>
         </aside>
 
         <main class="main-content">
-            
             <header class="main-header-center">
-                <h1>BoS : Boolean Solver</h1>
-                <p class="dev-tagline"> your boolean learning site! - gv </p>
+                <h1>Boolean Optimization System</h1>
+                <p class="dev-tagline">// Penganalisis & Optimasi Sirkuit Digital Logika Biner</p>
             </header>
 
-            <section id="bagian-hukum" class="content-section">
+            <section id="seksi-hukum" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Hukum Aljabar Boolean</h2>
-                    <p class="materi-text">Aljabar Boolean memiliki properti dasar yang diatur oleh 11 hukum formal (Prinsip Dualitas).</p>
-                    
+                    <h2 class="section-title-only">Analisis Hukum De Morgan</h2>
+                    <p class="materi-text">Mengubah hukum penjumlahan/perkalian logika biner menjadi bentuk komplemen terbalik secara otomatis sesuai teorema aljabar Boolean.</p>
                     <div class="tool-box">
-                        <h3>🛠️ Alat Validasi Hukum Komplemen & De Morgan</h3>
-                        <p class="note">Masukkan satu suku tunggal untuk melihat komplemen De Morgan-nya secara matematis.</p>
-                        <input type="text" id="input-hukum" placeholder="Contoh: x*y + z'">
-                        <button onclick="hitungHukum()">Jalankan Analisis Hukum</button>
+                        <h3>Masukkan Ekspresi Boolean (Contoh: A + B atau X * Y):</h3>
+                        <input type="text" id="input-hukum" placeholder="Masukkan rumus... (misal: A + B)">
+                        <div style="margin-top: 15px;">
+                            <button onclick="hitungHukum(event)">Jalankan Analisis Hukum</button>
+                        </div>
                     </div>
-
-                    <div class="dynamic-output-box" id="box-hukum-dinamis" style="display: none;">
-                        <h4>⚖️ Hasil Analisis Hukum De Morgan</h4>
+                    <div class="dynamic-output-box" id="box-hukum-dinamis">
+                        <h4>Hasil Analisis Hukum De Morgan</h4>
                         <div class="box-content" id="content-hukum-dinamis"></div>
                     </div>
                 </div>
             </section>
 
-            <section id="bagian-fungsi" class="content-section">
+            <section id="seksi-fungsi" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Fungsi Boolean</h2>
-                    <p class="materi-text">Fungsi Boolean dibentuk oleh literal (variabel) dan operator logika (+, ·, '). Nilai evaluasi fungsi selalu berupa elemen biner {0, 1}.</p>
-                    
+                    <h2 class="section-title-only">Evaluator Fungsi Biner</h2>
+                    <p class="materi-text">Uji nilai keluaran fungsi logika biner berdasarkan kombinasi kondisi input variabel aktif secara instan.</p>
                     <div class="tool-box">
-                        <h3>🛠️ Evaluator Fungsi & Identifikasi Literal</h3>
-                        <input type="text" id="input-fungsi" placeholder="Contoh: x*y + y*z'">
+                        <h3>Masukkan Fungsi Logika (Contoh: A * B + C'):</h3>
+                        <input type="text" id="input-fungsi" placeholder="Masukkan fungsi... (misal: A * B + C')">
                         <div class="variable-inputs">
-                            <label>x: <select id="eval-x"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>y: <select id="eval-y"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>z: <select id="eval-z"><option value="1">1</option><option value="0">0</option></select></label>
+                            <label>Nilai X/A: 
+                                <select id="eval-x"><option value="0">0</option><option value="1">1</option></select>
+                            </label>
+                            <label>Nilai Y/B: 
+                                <select id="eval-y"><option value="0">0</option><option value="1">1</option></select>
+                            </label>
+                            <label>Nilai Z/C: 
+                                <select id="eval-z"><option value="0">0</option><option value="1">1</option></select>
+                            </label>
                         </div>
-                        <button onclick="hitungFungsi()">Evaluasi & Identifikasi</button>
+                        <button onclick="hitungFungsi(event)">Evaluasi & Identifikasi</button>
                     </div>
-
-                    <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
-                        <h4>🎯 Jawaban / Status Fungsi</h4>
+                    <div class="dynamic-output-box" id="box-jawaban-dinamis">
+                        <h4>Hasil Evaluasi Fungsi</h4>
                         <div class="box-content" id="content-jawaban-dinamis"></div>
                     </div>
                 </div>
             </section>
 
-            <section id="bagian-tabel" class="content-section">
+            <section id="seksi-tabel" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Tabel Kebenaran</h2>
-                    <p class="materi-text">Tabel kebenaran mendaftar seluruh kemungkinan kombinasi nilai biner.</p>
-                    
+                    <h2 class="section-title-only">Generator Tabel Kebenaran</h2>
+                    <p class="materi-text">Memetakan seluruh kemungkinan kombinasi bit masukan biner untuk menghasilkan visualisasi tabel kebenaran yang komprehensif.</p>
                     <div class="tool-box">
-                        <h3>🛠️ Generator Tabel Kebenaran Otomatis (3 Variabel)</h3>
-                        <input type="text" id="input-tabel" placeholder="Contoh: x*y' + z">
-                        <button onclick="hitungTabelKebenaran()">Generate Tabel Kebenaran</button>
+                        <h3>Masukkan Rumus Logika:</h3>
+                        <input type="text" id="input-tabel" placeholder="Masukkan rumus... (misal: A + B * C)">
+                        <div style="margin-top: 15px;">
+                            <button onclick="hitungTabelKebenaran(event)">Generate Tabel Kebenaran</button>
+                        </div>
                     </div>
-
-                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none;">
-                        <h4>📋 Tabel Kebenaran Terkait</h4>
+                    <div class="dynamic-output-box" id="box-table-output-dinamis">
+                        <h4>Tabel Kebenaran Hasil Eksekusi</h4>
                         <div class="box-content" id="content-table-output-dinamis"></div>
                     </div>
                 </div>
             </section>
 
-            <section id="bagian-rangkaian" class="content-section">
+            <section id="seksi-rangkaian" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
-                    <p class="materi-text">Fungsi Boolean diimplementasikan ke dalam gerbang logika standar.</p>
-                    
+                    <h2 class="section-title-only">Pemetaan Rangkaian Kombinasional</h2>
+                    <p class="materi-text">Menganalisis susunan ekspresi aljabar untuk dipetakan ke dalam bentuk gerbang logika dasar (AND, OR, NOT).</p>
                     <div class="tool-box">
-                        <h3>🛠️ Generator Struktur Alur Sirkuit Rangkaian</h3>
-                        <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
-                        <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
+                        <h3>Masukkan Rumus Sirkuit:</h3>
+                        <input type="text" id="input-rangkaian" placeholder="Masukkan rumus sirkuit...">
+                        <div style="margin-top: 15px;">
+                            <button onclick="hitungRangkaian(event)">Visualisasikan Rangkaian</button>
+                        </div>
                     </div>
-
-                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
-                        <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
+                    <div class="dynamic-output-box" id="box-sirkuit-dinamis">
+                        <h4>Status Pemetaan Rangkaian Sirkuit</h4>
                         <div class="box-content" id="content-sirkuit-dinamis"></div>
                     </div>
                 </div>
             </section>
 
-            <section id="bagian-kmap" class="content-section">
+            <section id="seksi-kmap" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Penyederhanaan dengan K-Map</h2>
-                    <p class="materi-text">Peta Karnaugh (K-Map) memanfaatkan pengelompokan nilai 1 tetangga dekat.</p>
-                    
+                    <h2 class="section-title-only">Peta Karnaugh (K-Map Matrix)</h2>
+                    <p class="materi-text">Penyederhanaan visual minterm biner menggunakan matriks kode Gray untuk mencari bentuk fungsi paling sederhana.</p>
                     <div class="tool-box">
-                        <h3>🛠️ Generator Struktur Peta Karnaugh</h3>
-                        <input type="text" id="input-kmap" placeholder="Contoh: x*y + x*y'">
-                        <button onclick="hitungKMap()">Petakan ke K-Map</button>
+                        <h3>Masukkan Rumus K-Map:</h3>
+                        <input type="text" id="input-kmap" placeholder="Masukkan rumus untuk K-Map...">
+                        <div style="margin-top: 15px;">
+                            <button onclick="hitungKMap(event)">Petakan ke K-Map</button>
+                        </div>
                     </div>
-
-                    <div class="dynamic-output-box" id="box-kmap-matrix-dinamis" style="display: none;">
-                        <h4>🗺️ Matriks Visualisasi Peta Karnaugh (3-Variabel)</h4>
+                    <div class="dynamic-output-box" id="box-kmap-matrix-dinamis">
+                        <h4>Matriks Peta Karnaugh (K-Map)</h4>
                         <div class="box-content" id="content-kmap-matrix-dinamis"></div>
                     </div>
                 </div>
             </section>
-
         </main>
     </div>
 
-    <script>
-    function evaluasiEkspresi(ekspresi, x, y, z) {
-        let formatted = ekspresi.toLowerCase().replace(/\s+/g, '');
-        formatted = formatted.replace(/a/g, 'x').replace(/b/g, 'y').replace(/c/g, 'z');
-        formatted = formatted.replace(/x/g, x).replace(/y/g, y).replace(/z/g, z);
-
-        while (formatted.includes("'")) {
-            formatted = formatted.replace(/1'/g, '0').replace(/0'/g, '1');
-        }
-        formatted = formatted.replace(/\*/g, '&&').replace(/\./g, '&&');
-        formatted = formatted.replace(/([01])(?=[01])/g, '$1 && ');
-        formatted = formatted.replace(/\+/g, '||');
-
-        try {
-            let hasil = eval(formatted);
-            return hasil ? 1 : 0;
-        } catch (error) {
-            return "Error";
-        }
-    }
-
-    // 1. ANALISIS HUKUM DE MORGAN (Dinamis di Bawah Input)
-    function hitungHukum() {
-        let input = document.getElementById('input-hukum').value.trim();
-        let box = document.getElementById('box-hukum-dinamis');
-        let content = document.getElementById('content-hukum-dinamis');
-
-        if (!input) {
-            content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus terlebih dahulu!</span>";
-            return;
-        }
-
-        let hasilDeMorgan = "";
-        if (input.includes('+')) {
-            let bagian = input.split('+');
-            hasilDeMorgan = bagian.map(b => `(${b.trim()})'`).join(' · ');
-        } else if (input.includes('*') || input.length > 1) {
-            let separator = input.includes('*') ? '*' : '';
-            let bagian = separator ? input.split(separator) : input.split('');
-            hasilDeMorgan = bagian.map(b => `(${b.trim()})'`).join(' + ');
-        } else {
-            hasilDeMorgan = `${input}'`;
-        }
-
-        content.innerHTML = `<p><b>Ekspresi Awal:</b> (${input})'</p><p style='color:#38bdf8; font-weight:bold;'><b>Hasil De Morgan:</b> ${hasilDeMorgan}</p>`;
-        
-        // 🌟 Buka box secara instan & scroll ke sana 🌟
-        box.style.display = 'block';
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 2. EVALUATOR FUNGSI (Dinamis di Bawah Input)
-    function hitungFungsi() {
-        let input = document.getElementById('input-fungsi').value.trim();
-        let x = document.getElementById('eval-x').value;
-        let y = document.getElementById('eval-y').value;
-        let z = document.getElementById('eval-z').value;
-        let box = document.getElementById('box-jawaban-dinamis');
-        let content = document.getElementById('content-jawaban-dinamis');
-
-        if (!input) {
-            content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi!</span>";
-            return;
-        }
-
-        let hasil = evaluasiEkspresi(input, x, y, z);
-        content.innerHTML = `<p><b>Fungsi:</b> f = ${input}</p><p><b>Hasil Evaluasi:</b> <span style='color:#38bdf8; font-weight:bold;'>${hasil}</span></p>`;
-        
-        // 🌟 Buka box & scroll 🌟
-        box.style.display = 'block';
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 3. TABEL KEBENARAN (Dinamis di Bawah Input)
-    function hitungTabelKebenaran() {
-        let input = document.getElementById('input-tabel').value.trim();
-        let box = document.getElementById('box-table-output-dinamis');
-        let content = document.getElementById('content-table-output-dinamis');
-
-        if (!input) {
-            content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
-            return;
-        }
-
-        let htmlTable = `<table border="1" style="border-collapse:collapse; width:100%; text-align:center;"><thead><tr style="background:#1e293b;"><th>x/a</th><th>y/b</th><th>z/c</th><th>Output</th></tr></thead><tbody>`;
-        for (let x = 0; x <= 1; x++) {
-            for (let y = 0; y <= 1; y++) {
-                for (let z = 0; z <= 1; z++) {
-                    let hasil = evaluasiEkspresi(input, x, y, z);
-                    htmlTable += `<tr><td>${x}</td><td>${y}</td><td>${z}</td><td style='color:#38bdf8; font-weight:bold;'>${hasil}</td></tr>`;
-                }
-            }
-        }
-        htmlTable += `</tbody></table>`;
-        content.innerHTML = htmlTable;
-        
-        // 🌟 Buka box & scroll 🌟
-        box.style.display = 'block';
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 4. SIRKUIT LOGIKA (Dinamis di Bawah Input)
-    function hitungRangkaian() {
-        let input = document.getElementById('input-rangkaian').value.trim();
-        let box = document.getElementById('box-sirkuit-dinamis');
-        let content = document.getElementById('content-sirkuit-dinamis');
-
-        if (!input) {
-            content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus sirkuit!</span>";
-            return;
-        }
-
-        content.innerHTML = `<p>➡️ Logika sirkuit <b>${input}</b> berhasil dipetakan ke dalam gerbang kombinasi internal digital.</p>`;
-        
-        // 🌟 Buka box & scroll 🌟
-        box.style.display = 'block';
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 5. K-MAP (Dinamis di Bawah Input)
-    function hitungKMap() {
-        let input = document.getElementById('input-kmap').value.trim();
-        let box = document.getElementById('box-kmap-matrix-dinamis');
-        let content = document.getElementById('content-kmap-matrix-dinamis');
-
-        if (!input) {
-            content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus K-Map!</span>";
-            return;
-        }
-
-        let urutanKolom = [{y:0,z:0}, {y:0,z:1}, {y:1,z:1}, {y:1,z:0}];
-        let htmlKMap = `<table border="1" style="border-collapse:collapse; width:100%; text-align:center;"><thead><tr style="background:#1e293b;"><th>x \\ yz</th><th>00</th><th>01</th><th>11</th><th>10</th></tr></thead><tbody>`;
-        for (let x = 0; x <= 1; x++) {
-            htmlKMap += `<tr><td style='font-weight:bold; color:#38bdf8;'>${x}</td>`;
-            for (let i = 0; i < urutanKolom.length; i++) {
-                let hasil = evaluasiEkspresi(input, x, urutanKolom[i].y, urutanKolom[i].z);
-                htmlKMap += `<td>${hasil}</td>`;
-            }
-            htmlKMap += `</tr>`;
-        }
-        htmlKMap += `</tbody></table>`;
-        content.innerHTML = htmlKMap;
-        
-        // 🌟 Buka box & scroll 🌟
-        box.style.display = 'block';
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

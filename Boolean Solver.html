@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolean Function Solver & Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Boolean Function Solver</h1>
+        <p class="subtitle">Materi: Fungsi, Komplemen, & Evaluasi Aljabar Boolean</p>
+        
+        <div class="card">
+            <h3>Masukkan Fungsi Boolean</h3>
+            <p class="note">Gunakan format: <b>+</b> (OR), <b>*</b> atau langsung nempel (AND), <b>'</b> (NOT). Contoh: x*y + x'*z</p>
+            <input type="text" id="boolean-input" placeholder="Contoh: x y + x' z">
+            
+            <div class="variables-section">
+                <h4>Substitusi Nilai Variabel (Untuk Evaluasi)</h4>
+                <label>x: <select id="val-x"><option value="1">1</option><option value="0">0</option></select></label>
+                <label>y: <select id="val-y"><option value="1">1</option><option value="0">0</option></select></label>
+                <label>z: <select id="val-z"><option value="1">1</option><option value="0">0</option></select></label>
+            </div>
+
+            <button onclick="prosesFungsi()">Hitung & Analisis</button>
+        </div>
+
+        <div class="card result-card" id="result-box" style="display: none;">
+            <h3>📊 Hasil Analisis</h3>
+            <div class="result-item">
+                <strong>Fungsi Awal:</strong> <span id="res-awal"></span>
+            </div>
+            <div class="result-item">
+                <strong>Bentuk Komplemen (f'):</strong> <span id="res-komplemen"></span>
+            </div>
+            <div class="result-item">
+                <strong>Hasil Evaluasi Nilai:</strong> <span id="res-evaluasi" class="badge"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

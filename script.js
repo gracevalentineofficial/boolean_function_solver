@@ -22,13 +22,15 @@ function evaluasiEkspresi(ekspresi, x, y, z) {
 }
 
 // ==========================================
-// FUNGSI AKSI: LOCK SCROLL & CENTANG HIJAU
+// FUNGSI AKSI: LOCK SCROLL AKURAT & CENTANG HIJAU
 // ==========================================
 
 // 1. ANALISIS HUKUM DE MORGAN
-function hitungHukum() {
-    // Kunci browser agar tidak melakukan auto-scroll/lompat halaman
-    if (window.event) window.event.preventDefault();
+function hitungHukum(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     let input = document.getElementById('input-hukum').value.trim();
     let box = document.getElementById('box-hukum-dinamis');
@@ -37,7 +39,7 @@ function hitungHukum() {
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus terlebih dahulu!</span>";
         box.style.display = 'block';
-        return;
+        return false;
     }
 
     let hasilDeMorgan = "";
@@ -58,11 +60,15 @@ function hitungHukum() {
     `;
     
     box.style.display = 'block';
+    return false;
 }
 
 // 2. EVALUATOR FUNGSI
-function hitungFungsi() {
-    if (window.event) window.event.preventDefault();
+function hitungFungsi(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     let input = document.getElementById('input-fungsi').value.trim();
     let x = document.getElementById('eval-x').value;
@@ -74,7 +80,7 @@ function hitungFungsi() {
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi!</span>";
         box.style.display = 'block';
-        return;
+        return false;
     }
 
     let hasil = evaluasiEkspresi(input, x, y, z);
@@ -84,11 +90,15 @@ function hitungFungsi() {
     `;
     
     box.style.display = 'block';
+    return false;
 }
 
 // 3. TABEL KEBENARAN
-function hitungTabelKebenaran() {
-    if (window.event) window.event.preventDefault();
+function hitungTabelKebenaran(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     let input = document.getElementById('input-tabel').value.trim();
     let box = document.getElementById('box-table-output-dinamis');
@@ -97,7 +107,7 @@ function hitungTabelKebenaran() {
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
         box.style.display = 'block';
-        return;
+        return false;
     }
 
     let htmlTable = `
@@ -120,11 +130,15 @@ function hitungTabelKebenaran() {
     content.innerHTML = htmlTable;
     
     box.style.display = 'block';
+    return false;
 }
 
 // 4. RANGKAIAN LOGIKA
-function hitungRangkaian() {
-    if (window.event) window.event.preventDefault();
+function hitungRangkaian(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     let input = document.getElementById('input-rangkaian').value.trim();
     let box = document.getElementById('box-sirkuit-dinamis');
@@ -133,17 +147,21 @@ function hitungRangkaian() {
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus sirkuit!</span>";
         box.style.display = 'block';
-        return;
+        return false;
     }
 
     content.innerHTML = `<p>✅ <b>Pemetaan Sukses:</b> Logika sirkuit <b>${input}</b> berhasil dipetakan ke dalam gerbang kombinasi internal digital.</p>`;
     
     box.style.display = 'block';
+    return false;
 }
 
 // 5. K-MAP
-function hitungKMap() {
-    if (window.event) window.event.preventDefault();
+function hitungKMap(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     let input = document.getElementById('input-kmap').value.trim();
     let box = document.getElementById('box-kmap-matrix-dinamis');
@@ -152,7 +170,7 @@ function hitungKMap() {
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus K-Map!</span>";
         box.style.display = 'block';
-        return;
+        return false;
     }
 
     let urutanKolom = [{y:0,z:0}, {y:0,z:1}, {y:1,z:1}, {y:1,z:0}];
@@ -176,4 +194,5 @@ function hitungKMap() {
     content.innerHTML = htmlKMap;
     
     box.style.display = 'block';
+    return false;
 }

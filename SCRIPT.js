@@ -46,7 +46,7 @@ function hitungHukum() {
     let bersih = bersihkanEkspresi(input);
     let komp = olahDeMorgan(bersih);
     
-    bukaPanelOutput("Analisis Komplemen Berhasil", input, komp, "Tekan tombol di Bagian 3 untuk melihat tabel penuh.", "Tekan tombol di Bagian 4 untuk struktur sirkuit.", "Tekan tombol di Bagian 5 untuk matriks.");
+    bukaPanelOutput("Analisis Komplemen Berhasil", input, komp, "Tekan tombol di Bagian Tabel Kebenaran untuk melihat tabel penuh.", "Tekan tombol di Bagian Rangkaian Logika untuk melihat struktur sirkuit.", "Tekan tombol di Bagian K-Map untuk melihat matriks.");
 }
 
 // 2. TOOL PADA BAGIAN FUNGSI (IDENTIFIKASI & EVALUASI)
@@ -54,7 +54,6 @@ function hitungFungsi() {
     let input = document.getElementById('input-fungsi').value;
     if(!input) return alert("Masukkan fungsi!");
     
-    // Identifikasi apakah ini fungsi biner valid
     let isValid = /^[xyz01\+\*'\s\(\)]+$/.test(input);
     if(!isValid) {
         alert("Karakter tidak dikenal! Gunakan hanya x, y, z, +, *, dan '");
@@ -110,7 +109,7 @@ function hitungRangkaian() {
     }
     txt += "</div>";
     
-    bukaPanelOutput("Skema Struktur Rangkaian Siap", input, olahDeMorgan(bersih), "Tekan tombol di bagian 3 untuk data tabel.", txt, "Tekan tombol di bagian 5 untuk data peta.");
+    bukaPanelOutput("Skema Struktur Rangkaian Siap", input, olahDeMorgan(bersih), "Tekan tombol di bagian tabel untuk data tabel.", txt, "Tekan tombol di bagian K-Map untuk data peta.");
 }
 
 // 5. TOOL BAGIAN PETA KARNAUGH (K-MAP)
@@ -119,7 +118,6 @@ function hitungKMap() {
     if(!input) return alert("Masukkan rumus!");
     let bersih = bersihkanEkspresi(input);
     
-    // Susun peta K-Map untuk 3 variabel (Baris x, Kolom yz [00, 01, 11, 10])
     let m00_0 = jalankanEval(bersih, 0, 0, 0);
     let m01_0 = jalankanEval(bersih, 0, 0, 1);
     let m11_0 = jalankanEval(bersih, 0, 1, 1);
@@ -135,5 +133,5 @@ function hitungKMap() {
     html += `<tr><td><b>x = 1</b></td><td class='kmap-cell'>${m00_1}</td><td class='kmap-cell'>${m01_1}</td><td class='kmap-cell'>${m11_1}</td><td class='kmap-cell'>${m10_1}</td></tr>`;
     html += "</tbody></table><p class='note' style='margin-top:10px;'>Penyederhanaan dilakukan dengan melingkari grup angka 1 yang bertetangga.</p>";
     
-    bukaPanelOutput("Matriks K-Map Berhasil Dipetakan", input, olahDeMorgan(bersih), "Tekan tombol bagian 3 untuk tabel.", "Tekan tombol bagian 4 untuk gerbang.", html);
+    bukaPanelOutput("Matriks K-Map Berhasil Dipetakan", input, olahDeMorgan(bersih), "Tekan tombol bagian tabel untuk melihat data tabel.", "Tekan tombol bagian rangkaian untuk melihat gerbang.", html);
 }

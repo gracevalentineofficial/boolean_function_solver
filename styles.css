@@ -36,7 +36,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 25px; /* Skala Jarak 5: Dioptimalkan agar tidak memicu scroll panel */
+    margin-bottom: 20px; /* Skala Jarak 5: Dioptimalkan agar tidak memicu scroll panel */
 }
 .site-logo {
     max-height: 110px; /* Diatur proporsional dengan tinggi layout sidebar baru */

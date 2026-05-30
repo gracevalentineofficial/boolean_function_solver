@@ -1,9 +1,5 @@
-// ==========================================
-// ENGINE CORE: PARSER & EVALUATOR ASLI
-// ==========================================
 function evaluasiEkspresi(ekspresi, x, y, z) {
     let formatted = ekspresi.toLowerCase().replace(/\s+/g, '');
-    // Mendukung variabel input a, b, c maupun x, y, z
     formatted = formatted.replace(/a/g, 'x').replace(/b/g, 'y').replace(/c/g, 'z');
     formatted = formatted.replace(/x/g, x).replace(/y/g, y).replace(/z/g, z);
 
@@ -22,21 +18,13 @@ function evaluasiEkspresi(ekspresi, x, y, z) {
     }
 }
 
-// ==========================================
-// FUNGSI AKSI: LOCK SCROLL & OUTPUT KE PANEL BAWAH
-// ==========================================
-
-// 1. ANALISIS HUKUM DE MORGAN (Tombol: Petakan ke K-Map di Modul 1)
-function hitungHukum(e) {
-    if (e) e.preventDefault(); // Menghentikan auto-scroll browser
-
+function hitungHukum() {
     let input = document.getElementById('input-hukum').value.trim();
-    // Menargetkan langsung ke ID Solver Box bawah di index.html
-    let content = document.getElementById('content-hukum-dinamis'); 
+    let content = document.getElementById('content-hukum-dinamis');
 
     if (!input) {
-        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus terlebih dahulu!</span>";
-        return false;
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
+        return;
     }
 
     let hasilDeMorgan = "";
@@ -52,16 +40,12 @@ function hitungHukum(e) {
     }
 
     content.innerHTML = `
-        <p style="margin: 0 0 6px 0;"><b>Ekspresi Awal:</b> (${input})'</p>
-        <p style='color:#38bdf8; font-weight:bold; margin: 0;'>✅ <b>Bentuk De Morgan:</b> ${hasilDeMorgan}</p>
+        <p><b>Ekspresi Awal:</b> (${input})'</p>
+        <p style='color:#38bdf8; font-weight:bold;'>✅ <b>Bentuk De Morgan:</b> ${hasilDeMorgan}</p>
     `;
-    return false;
 }
 
-// 2. EVALUATOR FUNGSI (Tombol: Evaluasi Fungsi di Modul 2)
-function hitungFungsi(e) {
-    if (e) e.preventDefault(); 
-
+function hitungFungsi() {
     let input = document.getElementById('input-fungsi').value.trim();
     let x = document.getElementById('eval-x').value;
     let y = document.getElementById('eval-y').value;
@@ -70,32 +54,28 @@ function hitungFungsi(e) {
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi!</span>";
-        return false;
+        return;
     }
 
     let hasil = evaluasiEkspresi(input, x, y, z);
     content.innerHTML = `
-        <p style="margin: 0 0 6px 0;"><b>Fungsi:</b> f = ${input}</p>
-        <p style='color:#38bdf8; font-weight:bold; margin: 0;'>✅ <b>Hasil Evaluasi:</b> ${hasil}</p>
+        <p><b>Fungsi:</b> f = ${input}</p>
+        <p style='color:#38bdf8; font-weight:bold;'>✅ <b>Hasil Evaluasi:</b> ${hasil}</p>
     `;
-    return false;
 }
 
-// 3. TABEL KEBENARAN (Tombol: Generate Tabel Kebenaran di Modul 3)
-function hitungTabelKebenaran(e) {
-    if (e) e.preventDefault(); 
-
+function hitungTabelKebenaran() {
     let input = document.getElementById('input-tabel').value.trim();
     let content = document.getElementById('content-table-output-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
-        return false;
+        return;
     }
 
     let htmlTable = `
-        <p style="margin: 0 0 8px 0; color:#38bdf8; font-weight:bold;">✅ <b>Tabel Kebenaran Berhasil Dibuat:</b></p>
-        <table border="1" style="border-collapse:collapse; width:100%; text-align:center; font-size:13px; color:#f1f5f9; border-color:#334155;">
+        <p style="color:#38bdf8; font-weight:bold;">✅ Tabel Kebenaran:</p>
+        <table border="1" style="border-collapse:collapse; width:100%; text-align:center; color:#f1f5f9; border-color:#334155;">
             <thead>
                 <tr style="background:#1e293b; color:#38bdf8;"><th>x/a</th><th>y/b</th><th>z/c</th><th>Output</th></tr>
             </thead>
@@ -111,54 +91,45 @@ function hitungTabelKebenaran(e) {
     }
     htmlTable += `</tbody></table>`;
     content.innerHTML = htmlTable;
-    return false;
 }
 
-// 4. RANGKAIAN LOGIKA (Tombol: Visualisasikan Rangkaian di Modul 4)
-function hitungRangkaian(e) {
-    if (e) e.preventDefault(); 
-    
+function hitungRangkaian() {
     let input = document.getElementById('input-rangkaian').value.trim();
     let content = document.getElementById('content-sirkuit-dinamis');
 
     if (!input) {
-        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus sirkuit!</span>";
-        return false;
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
+        return;
     }
-    content.innerHTML = `<p style="margin:0; color:#38bdf8; font-weight:bold;">✅ <b>Pemetaan Sukses:</b> Logika sirkuit <b>${input}</b> berhasil dipetakan ke gerbang digital internal.</p>`;
-    return false;
+    content.innerHTML = `<p style="color:#38bdf8; font-weight:bold;">✅ Pemetaan Sukses untuk sirkuit ${input}</p>`;
 }
 
-// 5. K-MAP (Tombol: Generate K-Map di Modul 5)
-function hitungKMap(e) {
-    if (e) e.preventDefault(); 
-    
+function hitungKMap() {
     let input = document.getElementById('input-kmap').value.trim();
     let content = document.getElementById('content-kmap-matrix-dinamis');
 
     if (!input) {
-        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus K-Map!</span>";
-        return false;
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
+        return;
     }
 
     let urutanKolom = [{y:0,z:0}, {y:0,z:1}, {y:1,z:1}, {y:1,z:0}];
     let htmlKMap = `
-        <p style="margin: 0 0 8px 0; color:#38bdf8; font-weight:bold;">✅ <b>Matriks K-Map Berhasil Digenerate:</b></p>
-        <table border="1" style="border-collapse:collapse; width:100%; text-align:center; font-size:13px; color:#f1f5f9; border-color:#334155;">
+        <p style="color:#38bdf8; font-weight:bold;">✅ Matriks K-Map:</p>
+        <table border="1" style="border-collapse:collapse; width:100%; text-align:center; color:#f1f5f9; border-color:#334155;">
             <thead>
                 <tr style="background:#1e293b; color:#38bdf8;"><th>x \\ yz</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
             </thead>
             <tbody>
     `;
     for (let x = 0; x <= 1; x++) {
-        htmlKMap += `<tr><td style='font-weight:bold; color:#38bdf8; background:#1e293b;'>${x}</td>`;
+        htmlKMap += `<tr><td style='font-weight:bold; color:#38bdf8;'>${x}</td>`;
         for (let i = 0; i < urutanKolom.length; i++) {
             let hasil = evaluasiEkspresi(input, x, urutanKolom[i].y, urutanKolom[i].z);
-            htmlKMap += `<td style="font-weight:bold; color:#f43f5e;">${hasil}</td>`;
+            htmlKMap += `<td style="color:#f43f5e; font-weight:bold;">${hasil}</td>`;
         }
         htmlKMap += `</tr>`;
     }
     htmlKMap += `</tbody></table>`;
     content.innerHTML = htmlKMap;
-    return false;
 }

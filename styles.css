@@ -1,11 +1,11 @@
-/* GLOBAL SETTING & COMFORTABLE NAVY THEME */
+/* GLOBAL SETTING & COMFORTABLE LIGHTER NAVY THEME */
 html {
     scroll-behavior: smooth;
 }
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: #111827; /* Navy gelap lembut */
-    color: #f3f4f6; /* Abu-abu terang kustom agar mata tidak perih */
+    background-color: #1e293b; /* Navy yang sedikit lebih cerah & nyaman di mata */
+    color: #f1f5f9; /* Kontras teks yang disesuaikan agar tidak melelahkan mata */
     margin: 0;
     padding: 0;
 }
@@ -18,9 +18,9 @@ body {
 
 /* KOLOM 1: SIDEBAR MENU NAVIGATION (FIXED & STICKY) */
 .sidebar {
-    width: 280px;
-    background-color: #1f2937; /* Navy medium */
-    border-right: 1px solid #374151;
+    width: 290px;
+    background-color: #0f172a; /* Kontras navy pekat sebagai penyeimbang */
+    border-right: 1px solid #334155;
     padding: 25px;
     display: flex;
     flex-direction: column;
@@ -29,18 +29,29 @@ body {
     box-sizing: border-box;
     z-index: 100;
 }
+
+/* KOMPONEN LOGO BARU DI SIDEBAR */
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    margin-bottom: 10px;
+}
+.site-logo {
+    max-height: 50px;
+    width: auto;
+    border-radius: 6px;
+    object-fit: contain;
+}
 .sidebar-header h2 {
     color: #38bdf8;
-    margin-top: 0;
-    font-size: 22px;
+    margin-top: 5px;
+    font-size: 20px;
+    letter-spacing: 0.5px;
 }
-.sidebar-header p {
-    color: #9ca3af;
-    font-size: 13px;
-    margin-top: -10px;
-}
+
 .sidebar-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     flex-grow: 1;
 }
 .sidebar-menu ul {
@@ -49,46 +60,76 @@ body {
     margin: 0;
 }
 .sidebar-menu li {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 .sidebar-menu a {
-    color: #e5e7eb;
+    color: #cbd5e1;
     text-decoration: none;
     font-size: 14px;
     display: block;
-    padding: 12px 15px;
+    padding: 12px 14px;
     border-radius: 8px;
     transition: all 0.2s ease;
     font-weight: 500;
+    line-height: 1.4;
 }
 .sidebar-menu a:hover {
-    background-color: #374151;
+    background-color: #1e293b;
     color: #38bdf8;
-    transform: translateX(5px);
+    transform: translateX(4px);
 }
 .sidebar-footer {
     font-size: 12px;
-    color: #6b7280;
+    color: #64748b;
+    border-top: 1px solid #334155;
+    padding-top: 15px;
+    font-weight: 500;
 }
 
 /* KOLOM 2 & 3: MAIN KONTEN FLUID AREA */
 .main-content {
-    margin-left: 280px; /* Memberi ruang untuk sidebar fixed */
+    margin-left: 290px;
     padding: 40px;
     flex-grow: 1;
     box-sizing: border-box;
-    max-width: calc(100% - 280px);
+    max-width: calc(100% - 290px);
 }
 .main-header h1 {
     color: #38bdf8;
-    font-size: 32px;
+    font-size: 36px;
     margin-top: 0;
+    margin-bottom: 5px;
 }
-.main-header p {
-    color: #9ca3af;
-    font-size: 15px;
-    margin-top: -5px;
+.dev-tagline {
+    color: #94a3b8;
+    font-size: 14px;
+    font-family: monospace;
+    margin-top: 0;
     margin-bottom: 35px;
+}
+
+/* HEADER SEKSIONAL SEJAJAR DENGAN ILUSTRASI */
+.section-header-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #334155;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+.section-header-inline h2 {
+    color: #f8fafc;
+    margin: 0;
+    font-size: 22px;
+    flex-grow: 1;
+}
+.section-illustration {
+    max-height: 45px; /* Mengunci agar tinggi gambar tetap elegan berdampingan dengan teks */
+    width: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    background-color: transparent;
 }
 
 /* KARTU MATERI */
@@ -96,28 +137,22 @@ body {
     margin-bottom: 35px;
 }
 .section-card {
-    background-color: #1f2937;
-    border: 1px solid #374151;
+    background-color: #0f172a;
+    border: 1px solid #334155;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-}
-.section-card h2 {
-    color: #f3f4f6;
-    margin-top: 0;
-    border-bottom: 2px solid #374151;
-    padding-bottom: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 .materi-text {
-    color: #d1d5db;
+    color: #cbd5e1;
     line-height: 1.6;
     font-size: 15px;
 }
 
 /* SEKSI ALAT / TOOLS */
 .tool-box {
-    background-color: #111827;
-    border: 1px solid #4b5563;
+    background-color: #1e293b;
+    border: 1px solid #475569;
     padding: 20px;
     border-radius: 8px;
     margin-top: 20px;
@@ -130,8 +165,8 @@ body {
 input[type="text"] {
     width: 100%;
     padding: 12px;
-    background-color: #1f2937;
-    border: 1px solid #4b5563;
+    background-color: #0f172a;
+    border: 1px solid #475569;
     color: white;
     border-radius: 6px;
     font-size: 15px;
@@ -149,9 +184,9 @@ input[type="text"]:focus {
 }
 select {
     padding: 6px 12px;
-    background-color: #374151;
+    background-color: #334155;
     color: white;
-    border: 1px solid #4b5563;
+    border: 1px solid #475569;
     border-radius: 4px;
 }
 button {
@@ -170,11 +205,11 @@ button:hover {
     background-color: #0369a1;
 }
 
-/* INTERACTIVE OUTPUT BOX GRID (KOLOM OUTPUT) */
+/* INTERACTIVE OUTPUT BOX */
 .output-zone {
     margin-top: 40px;
     padding: 25px;
-    background-color: #111827;
+    background-color: #0f172a;
     border: 2px dashed #38bdf8;
     border-radius: 12px;
 }
@@ -191,24 +226,24 @@ button:hover {
     margin-top: 20px;
 }
 .output-box {
-    background-color: #1f2937;
-    border: 1px solid #374151;
+    background-color: #1e293b;
+    border: 1px solid #334155;
     border-radius: 8px;
     padding: 20px;
 }
 .output-box h4 {
     margin-top: 0;
     color: #38bdf8;
-    border-bottom: 1px solid #374151;
+    border-bottom: 1px solid #334155;
     padding-bottom: 8px;
 }
 .box-content {
     font-size: 14px;
-    color: #e5e7eb;
+    color: #e2e8f0;
     line-height: 1.5;
 }
 
-/* REUSABLE TABLES */
+/* TABLES */
 .table-container {
     overflow-x: auto;
     margin: 15px 0;
@@ -219,22 +254,22 @@ table {
     font-size: 14px;
 }
 th, td {
-    border: 1px solid #374151;
+    border: 1px solid #334155;
     padding: 10px;
     text-align: left;
 }
 th {
-    background-color: #111827;
+    background-color: #0f172a;
     color: #38bdf8;
 }
 tr:hover {
-    background-color: #262626;
+    background-color: #1e293b;
 }
 .kmap-cell {
     width: 50px;
     height: 40px;
     text-align: center;
     font-weight: bold;
-    background: #111827;
+    background: #0f172a;
     color: #f43f5e;
 }

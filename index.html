@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Dashboard & Solver Aljabar Boolean Komprehensif</title>
+    <title>BoS : Boolean Solver</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,53 +12,57 @@
         
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h2>🧠 Boolean Panel</h2>
-                <p>Matematika Diskrit Dashboard</p>
+                <div class="logo-container">
+                    <img src="logositus.jpg" alt="Logo BoS" class="site-logo">
+                </div>
+                <h2>BoS Panel</h2>
             </div>
             <nav class="sidebar-menu">
                 <ul>
-                    <li><a href="#bagian-hukum">📜 1. Hukum Aljabar Boolean</a></li>
-                    <li><a href="#bagian-fungsi">📝 2. Definisi & Evaluasi Fungsi</a></li>
-                    <li><a href="#bagian-tabel">📊 3. Generator Tabel Kebenaran</a></li>
-                    <li><a href="#bagian-rangkaian">🔌 4. Rangkaian & Gerbang Logika</a></li>
-                    <li><a href="#bagian-kmap">🗺️ 5. Penyederhanaan K-Map</a></li>
+                    <li><a href="#bagian-hukum">Hukum Aljabar Boolean</a></li>
+                    <li><a href="#bagian-fungsi">Fungsi Boolean</a></li>
+                    <li><a href="#bagian-tabel">Tabel Kebenaran</a></li>
+                    <li><a href="#bagian-rangkaian">Rangkaian & Gerbang Logika</a></li>
+                    <li><a href="#bagian-kmap">Penyederhanaan Fungsi Boolean dengan K-Map</a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <p>Status: Siap Pakai ✨</p>
+                <p>Powered by Grace Valentine</p>
             </div>
         </aside>
 
         <main class="main-content">
             
             <header class="main-header">
-                <h1>Dashboard Analisis & Solver Aljabar Boolean</h1>
-                <p>Platform Interaktif Penyelesaian Logika, Tabel Kebenaran, Sirkuit Digital, dan Peta Karnaugh</p>
+                <h1>BoS : Boolean Solver</h1>
+                <p class="dev-tagline">Make it Fast - developer</p>
             </header>
 
             <section id="bagian-hukum" class="content-section">
                 <div class="section-card">
-                    <h2>📜 1. Hukum-Hukum Aljabar Boolean</h2>
+                    <div class="section-header-inline">
+                        <h2>Hukum Aljabar Boolean</h2>
+                        <img src="ikonhukum.jpg" alt="Ilustrasi Hukum Aljabar Boolean" class="section-illustration">
+                    </div>
                     <p class="materi-text">Aljabar Boolean memiliki properti dasar yang diatur oleh 11 hukum formal (Prinsip Dualitas). Hukum ini digunakan untuk memanipulasi ekspresi logika tanpa mengubah nilai kebenarannya.</p>
                     
                     <div class="table-container">
                         <table>
                             <thead>
-                                border="1"
                                 <tr><th>Nama Hukum</th><th>Dualitas 1</th><th>Dualitas 2</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>1. Hukum Identitas</td><td>x + 0 = x</td><td>x · 1 = x</td></tr>
-                                <tr><td>2. Hukum Idempoten</td><td>x + x = x</td><td>x · x = x</td></tr>
-                                <tr><td>3. Hukum Komplemen</td><td>x + x' = 1</td><td>x · x' = 0</td></tr>
-                                <tr><td>4. Hukum Involusi</td><td colspan="2" style="text-align: center;">(x')' = x</td></tr>
-                                <tr><td>5. Hukum Komutatif</td><td>x + y = y + x</td><td>x · y = y · x</td></tr>
-                                <tr><td>6. Hukum Asosiatif</td><td>x + (y + z) = (x + y) + z</td><td>x · (y · z) = (x · y) · z</td></tr>
-                                <tr><td>7. Hukum Distributif</td><td>x + (y · z) = (x + y)(x + z)</td><td>x · (y + z) = (x · y) + (x · z)</td></tr>
-                                <tr><td>8. Hukum De Morgan</td><td>(x + y)' = x' · y'</td><td>(x · y)' = x' + y'</td></tr>
-                                <tr><td>9. Hukum Penyerapan (Absorpsi)</td><td>x + (x · y) = x</td><td>x · (x + y) = x</td></tr>
-                                <tr><td>10. Hukum Dominansi (0 dan 1)</td><td>x + 1 = 1</td><td>x · 0 = 0</td></tr>
-                                <tr><td>11. Hukum Komplemen Ganda 0/1</td><td>0' = 1</td><td>1' = 0</td></tr>
+                                <tr><td>Hukum Identitas</td><td>x + 0 = x</td><td>x · 1 = x</td></tr>
+                                <tr><td>Hukum Idempoten</td><td>x + x = x</td><td>x · x = x</td></tr>
+                                <tr><td>Hukum Komplemen</td><td>x + x' = 1</td><td>x · x' = 0</td></tr>
+                                <tr><td>Hukum Involusi</td><td colspan="2" style="text-align: center;">(x')' = x</td></tr>
+                                <tr><td>Hukum Komutatif</td><td>x + y = y + x</td><td>x · y = y · x</td></tr>
+                                <tr><td>Hukum Asosiatif</td><td>x + (y + z) = (x + y) + z</td><td>x · (y · z) = (x · y) · z</td></tr>
+                                <tr><td>Hukum Distributif</td><td>x + (y · z) = (x + y)(x + z)</td><td>x · (y + z) = (x · y) + (x · z)</td></tr>
+                                <tr><td>Hukum De Morgan</td><td>(x + y)' = x' · y'</td><td>(x · y)' = x' + y'</td></tr>
+                                <tr><td>Hukum Penyerapan (Absorpsi)</td><td>x + (x · y) = x</td><td>x · (x + y) = x</td></tr>
+                                <tr><td>Hukum Dominansi</td><td>x + 1 = 1</td><td>x · 0 = 0</td></tr>
+                                <tr><td>Hukum Komplemen Ganda</td><td>0' = 1</td><td>1' = 0</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -74,8 +78,11 @@
 
             <section id="bagian-fungsi" class="content-section">
                 <div class="section-card">
-                    <h2>📝 2. Fungsi Boolean & Substitusi Nilai</h2>
-                    <p class="materi-text">Fungsi Boolean adalah ekspresi yang dibentuk oleh literal (variabel) dan operator logika (+, ·, '). Nilai evaluasi fungsi selalu berupa elemen biner biner {0, 1} tergantung nilai substitusi komponennya.</p>
+                    <div class="section-header-inline">
+                        <h2>Fungsi Boolean</h2>
+                        <img src="fungsibool.jpg" alt="Ilustrasi Fungsi Boolean" class="section-illustration">
+                    </div>
+                    <p class="materi-text">Fungsi Boolean adalah ekspresi yang dibentuk oleh literal (variabel) dan operator logika (+, ·, '). Nilai evaluasi fungsi selalu berupa elemen biner {0, 1} tergantung nilai substitusi komponennya.</p>
                     
                     <div class="tool-box">
                         <h3>🛠️ Evaluator Fungsi & Identifikasi Literal</h3>
@@ -93,7 +100,10 @@
 
             <section id="bagian-tabel" class="content-section">
                 <div class="section-card">
-                    <h2>📊 3. Generator Tabel Kebenaran Kompleks</h2>
+                    <div class="section-header-inline">
+                        <h2>Tabel Kebenaran</h2>
+                        <img src="tabelkebenaran.jpg" alt="Ilustrasi Tabel Kebenaran" class="section-illustration">
+                    </div>
                     <p class="materi-text">Tabel kebenaran mendaftar seluruh kemungkinan kombinasi nilai biner dari literal masukan untuk melihat karakteristik output f secara menyeluruh.</p>
                     
                     <div class="tool-box">
@@ -106,7 +116,10 @@
 
             <section id="bagian-rangkaian" class="content-section">
                 <div class="section-card">
-                    <h2>🔌 4. Skematik Rangkaian Gerbang Logika</h2>
+                    <div class="section-header-inline">
+                        <h2>Rangkaian & Gerbang Logika</h2>
+                        <img src="rangkaianlogika.jpg" alt="Ilustrasi Rangkaian Logika" class="section-illustration">
+                    </div>
                     <p class="materi-text">Fungsi Boolean dapat diimplementasikan ke dalam perangkat keras digital melalui gerbang logika standar: AND (perkalian), OR (penjumlahan), dan NOT (pembalik sinyal).</p>
                     
                     <div class="tool-box">
@@ -119,7 +132,10 @@
 
             <section id="bagian-kmap" class="content-section">
                 <div class="section-card">
-                    <h2>🗺️ 5. Penyederhanaan Fungsi & Peta Karnaugh (K-Map)</h2>
+                    <div class="section-header-inline">
+                        <h2>Penyederhanaan Fungsi Boolean dengan K-Map</h2>
+                        <img src="kmap.jpg" alt="Ilustrasi Peta Karnaugh" class="section-illustration">
+                    </div>
                     <p class="materi-text">Peta Karnaugh (K-Map) adalah metode grafis peta kotak-kotak untuk menyederhanakan fungsi Boolean dengan memanfaatkan pengelompokan nilai 1 tetangga dekat.</p>
                     
                     <div class="tool-box">
@@ -133,32 +149,26 @@
             <section id="output-zone" class="output-zone" style="display: none;">
                 <h2 class="zone-title">📊 PANEL OUTPUT INTERAKTIF (SOLVER BOX)</h2>
                 <div class="output-grid">
-                    
                     <div class="output-box" id="box-jawaban">
                         <h4>🎯 Jawaban / Status Fungsi</h4>
                         <div class="box-content" id="content-jawaban"></div>
                     </div>
-
                     <div class="output-box" id="box-hukum">
                         <h4>⚖️ Analisis Hukum De Morgan</h4>
                         <div class="box-content" id="content-hukum"></div>
                     </div>
-
                     <div class="output-box" id="box-table-output">
                         <h4>📋 Tabel Kebenaran Terkait</h4>
                         <div class="box-content" id="content-table-output"></div>
                     </div>
-
                     <div class="output-box" id="box-sirkuit">
                         <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
                         <div class="box-content" id="content-sirkuit"></div>
                     </div>
-
                     <div class="output-box" id="box-kmap-matrix">
                         <h4>🗺️ Matriks Visualisasi Peta Karnaugh (3-Variabel)</h4>
                         <div class="box-content" id="content-kmap-matrix"></div>
                     </div>
-
                 </div>
             </section>
 

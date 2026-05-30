@@ -226,45 +226,48 @@ button:hover {
     background-color: #0369a1;
 }
 
-/* INTERACTIVE OUTPUT BOX */
-.output-zone {
-    margin-top: 40px;
-    padding: 25px;
-    background-color: #0f172a;
-    border: 2px dashed #38bdf8;
-    border-radius: 12px;
-}
-.zone-title {
-    color: #38bdf8;
-    margin-top: 0;
-    font-size: 20px;
-    text-align: center;
-}
-.output-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-.output-box {
+/* ==========================================================================
+   🌟 PEMBARUAN: SEKSI KOTAK JAWABAN DINAMIS (CONTEXT-AWARE OUTPUT BOX) 🌟
+   ========================================================================== */
+.dynamic-output-box {
     background-color: #1e293b;
     border: 1px solid #334155;
     border-radius: 8px;
     padding: 20px;
+    margin-top: 20px; /* Jarak pas tepat di bawah modul input tools */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-left: 4px solid #38bdf8; /* Garis aksen premium penanda output aktif */
+    animation: fadeInSlide 0.3s ease-out; /* Animasi halus saat kotak muncul */
 }
-.output-box h4 {
+
+.dynamic-output-box h4 {
     margin-top: 0;
+    margin-bottom: 12px;
     color: #38bdf8;
+    font-size: 16px;
     border-bottom: 1px solid #334155;
     padding-bottom: 8px;
 }
-.box-content {
+
+.dynamic-output-box .box-content {
     font-size: 14px;
     color: #e2e8f0;
     line-height: 1.5;
 }
 
-/* TABLES */
+/* Efek Animasi Muncul Lembut */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TABLES & K-MAP STRUCTURING */
 .table-container {
     overflow-x: auto;
     margin: 15px 0;

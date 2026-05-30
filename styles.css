@@ -36,7 +36,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 35px; /* Skala Jarak 5: Dioptimalkan agar tidak memicu scroll panel */
+    margin-bottom: 25px; /* Skala Jarak 5: Dioptimalkan agar tidak memicu scroll panel */
 }
 .site-logo {
     max-height: 110px; /* Diatur proporsional dengan tinggi layout sidebar baru */
@@ -49,7 +49,7 @@ body {
 .sidebar-title {
     color: #38bdf8;
     margin-top: 0;
-    margin-bottom: 21px; /* Skala Jarak 3: Dikurangi berbanding lurus dengan margin-bottom logo */
+    margin-bottom: 15px; /* Skala Jarak 3: Dikurangi berbanding lurus dengan margin-bottom logo */
     font-size: 20px;
     letter-spacing: 0.5px;
     text-align: center;
@@ -90,8 +90,8 @@ body {
 /* IKON ILUSTRASI DI SIDEBAR - TEPAT UKURAN (65PX) */
 /* Ukuran diperkecil ideal agar pas, detail tetap terlihat jelas, dan mengutamakan estetika */
 .menu-illustration {
-    width: 80px; 
-    height: 80px;
+    width: 90px; 
+    height: 90px;
     object-fit: contain;
     border-radius: 6px;
     flex-shrink: 0; /* Mencegah gambar gepeng saat ruang horizontal sempit */

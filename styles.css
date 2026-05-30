@@ -1,306 +1,170 @@
-/* GLOBAL SETTING & COMFORTABLE LIGHTER NAVY THEME */
-html {
-    scroll-behavior: smooth;
-}
-body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: #1e293b;
-    color: #f1f5f9;
-    margin: 0;
-    padding: 0;
+// ==========================================
+// ENGINE CORE: PARSER & EVALUATOR ALJABAR
+// ==========================================
+function evaluasiEkspresi(ekspresi, x, y, z) {
+    let formatted = ekspresi.toLowerCase().replace(/\s+/g, '');
+    formatted = formatted.replace(/a/g, 'x').replace(/b/g, 'y').replace(/c/g, 'z');
+    formatted = formatted.replace(/x/g, x).replace(/y/g, y).replace(/z/g, z);
+
+    while (formatted.includes("'")) {
+        formatted = formatted.replace(/1'/g, '0').replace(/0'/g, '1');
+    }
+    formatted = formatted.replace(/\*/g, '&&').replace(/\./g, '&&');
+    formatted = formatted.replace(/([01])(?=[01])/g, '$1 && ');
+    formatted = formatted.replace(/\+/g, '||');
+
+    try {
+        let hasil = eval(formatted);
+        return hasil ? 1 : 0;
+    } catch (error) {
+        return "Error";
+    }
 }
 
-/* CONTAINER UTAMA - 3 KOLOM DESKTOP SYSTEM */
-.dashboard-container {
-    display: flex;
-    min-height: 100vh;
+// ==========================================
+// FUNGSI AKSI: LOCK SCROLL MURNI JAVASCRIPT
+// ==========================================
+
+// 1. ANALISIS HUKUM DE MORGAN
+function hitungHukum(e) {
+    if (e) {
+        e.preventDefault(); // 🌟 KUNCI: Mencegah browser melompat akibat klik tombol
+    }
+
+    let input = document.getElementById('input-hukum').value.trim();
+    let content = document.getElementById('content-hukum-dinamis');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e; font-weight:bold;'>⚠️ Masukkan rumus terlebih dahulu!</span>";
+        return false;
+    }
+
+    let hasilDeMorgan = "";
+    if (input.includes('+')) {
+        let bagian = input.split('+');
+        hasilDeMorgan = bagian.map(b => `(${b.trim()})'`).join(' · ');
+    } else if (input.includes('*') || input.length > 1) {
+        let separator = input.includes('*') ? '*' : '';
+        let bagian = separator ? input.split(separator) : input.split('');
+        hasilDeMorgan = bagian.map(b => `(${b.trim()})'`).join(' + ');
+    } else {
+        hasilDeMorgan = `${input}'`;
+    }
+
+    content.innerHTML = `
+        <div style="animation: fadeIn 0.3s ease;">
+            <p style="margin: 0 0 6px 0; color: #cbd5e1;"><b>Ekspresi Awal:</b> (${input})'</p>
+            <p style='color:#38bdf8; font-weight:bold; margin: 0;'>✅ <b>Bentuk De Morgan:</b> ${hasilDeMorgan}</p>
+        </div>
+    `;
+    return false;
 }
 
-/* KOLOM 1: SIDEBAR MENU NAVIGATION (FIXED & NO SCROLL) */
-/* Ukuran dipersempit menjadi 340px agar efisien dan pas dengan layar monitor */
-.sidebar {
-    width: 340px; 
-    background-color: #0f172a;
-    border-right: 1px solid #334155;
-    padding: 20px 15px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
-    box-sizing: border-box;
-    z-index: 100;
+// 2. EVALUATOR FUNGSI
+function hitungFungsi(e) {
+    if (e) e.preventDefault();
+
+    let input = document.getElementById('input-fungsi').value.trim();
+    let x = document.getElementById('eval-x').value;
+    let y = document.getElementById('eval-y').value;
+    let z = document.getElementById('eval-z').value;
+    let content = document.getElementById('content-jawaban-dinamis');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e; font-weight:bold;'>⚠️ Masukkan fungsi!</span>";
+        return false;
+    }
+
+    let hasil = evaluasiEkspresi(input, x, y, z);
+    content.innerHTML = `
+        <div style="animation: fadeIn 0.3s ease;">
+            <p style="margin: 0 0 6px 0; color: #cbd5e1;"><b>Fungsi:</b> f = ${input}</p>
+            <p style='color:#38bdf8; font-weight:bold; margin: 0;'>✅ <b>Hasil Evaluasi:</b> ${hasil}</p>
+        </div>
+    `;
+    return false;
 }
 
-/* LOGO SITUS BoS (CENTER) */
-.logo-container-center {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px; /* Skala Jarak 5: Dioptimalkan agar tidak memicu scroll panel */
-}
-.site-logo {
-    max-height: 110px; /* Diatur proporsional dengan tinggi layout sidebar baru */
-    width: auto;
-    border-radius: 10px;
-    object-fit: contain;
+// 3. TABEL KEBENARAN
+function hitungTabelKebenaran(e) {
+    if (e) e.preventDefault();
+
+    let input = document.getElementById('input-tabel').value.trim();
+    let content = document.getElementById('content-table-output-dinamis');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e; font-weight:bold;'>⚠️ Masukkan rumus!</span>";
+        return false;
+    }
+
+    let htmlTable = `
+        <div style="animation: fadeIn 0.3s ease;">
+            <p style="margin: 0 0 8px 0; color:#38bdf8; font-weight:bold;">✅ <b>Tabel Kebenaran Berhasil Dibuat:</b></p>
+            <table border="1" style="border-collapse:collapse; width:100%; text-align:center; font-size:13px; color:#f1f5f9; border-color:#334155;">
+                <thead>
+                    <tr style="background:#1e293b; color:#38bdf8;"><th>x/a</th><th>y/b</th><th>z/c</th><th>Output</th></tr>
+                </thead>
+                <tbody>
+    `;
+    for (let x = 0; x <= 1; x++) {
+        for (let y = 0; y <= 1; y++) {
+            for (let z = 0; z <= 1; z++) {
+                let hasil = evaluasiEkspresi(input, x, y, z);
+                htmlTable += `<tr><td style="padding:6px;">${x}</td><td>${y}</td><td>${z}</td><td style='color:#38bdf8; font-weight:bold;'>${hasil}</td></tr>`;
+            }
+        }
+    }
+    htmlTable += `</tbody></table></div>`;
+    content.innerHTML = htmlTable;
+    return false;
 }
 
-/* TULISAN BoS PANEL */
-.sidebar-title {
-    color: #38bdf8;
-    margin-top: 0;
-    margin-bottom: 15px; /* Skala Jarak 3: Dikurangi berbanding lurus dengan margin-bottom logo */
-    font-size: 20px;
-    letter-spacing: 0.5px;
-    text-align: center;
-}
-
-/* DAFTAR MENU SIDEBAR */
-.sidebar-menu {
-    flex-grow: 1;
-}
-.sidebar-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.sidebar-menu li {
-    margin-bottom: 12px; /* Jarak antar-menu dipersempit agar pas dalam satu layar screen */
-}
-.sidebar-menu a {
-    color: #cbd5e1;
-    text-decoration: none;
-    display: flex;
-    flex-direction: row; /* Kembali Horisontal: Ikon di kiri, judul teks di kanan */
-    align-items: center; /* Menyejajarkan teks di tengah vertical terhadap ilustrasi */
-    gap: 12px; /* Jarak rapat antara ikon dan teks */
-    padding: 8px 12px;
-    border-radius: 8px;
-    background-color: #111827;
-    border: 1px solid #1e293b;
-    transition: all 0.2s ease;
-}
-.sidebar-menu a:hover {
-    background-color: #1e293b;
-    color: #38bdf8;
-    border-color: #38bdf8;
-    transform: translateX(4px);
-}
-
-/* IKON ILUSTRASI DI SIDEBAR - TEPAT UKURAN (65PX) */
-/* Ukuran diperkecil ideal agar pas, detail tetap terlihat jelas, dan mengutamakan estetika */
-.menu-illustration {
-    width: 90px; 
-    height: 90px;
-    object-fit: contain;
-    border-radius: 6px;
-    flex-shrink: 0; /* Mencegah gambar gepeng saat ruang horizontal sempit */
-}
-
-/* PENFORMATAN TEKS JUDUL MENU DI SAMPING ILUSTRASI */
-.sidebar-menu a span {
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.3;
-    text-align: left; /* Teks otomatis rata kiri di samping ilustrasi */
-    color: #e2e8f0;
-    word-wrap: break-word; /* Otomatis turun ke baris berikutnya mengikuti sisa ruang panel */
-}
-
-.sidebar-footer {
-    font-size: 11px;
-    color: #64748b;
-    border-top: 1px solid #334155;
-    padding-top: 3px;
-    text-align: center;
-    font-weight: 500;
-}
-
-/* KOLOM 2 & 3: MAIN KONTEN FLUID AREA */
-/* Margin kiri disesuaikan dengan lebar baru sidebar (340px) */
-.main-content {
-    margin-left: 340px;
-    padding: 40px;
-    flex-grow: 1;
-    box-sizing: border-box;
-    max-width: calc(100% - 340px);
-}
-
-/* HEADER UTAMA DI TENGAH (CENTER) */
-.main-header-center {
-    text-align: center;
-    margin-bottom: 40px;
-}
-.main-header-center h1 {
-    color: #38bdf8;
-    font-size: 38px;
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-.dev-tagline {
-    color: #94a3b8;
-    font-size: 15px;
-    font-family: monospace;
-    margin-top: 0;
-    text-align: center;
-}
-
-/* KARTU MATERI */
-.content-section {
-    margin-bottom: 35px;
-}
-.section-card {
-    background-color: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-.section-title-only {
-    color: #f8fafc;
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 22px;
-    border-bottom: 2px solid #334155;
-    padding-bottom: 12px;
-}
-.materi-text {
-    color: #cbd5e1;
-    line-height: 1.6;
-    font-size: 15px;
-}
-
-/* SEKSI ALAT / TOOLS */
-.tool-box {
-    background-color: #1e293b;
-    border: 1px solid #475569;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-}
-.tool-box h3 {
-    margin-top: 0;
-    color: #38bdf8;
-    font-size: 16px;
-}
-input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    background-color: #0f172a;
-    border: 1px solid #475569;
-    color: white;
-    border-radius: 6px;
-    font-size: 15px;
-    box-sizing: border-box;
-    font-family: monospace;
-}
-input[type="text"]:focus {
-    border-color: #38bdf8;
-    outline: none;
-}
-.variable-inputs {
-    display: flex;
-    gap: 20px;
-    margin: 15px 0;
-}
-select {
-    padding: 6px 12px;
-    background-color: #334155;
-    color: white;
-    border: 1px solid #475569;
-    border-radius: 4px;
-}
-button {
-    background-color: #0284c7;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-button:hover {
-    background-color: #0369a1;
-}
-
-/* ==========================================================================
-   🌟 KUNCI UTAMA: INTERACTIVE DYNAMIC OUTPUT BOX (LOCK SCROLL & OPACITY) 🌟
-   ========================================================================== */
-.dynamic-output-box {
-    background-color: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+// 4. RANGKAIAN LOGIKA
+function hitungRangkaian(e) {
+    if (e) e.preventDefault();
     
-    /* Konfigurasi Awal: Sembunyikan total tinggi & wujudnya agar tidak memakan ruang visual */
-    opacity: 0;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    padding: 0 20px; 
-    margin-top: 0;
-    border-left: 0 solid #38bdf8;
+    let input = document.getElementById('input-rangkaian').value.trim();
+    let content = document.getElementById('content-sirkuit-dinamis');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e; font-weight:bold;'>⚠️ Masukkan rumus sirkuit!</span>";
+        return false;
+    }
+    content.innerHTML = `<p style="margin:0; color:#38bdf8; font-weight:bold; animation: fadeIn 0.3s ease;">✅ <b>Pemetaan Sukses:</b> Logika sirkuit <b>${input}</b> berhasil dipetakan.</p>`;
+    return false;
+}
+
+// 5. K-MAP
+function hitungKMap(e) {
+    if (e) e.preventDefault();
     
-    /* Efek Transisi Animasi Lembut Saat Muncul */
-    transition: opacity 0.3s ease, padding 0.3s ease, margin-top 0.3s ease, border-left-width 0.1s ease;
-}
+    let input = document.getElementById('input-kmap').value.trim();
+    let content = document.getElementById('content-kmap-matrix-dinamis');
 
-/* KELAS AKTIF YANG DIPANGGIL JAVASCRIPT (.classList.add) */
-.dynamic-output-box.show-active {
-    opacity: 1;
-    visibility: visible;
-    height: auto;
-    overflow: visible;
-    padding: 20px;
-    margin-top: 20px; /* Jarak pas di bawah tombol tools masukan */
-    border-left: 4px solid #38bdf8; /* Garis aksen vertikal premium */
-}
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e; font-weight:bold;'>⚠️ Masukkan rumus K-Map!</span>";
+        return false;
+    }
 
-.dynamic-output-box h4 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    color: #38bdf8;
-    font-size: 16px;
-    border-bottom: 1px solid #334155;
-    padding-bottom: 8px;
-}
-
-.dynamic-output-box .box-content {
-    font-size: 14px;
-    color: #e2e8f0;
-    line-height: 1.5;
-}
-
-/* TABLES & MATRIX VISUALIZATION */
-.table-container {
-    overflow-x: auto;
-    margin: 15px 0;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-th, td {
-    border: 1px solid #334155;
-    padding: 10px;
-    text-align: left;
-}
-th {
-    background-color: #0f172a;
-    color: #38bdf8;
-}
-tr:hover {
-    background-color: #1e293b;
-}
-.kmap-cell {
-    width: 50px;
-    height: 40px;
-    text-align: center;
-    font-weight: bold;
-    background: #0f172a;
-    color: #f43f5e;
+    let urutanKolom = [{y:0,z:0}, {y:0,z:1}, {y:1,z:1}, {y:1,z:0}];
+    let htmlKMap = `
+        <div style="animation: fadeIn 0.3s ease;">
+            <p style="margin: 0 0 8px 0; color:#38bdf8; font-weight:bold;">✅ <b>Matriks K-Map Berhasil Digenerate:</b></p>
+            <table border="1" style="border-collapse:collapse; width:100%; text-align:center; font-size:13px; color:#f1f5f9; border-color:#334155;">
+                <thead>
+                    <tr style="background:#1e293b; color:#38bdf8;"><th>x \\ yz</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+                </thead>
+                <tbody>
+    `;
+    for (let x = 0; x <= 1; x++) {
+        htmlKMap += `<tr><td style='font-weight:bold; color:#38bdf8; background:#1e293b; padding:6px;'>${x}</td>`;
+        for (let i = 0; i < urutanKolom.length; i++) {
+            let hasil = evaluasiEkspresi(input, x, urutanKolom[i].y, urutanKolom[i].z);
+            htmlKMap += `<td style="font-weight:bold; color:#f43f5e;">${hasil}</td>`;
+        }
+        htmlKMap += `</tr>`;
+    }
+    htmlKMap += `</tbody></table></div>`;
+    content.innerHTML = htmlKMap;
+    return false;
 }

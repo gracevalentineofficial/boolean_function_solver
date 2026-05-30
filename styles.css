@@ -4,8 +4,8 @@ html {
 }
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: #1e293b; /* Navy yang sedikit lebih cerah & nyaman di mata */
-    color: #f1f5f9; /* Kontras teks yang disesuaikan agar tidak melelahkan mata */
+    background-color: #1e293b;
+    color: #f1f5f9;
     margin: 0;
     padding: 0;
 }
@@ -18,10 +18,10 @@ body {
 
 /* KOLOM 1: SIDEBAR MENU NAVIGATION (FIXED & STICKY) */
 .sidebar {
-    width: 290px;
-    background-color: #0f172a; /* Kontras navy pekat sebagai penyeimbang */
+    width: 320px; /* Diperlebar sedikit agar akomodatif terhadap pembesaran ikon menu 3x */
+    background-color: #0f172a;
     border-right: 1px solid #334155;
-    padding: 25px;
+    padding: 25px 20px;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -30,28 +30,32 @@ body {
     z-index: 100;
 }
 
-/* KOMPONEN LOGO BARU DI SIDEBAR */
-.logo-container {
+/* FORMAT LOGO SITUS BoS (CENTER & PERBESARAN 3X) */
+.logo-container-center {
     width: 100%;
     display: flex;
-    justify-content: start;
-    margin-bottom: 10px;
+    justify-content: center; /* Setengah Center Panel */
+    margin-bottom: 50px; /* JARAK SKALA 5: Memberi jarak jauh ke tulisan BoS Panel */
 }
 .site-logo {
-    max-height: 50px;
+    max-height: 150px; /* Ukuran diperbesar 3 kali lipat dari ukuran dasar 50px */
     width: auto;
-    border-radius: 6px;
+    border-radius: 10px;
     object-fit: contain;
 }
-.sidebar-header h2 {
+
+/* TULISAN BoS PANEL DENGAN SETTING JARAK SKALA 3 */
+.sidebar-title {
     color: #38bdf8;
-    margin-top: 5px;
-    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 30px; /* JARAK SKALA 3: Jarak yang dikurangi menuju ke isi menu pertama */
+    font-size: 22px;
     letter-spacing: 0.5px;
+    text-align: center;
 }
 
+/* DAFTAR MENU SIDEBAR BESERTA INTEGRASI IKON MATERI (PERBESARAN 3X) */
 .sidebar-menu {
-    margin-top: 20px;
     flex-grow: 1;
 }
 .sidebar-menu ul {
@@ -60,14 +64,16 @@ body {
     margin: 0;
 }
 .sidebar-menu li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .sidebar-menu a {
     color: #cbd5e1;
     text-decoration: none;
-    font-size: 14px;
-    display: block;
-    padding: 12px 14px;
+    font-size: 13.5px;
+    display: flex;
+    align-items: center; /* Sejajar dengan teks judul */
+    gap: 15px; /* Jarak antara ikon dan teks menu */
+    padding: 10px 12px;
     border-radius: 8px;
     transition: all 0.2s ease;
     font-weight: 500;
@@ -78,58 +84,51 @@ body {
     color: #38bdf8;
     transform: translateX(4px);
 }
+
+/* IKON ILUSTRASI DI SIDEBAR (PERBESARAN 3X) */
+.menu-illustration {
+    width: 45px; /* Diperbesar 3 kali lipat dari ukuran mikro standar ikon teks */
+    height: 45px;
+    object-fit: contain;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
 .sidebar-footer {
     font-size: 12px;
     color: #64748b;
     border-top: 1px solid #334155;
     padding-top: 15px;
+    text-align: center;
     font-weight: 500;
 }
 
 /* KOLOM 2 & 3: MAIN KONTEN FLUID AREA */
 .main-content {
-    margin-left: 290px;
+    margin-left: 320px;
     padding: 40px;
     flex-grow: 1;
     box-sizing: border-box;
-    max-width: calc(100% - 290px);
+    max-width: calc(100% - 320px);
 }
-.main-header h1 {
+
+/* HEADER UTAMA DI TENGAH (CENTER) */
+.main-header-center {
+    text-align: center; /* Mengubah pemformatan judul situs ke tengah */
+    margin-bottom: 40px;
+}
+.main-header-center h1 {
     color: #38bdf8;
-    font-size: 36px;
+    font-size: 38px;
     margin-top: 0;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 .dev-tagline {
     color: #94a3b8;
-    font-size: 14px;
+    font-size: 15px;
     font-family: monospace;
     margin-top: 0;
-    margin-bottom: 35px;
-}
-
-/* HEADER SEKSIONAL SEJAJAR DENGAN ILUSTRASI */
-.section-header-inline {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #334155;
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-    gap: 15px;
-}
-.section-header-inline h2 {
-    color: #f8fafc;
-    margin: 0;
-    font-size: 22px;
-    flex-grow: 1;
-}
-.section-illustration {
-    max-height: 45px; /* Mengunci agar tinggi gambar tetap elegan berdampingan dengan teks */
-    width: auto;
-    object-fit: contain;
-    border-radius: 4px;
-    background-color: transparent;
+    text-align: center; /* Mengubah posisi tulisan slogan ke tengah */
 }
 
 /* KARTU MATERI */
@@ -142,6 +141,14 @@ body {
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.section-title-only {
+    color: #f8fafc;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 22px;
+    border-bottom: 2px solid #334155;
+    padding-bottom: 12px;
 }
 .materi-text {
     color: #cbd5e1;

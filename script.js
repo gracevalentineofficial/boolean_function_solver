@@ -1,137 +1,232 @@
-// Standarisasi Fungsi Teks agar Siap Diolah Mesin Logika
-function bersihkanEkspresi(expr) {
-    let res = expr.replace(/\s+/g, '');
-    res = res.replace(/([xyz])([xyz])/g, '$1*$2');
-    res = res.replace(/(\))([xyz])/g, '$1*$2');
-    res = res.replace(/([xyz])(\()/g, '$1*$2');
-    return res;
+// ==========================================
+// ENGINE CORE: PARSER & EVALUATOR EKSPRESI BOOLEAN
+// ==========================================
+
+// Fungsi untuk membersihkan dan menerjemahkan input ke sintaks JavaScript
+function evaluasiEkspresi(ekspresi, x, y, z) {
+    // Sederhanakan input pengguna agar seragam
+    let formatted = ekspresi.toLowerCase().replace(/\s+/g, '');
+    
+    // Ganti literal variabel dengan nilai biner (1 atau 0)
+    // Gunakan regex untuk memastikan tidak salah mengganti karakter sisa
+    formatted = formatted.replace(/x/g, x);
+    formatted = formatted.replace(/y/g, y);
+    formatted = formatted.replace(/z/g, z);
+
+    // Proses operasi komplemen/NOT (contoh: 1' menjadi 0, 0' menjadi 1)
+    while (formatted.includes("'")) {
+        formatted = formatted.replace(/1'/g, '0').replace(/0'/g, '1');
+    }
+
+    // Ubah operator perkalian Boolean menjadi operator logika AND JavaScript
+    // Mendukung penulisan implisit (xy) maupun eksplisit (x*y atau x.y)
+    formatted = formatted.replace(/\*/g, '&&').replace(/\./g, '&&');
+    // Menangani perkalian biner menempel (misal: 11 atau 10 setelah substitusi)
+    formatted = formatted.replace(/([01])(?=[01])/g, '$1 && ');
+
+    // Ubah operator penjumlahan Boolean (+) menjadi OR (||)
+    formatted = formatted.replace(/\+/g, '||');
+
+    try {
+        // Evaluasi string ekspresi menjadi nilai boolean JavaScript (true/false)
+        let hasilTingkatLanjut = eval(formatted);
+        return hasilTingkatLanjut ? 1 : 0;
+    } catch (error) {
+        return "Error Sintaks";
+    }
 }
 
-// Logika De Morgan Otomatis
-function olahDeMorgan(expr) {
-    let suku = expr.split('+');
-    let hasilSuku = suku.map(s => {
-        let faktor = s.split('*');
-        let invFaktor = faktor.map(f => f.includes("'") ? f.replace("'", "") : f + "'");
-        return "(" + invFaktor.join('+') + ")";
-    });
-    return hasilSuku.join('*');
-}
-
-// Evaluator Inti JavaScript boolean
-function jalankanEval(expr, x, y, z) {
-    let js = expr.replace(/x'/g, (!x?1:0)).replace(/y'/g, (!y?1:0)).replace(/z'/g, (!z?1:0))
-                 .replace(/x/g, x).replace(/y/g, y).replace(/z/g, z)
-                 .replace(/\+/g, '||').replace(/\*/g, '&&');
-    try { return eval(js) ? 1 : 0; } catch(e) { return "Err"; }
-}
-
-// Sinkronisasi sinkron untuk membuka semua kotak luaran sekaligus
-function bukaPanelOutput(judul, awal, komplemen, tabelHtml, sirkuitTxt, kmapHtml) {
+// Fungsi pembantu menampilkan zona output utama
+function tampilkanOutputZone() {
     document.getElementById('output-zone').style.display = 'block';
-    document.getElementById('content-jawaban').innerHTML = `<b>Status:</b> ${judul}<br><b>Formula Terbaca:</b> <code style='color:#f43f5e'>${awal}</code>`;
-    document.getElementById('content-hukum').innerHTML = `<code>f' = ${komplemen}</code>`;
-    document.getElementById('content-table-output').innerHTML = tabelHtml;
-    document.getElementById('content-sirkuit').innerHTML = sirkuitTxt;
-    document.getElementById('content-kmap-matrix').innerHTML = kmapHtml;
-    
-    // Auto scroll halus ke area panel luaran
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
 }
 
-// 1. TOOL PADA BAGIAN HUKUM
+// ==========================================
+// 1. FUNGSI SOLVER: ANALISIS HUKUM DE MORGAN
+// ==========================================
 function hitungHukum() {
-    let input = document.getElementById('input-hukum').value;
-    if(!input) return alert("Masukkan formula logika!");
-    let bersih = bersihkanEkspresi(input);
-    let komp = olahDeMorgan(bersih);
-    
-    bukaPanelOutput("Analisis Komplemen Berhasil", input, komp, "Tekan tombol di Bagian Tabel Kebenaran untuk melihat tabel penuh.", "Tekan tombol di Bagian Rangkaian Logika untuk melihat struktur sirkuit.", "Tekan tombol di Bagian K-Map untuk melihat matriks.");
-}
+    tampilkanOutputZone();
+    let input = document.getElementById('input-hukum').value.trim();
+    let content = document.getElementById('content-hukum');
 
-// 2. TOOL PADA BAGIAN FUNGSI (IDENTIFIKASI & EVALUASI)
-function hitungFungsi() {
-    let input = document.getElementById('input-fungsi').value;
-    if(!input) return alert("Masukkan fungsi!");
-    
-    let isValid = /^[xyz01\+\*'\s\(\)]+$/.test(input);
-    if(!isValid) {
-        alert("Karakter tidak dikenal! Gunakan hanya x, y, z, +, *, dan '");
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan suku ekspresi terlebih dahulu!</span>";
         return;
     }
-    
-    let bersih = bersihkanEkspresi(input);
-    let x = parseInt(document.getElementById('eval-x').value);
-    let y = parseInt(document.getElementById('eval-y').value);
-    let z = parseInt(document.getElementById('eval-z').value);
-    let hasil = jalankanEval(bersih, x, y, z);
-    
-    bukaPanelOutput(`FUNGSI VALID. Hasil substitusi f(${x},${y},${z}) = <b>${hasil}</b>`, input, olahDeMorgan(bersih), "Sistem mendeteksi 3 literal aktif.", "Sirkuit siap di-generate.", "Matriks siap di-generate.");
+
+    // Algoritma dasar De Morgan: (A + B)' = A'B' dan (AB)' = A' + B'
+    let hasilDeMorgan = "";
+    if (input.includes('+')) {
+        let bagian = input.split('+');
+        hasilDeMorgan = bagian.map(b => `(${b.trim()})'`).join(' · ');
+    } else if (input.includes('*') || input.includes('.') || input.length > 1) {
+        let separator = input.includes('*') ? '*' : (input.includes('.') ? '.' : '');
+        let bagian = separator ? input.split(separator) : input.split('');
+        hasilDeMorgan = bagian.map(b => `${b.trim()}'`).join(' + ');
+    } else {
+        hasilDeMorgan = `${input}'`;
+    }
+
+    content.innerHTML = `
+        <p><b>Ekspresi Awal:</b> $(${input})'$</p>
+        <p style='color:#38bdf8; font-weight:bold;'><b>Bentuk Komplemen (De Morgan):</b> $${hasilDeMorgan}$</p>
+        <p class='note' style='font-size:12px; color:#94a3b8;'>*Gunakan prinsip dualitas untuk menyederhanakan literal komplemen ganda.</p>
+    `;
 }
 
-// 3. TOOL BAGIAN TABEL KEBENARAN
-function hitungTabelKebenaran() {
-    let input = document.getElementById('input-tabel').value;
-    if(!input) return alert("Masukkan rumus ekspresi!");
-    let bersih = bersihkanEkspresi(input);
+// ==========================================
+// 2. FUNGSI SOLVER: EVALUATOR FUNGSI & LITERAL
+// ==========================================
+function hitungFungsi() {
+    tampilkanOutputZone();
+    let input = document.getElementById('input-fungsi').value.trim();
+    let x = document.getElementById('eval-x').value;
+    let y = document.getElementById('eval-y').value;
+    let z = document.getElementById('eval-z').value;
+    let content = document.getElementById('content-jawaban');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi Boolean!</span>";
+        return;
+    }
+
+    let hasil = evaluasiEkspresi(input, x, y, z);
     
-    let html = "<table><thead><tr><th>x</th><th>y</th><th>z</th><th>Output (f)</th></tr></thead><tbody>";
-    for(let x=0; x<=1; x++) {
-        for(let y=0; y<=1; y++) {
-            for(let z=0; z<=1; z++) {
-                let out = jalankanEval(bersih, x, y, z);
-                html += `<tr><td>${x}</td><td>${y}</td><td>${z}</td><td style='font-weight:bold;color:#38bdf8'>${out}</td></tr>`;
+    // Identifikasi literal aktif
+    let literalDitemukan = [];
+    if (/x/i.test(input)) literalDitemukan.push('x');
+    if (/y/i.test(input)) literalDitemukan.push('y');
+    if (/z/i.test(input)) literalDitemukan.push('z');
+
+    content.innerHTML = `
+        <p><b>Fungsi:</b> $f(x,y,z) = {${input}}$</p>
+        <p><b>Substitusi:</b> $x=${x}, y=${y}, z=${z}$</p>
+        <hr style='border-color:#334155;'>
+        <p style='font-size:16px;'><b>Hasil Evaluasi $f$:</b> <span style='color:#38bdf8; font-weight:bold;'>${hasil}</span></p>
+        <p style='font-size:13px; color:#cbd5e1;'><b>Literal Terdeteksi:</b> ${literalDitemukan.join(', ')} (${literalDitemukan.length} Variabel)</p>
+    `;
+}
+
+// ==========================================
+// 3. FUNGSI SOLVER: GENERATOR TABEL KEBENARAN
+// ==========================================
+function hitungTabelKebenaran() {
+    tampilkanOutputZone();
+    let input = document.getElementById('input-tabel').value.trim();
+    let content = document.getElementById('content-table-output');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus ekspresi!</span>";
+        return;
+    }
+
+    // Membuat struktur tabel 3-variabel standar (8 Kombinasi)
+    let htmlTable = `
+        <table>
+            <thead>
+                <tr><th>x</th><th>y</th><th>z</th><th>f(x,y,z)</th></tr>
+            </thead>
+            <tbody>
+    `;
+
+    for (let x = 0; x <= 1; x++) {
+        for (let y = 0; y <= 1; y++) {
+            for (let z = 0; z <= 1; z++) {
+                let hasil = evaluasiEkspresi(input, x, y, z);
+                let highlightRow = hasil === 1 ? "style='background-color: rgba(56, 189, 248, 0.1);'" : "";
+                htmlTable += `<tr ${highlightRow}><td>${x}</td><td>${y}</td><td>${z}</td><td style='font-weight:bold; color:${hasil===1?'#38bdf8':'#64748b'}'>${hasil}</td></tr>`;
             }
         }
     }
-    html += "</tbody></table>";
-    
-    bukaPanelOutput("Tabel Kebenaran Selesai Dibuat", input, olahDeMorgan(bersih), html, "Gunakan fitur sirkuit untuk melihat visual gerbang.", "Gunakan fitur K-Map untuk pemetaan kotak.");
+
+    htmlTable += `</tbody></table>`;
+    content.innerHTML = `<p style='font-size:13px; margin-bottom:10px;'>Tabel Kebenaran untuk: <b>${input}</b></p>` + htmlTable;
 }
 
-// 4. TOOL BAGIAN RANGKAIAN LOGIKA
+// ==========================================
+// 4. FUNGSI SOLVER: VISUALISASI ALUR SIRKUIT RANGKAIAN
+// ==========================================
 function hitungRangkaian() {
-    let input = document.getElementById('input-rangkaian').value;
-    if(!input) return alert("Masukkan ekspresi!");
-    let bersih = bersihkanEkspresi(input);
-    
-    let suku = bersih.split('+');
-    let txt = "<div style='font-family:monospace; background:#111827; padding:10px; border-radius:6px;'>";
-    txt += "<b>=== ALUR INPUT & GERBANG GERBANG ===</b><br>";
-    
-    suku.forEach((s, idx) => {
-        txt += `Suku-${idx+1} [${s}] -> Masuk Gerbang AND<br>`;
-    });
-    if(suku.length > 1) {
-        txt += "Gabungan Semua Suku -> Masuk Gerbang Utama OR -> OUTPUT PIN (f)<br>";
-    } else {
-        txt += "Suku Tunggal langsung dilempar ke -> OUTPUT PIN (f)<br>";
+    tampilkanOutputZone();
+    let input = document.getElementById('input-rangkaian').value.trim();
+    let content = document.getElementById('content-sirkuit');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi sirkuit!</span>";
+        return;
     }
-    txt += "</div>";
-    
-    bukaPanelOutput("Skema Struktur Rangkaian Siap", input, olahDeMorgan(bersih), "Tekan tombol di bagian tabel untuk data tabel.", txt, "Tekan tombol di bagian K-Map untuk data peta.");
+
+    // Parsing sederhana untuk memetakan alur logika sirkuit gerbang ke teks instruksi
+    let alurSirkuit = "";
+    if (input.includes('+')) {
+        let kelompokGerbang = input.split('+');
+        alurSirkuit += "<ol>";
+        kelompokGerbang.forEach((item, index) => {
+            alurSirkuit += `<li>Suku-${index+1} (${item.trim()}): Melewati Gerbang <b>AND / NOT</b></li>`;
+        });
+        alurSirkuit += "</ol><p>➡️ Seluruh luaran suku digabungkan menuju Gerbang Utama: <b>OR GATE (Penjumlahan)</b></p>";
+    } else {
+        alurSirkuit = "<p>➡️ Ekspresi tunggal: Melewati interkoneksi seri kabel logika menuju <b>AND GATE / NOT GATE</b> secara langsung.</p>";
+    }
+
+    content.innerHTML = `
+        <div style='background:#0f172a; padding:12px; border-radius:6px; font-family:monospace; border:1px solid #334155;'>
+            <p style='color:#38bdf8; margin-top:0;'><b>[Peta Interkoneksi Sirkuit]</b></p>
+            ${alurSirkuit}
+        </div>
+    `;
 }
 
-// 5. TOOL BAGIAN PETA KARNAUGH (K-MAP)
+// ==========================================
+// 5. FUNGSI SOLVER: MATRIKS PETA KARNAUGH (K-MAP)
+// ==========================================
 function hitungKMap() {
-    let input = document.getElementById('input-kmap').value;
-    if(!input) return alert("Masukkan rumus!");
-    let bersih = bersihkanEkspresi(input);
-    
-    let m00_0 = jalankanEval(bersih, 0, 0, 0);
-    let m01_0 = jalankanEval(bersih, 0, 0, 1);
-    let m11_0 = jalankanEval(bersih, 0, 1, 1);
-    let m10_0 = jalankanEval(bersih, 0, 1, 0);
-    
-    let m00_1 = jalankanEval(bersih, 1, 0, 0);
-    let m01_1 = jalankanEval(bersih, 1, 0, 1);
-    let m11_1 = jalankanEval(bersih, 1, 1, 1);
-    let m10_1 = jalankanEval(bersih, 1, 1, 0);
-    
-    let html = "<table><thead><tr><th>x \\ yz</th><th>00</th><th>01</th><th>11</th><th>10</th></tr></thead><tbody>";
-    html += `<tr><td><b>x = 0</b></td><td class='kmap-cell'>${m00_0}</td><td class='kmap-cell'>${m01_0}</td><td class='kmap-cell'>${m11_0}</td><td class='kmap-cell'>${m10_0}</td></tr>`;
-    html += `<tr><td><b>x = 1</b></td><td class='kmap-cell'>${m00_1}</td><td class='kmap-cell'>${m01_1}</td><td class='kmap-cell'>${m11_1}</td><td class='kmap-cell'>${m10_1}</td></tr>`;
-    html += "</tbody></table><p class='note' style='margin-top:10px;'>Penyederhanaan dilakukan dengan melingkari grup angka 1 yang bertetangga.</p>";
-    
-    bukaPanelOutput("Matriks K-Map Berhasil Dipetakan", input, olahDeMorgan(bersih), "Tekan tombol bagian tabel untuk melihat data tabel.", "Tekan tombol bagian rangkaian untuk melihat gerbang.", html);
+    tampilkanOutputZone();
+    let input = document.getElementById('input-kmap').value.trim();
+    let content = document.getElementById('content-kmap-matrix');
+
+    if (!input) {
+        content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi penyederhanaan!</span>";
+        return;
+    }
+
+    // Ambil nilai kebenaran untuk susunan urutan matriks K-Map 3-Variabel (Kode Gray)
+    // Baris: x=0, x=1
+    // Kolom: yz=00, yz=01, yz=11, yz=10 (Urutan Kode Gray khusus)
+    let urutanKolom = [
+        {y:0, z:0}, // 00
+        {y:0, z:1}, // 01
+        {y:1, z:1}, // 11
+        {y:1, z:0}  // 10
+    ];
+
+    let htmlKMap = `
+        <table>
+            <thead>
+                <tr>
+                    <th style='background:#1e293b; color:#cbd5e1;'>x \\ yz</th>
+                    <th>00</th>
+                    <th>01</th>
+                    <th>11</th>
+                    <th>10</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    for (let x = 0; x <= 1; x++) {
+        htmlKMap += `<tr><td style='font-weight:bold; background:#0f172a; color:#38bdf8; text-align:center;'>${x}</td>`;
+        for (let i = 0; i < urutanKolom.length; i++) {
+            let y = urutanKolom[i].y;
+            let z = urutanKolom[i].z;
+            let hasil = evaluasiEkspresi(input, x, y, z);
+            
+            let cellStyle = hasil === 1 ? "style='background-color:#0284c7; color:white; font-weight:bold; text-align:center;'" : "style='text-align:center; color:#475569;'";
+            htmlKMap += `<td ${cellStyle}>${hasil}</td>`;
+        }
+        htmlKMap += `</tr>`;
+    }
+
+    htmlKMap += `</tbody></table>`;
+    content.innerHTML = `<p style='font-size:13px; margin-bottom:10px;'>Peta Kotak Matriks Berdasarkan Urutan Kode Gray:</p>` + htmlKMap;
 }

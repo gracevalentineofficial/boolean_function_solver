@@ -90,8 +90,8 @@ body {
 /* IKON ILUSTRASI DI SIDEBAR - TEPAT UKURAN (65PX) */
 /* Ukuran diperkecil ideal agar pas, detail tetap terlihat jelas, dan mengutamakan estetika */
 .menu-illustration {
-    width: 65px; 
-    height: 65px;
+    width: 80px; 
+    height: 80px;
     object-fit: contain;
     border-radius: 6px;
     flex-shrink: 0; /* Mencegah gambar gepeng saat ruang horizontal sempit */

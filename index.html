@@ -3,39 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boolean Function Solver & Analyzer</title>
+    <title>Advanced Boolean Function Solver & Cheat Sheet</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>🧠 Boolean Function Solver</h1>
-        <p class="subtitle">Materi: Fungsi, Komplemen, & Evaluasi Aljabar Boolean</p>
+        <h1>🧠 Advanced Boolean Solver</h1>
+        <p class="subtitle">Platform Evaluasi & Kamus Hukum Aljabar Boolean</p>
         
         <div class="card">
-            <h3>Masukkan Fungsi Boolean</h3>
-            <p class="note">Gunakan format: <b>+</b> (OR), <b>*</b> atau langsung nempel (AND), <b>'</b> (NOT). Contoh: x*y + x'*z</p>
+            <h3>🎛️ Masukkan Fungsi Boolean</h3>
+            <p class="note">Format: <b>+</b> (OR), <b>*</b> atau nempel (AND), <b>'</b> (NOT). Contoh: x*y + x'*z</p>
             <input type="text" id="boolean-input" placeholder="Contoh: x y + x' z">
             
             <div class="variables-section">
-                <h4>Substitusi Nilai Variabel (Untuk Evaluasi)</h4>
+                <h4>Substitusi Variabel (Evaluasi Nilai)</h4>
                 <label>x: <select id="val-x"><option value="1">1</option><option value="0">0</option></select></label>
                 <label>y: <select id="val-y"><option value="1">1</option><option value="0">0</option></select></label>
                 <label>z: <select id="val-z"><option value="1">1</option><option value="0">0</option></select></label>
             </div>
 
-            <button onclick="prosesFungsi()">Hitung & Analisis</button>
+            <button onclick="prosesFungsi()">Hitung & Analisis Fungsi</button>
         </div>
 
         <div class="card result-card" id="result-box" style="display: none;">
-            <h3>📊 Hasil Analisis</h3>
+            <h3>📊 Hasil Analisis Sistem</h3>
             <div class="result-item">
-                <strong>Fungsi Awal:</strong> <span id="res-awal"></span>
+                <strong>Fungsi Awal (f):</strong> <span id="res-awal" class="highlight"></span>
             </div>
             <div class="result-item">
-                <strong>Bentuk Komplemen (f'):</strong> <span id="res-komplemen"></span>
+                <strong>Bentuk Komplemen (f') [De Morgan]:</strong> <span id="res-komplemen" class="highlight"></span>
             </div>
             <div class="result-item">
-                <strong>Hasil Evaluasi Nilai:</strong> <span id="res-evaluasi" class="badge"></span>
+                <strong>Hasil Evaluasi Akhir:</strong> <span id="res-evaluasi" class="badge"></span>
+            </div>
+        </div>
+
+        <div class="card laws-card">
+            <h3>📚 Kamus Hukum Aljabar Boolean</h3>
+            <p class="note">Referensi resmi penulisan penyederhanaan yang ditanamkan pada logika sistem:</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Hukum</th>
+                            <th>Dua-an (Duality 1)</th>
+                            <th>Dua-an (Duality 2)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><b>Identity</b></td><td>x + 0 = x</td><td>x * 1 = x</td></tr>
+                        <tr><td><b>Idempotent</b></td><td>x + x = x</td><td>x * x = x</td></tr>
+                        <tr><td><b>Complement</b></td><td>x + x' = 1</td><td>x * x' = 0</td></tr>
+                        <tr><td><b>Involution (Double NOT)</b></td><td colspan="2" style="text-align: center;">(x')' = x</td></tr>
+                        <tr><td><b>Commutative</b></td><td>x + y = y + x</td><td>x * y = y * x</td></tr>
+                        <tr><td><b>Associative</b></td><td>x + (y + z) = (x + y) + z</td><td>x * (y * z) = (x * y) * z</td></tr>
+                        <tr><td><b>Distributive</b></td><td>x + (y * z) = (x + y)*(x + z)</td><td>x * (y + z) = (x * y) + (x * z)</td></tr>
+                        <tr><td><b>De Morgan</b></td><td>(x + y)' = x' * y'</td><td>(x * y)' = x' + y'</td></tr>
+                        <tr><td><b>Absorption (Penyerapan)</b></td><td>x + (x * y) = x</td><td>x * (x + y) = x</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

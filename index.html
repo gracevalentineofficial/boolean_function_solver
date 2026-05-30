@@ -12,18 +12,44 @@
         
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo-container">
-                    <img src="logositus.png" alt="Logo BoS" class="site-logo">
+                <div class="logo-container-center">
+                    <img src="logositus.jpg" alt="Logo BoS" class="site-logo">
                 </div>
-                <h2>BoS Panel</h2>
+                <h2 class="sidebar-title">BoS Panel</h2>
             </div>
+            
             <nav class="sidebar-menu">
                 <ul>
-                    <li><a href="#bagian-hukum">Hukum Aljabar Boolean</a></li>
-                    <li><a href="#bagian-fungsi">Fungsi Boolean</a></li>
-                    <li><a href="#bagian-tabel">Tabel Kebenaran</a></li>
-                    <li><a href="#bagian-rangkaian">Rangkaian & Gerbang Logika</a></li>
-                    <li><a href="#bagian-kmap">Penyederhanaan Fungsi Boolean dengan K-Map</a></li>
+                    <li>
+                        <a href="#bagian-hukum">
+                            <img src="ikonhukum.jpg" alt="Ikon Hukum" class="menu-illustration">
+                            <span>Hukum Aljabar Boolean</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#bagian-fungsi">
+                            <img src="fungsibool.jpg" alt="Ikon Fungsi" class="menu-illustration">
+                            <span>Fungsi Boolean</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#bagian-tabel">
+                            <img src="tabelkebenaran.jpg" alt="Ikon Tabel" class="menu-illustration">
+                            <span>Tabel Kebenaran</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#bagian-rangkaian">
+                            <img src="rangkaianlogika.jpg" alt="Ikon Rangkaian" class="menu-illustration">
+                            <span>Rangkaian & Gerbang Logika</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#bagian-kmap">
+                            <img src="kmap.jpg" alt="Ikon KMap" class="menu-illustration">
+                            <span>Penyederhanaan Fungsi Boolean dengan K-Map</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
@@ -33,17 +59,14 @@
 
         <main class="main-content">
             
-            <header class="main-header">
+            <header class="main-header-center">
                 <h1>BoS : Boolean Solver</h1>
-                <p class="dev-tagline">Make it Fast - developer</p>
+                <p class="dev-tagline">-- make it easy fastly ~ developer --</p>
             </header>
 
             <section id="bagian-hukum" class="content-section">
                 <div class="section-card">
-                    <div class="section-header-inline">
-                        <h2>Hukum Aljabar Boolean</h2>
-                        <img src="ikonhukum.png" alt="Ilustrasi Hukum Aljabar Boolean" class="section-illustration">
-                    </div>
+                    <h2 class="section-title-only">Hukum Aljabar Boolean</h2>
                     <p class="materi-text">Aljabar Boolean memiliki properti dasar yang diatur oleh 11 hukum formal (Prinsip Dualitas). Hukum ini digunakan untuk memanipulasi ekspresi logika tanpa mengubah nilai kebenarannya.</p>
                     
                     <div class="table-container">
@@ -78,10 +101,7 @@
 
             <section id="bagian-fungsi" class="content-section">
                 <div class="section-card">
-                    <div class="section-header-inline">
-                        <h2>Fungsi Boolean</h2>
-                        <img src="fungsibool.png" alt="Ilustrasi Fungsi Boolean" class="section-illustration">
-                    </div>
+                    <h2 class="section-title-only">Fungsi Boolean</h2>
                     <p class="materi-text">Fungsi Boolean adalah ekspresi yang dibentuk oleh literal (variabel) dan operator logika (+, ·, '). Nilai evaluasi fungsi selalu berupa elemen biner {0, 1} tergantung nilai substitusi komponennya.</p>
                     
                     <div class="tool-box">
@@ -100,10 +120,7 @@
 
             <section id="bagian-tabel" class="content-section">
                 <div class="section-card">
-                    <div class="section-header-inline">
-                        <h2>Tabel Kebenaran</h2>
-                        <img src="tabelkebenaran.png" alt="Ilustrasi Tabel Kebenaran" class="section-illustration">
-                    </div>
+                    <h2 class="section-title-only">Tabel Kebenaran</h2>
                     <p class="materi-text">Tabel kebenaran mendaftar seluruh kemungkinan kombinasi nilai biner dari literal masukan untuk melihat karakteristik output f secara menyeluruh.</p>
                     
                     <div class="tool-box">
@@ -116,10 +133,7 @@
 
             <section id="bagian-rangkaian" class="content-section">
                 <div class="section-card">
-                    <div class="section-header-inline">
-                        <h2>Rangkaian & Gerbang Logika</h2>
-                        <img src="rangkaianlogika.png" alt="Ilustrasi Rangkaian Logika" class="section-illustration">
-                    </div>
+                    <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
                     <p class="materi-text">Fungsi Boolean dapat diimplementasikan ke dalam perangkat keras digital melalui gerbang logika standar: AND (perkalian), OR (penjumlahan), dan NOT (pembalik sinyal).</p>
                     
                     <div class="tool-box">
@@ -132,10 +146,7 @@
 
             <section id="bagian-kmap" class="content-section">
                 <div class="section-card">
-                    <div class="section-header-inline">
-                        <h2>Penyederhanaan Fungsi Boolean dengan K-Map</h2>
-                        <img src="kmap.png" alt="Ilustrasi Peta Karnaugh" class="section-illustration">
-                    </div>
+                    <h2 class="section-title-only">Penyederhanaan Fungsi Boolean dengan K-Map</h2>
                     <p class="materi-text">Peta Karnaugh (K-Map) adalah metode grafis peta kotak-kotak untuk menyederhanakan fungsi Boolean dengan memanfaatkan pengelompokan nilai 1 tetangga dekat.</p>
                     
                     <div class="tool-box">

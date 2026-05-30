@@ -64,13 +64,13 @@
 
             <section id="section-hukum" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Penyederhanaan Fungsi Boolean dengan K-Map</h2>
-                    <p class="materi-text">Peta Karnaugh (K-Map) adalah metode grafis peta kotak-kotak untuk menyederhanakan fungsi Boolean dengan memanfaatkan pengelompokan nilai 1 tetangga dekat.</p>
+                    <h2 class="section-title-only">Hukum Aljabar Boolean (De Morgan)</h2>
+                    <p class="materi-text">Mengubah hukum penjumlahan atau perkalian logika biner menjadi bentuk komplemen terbalik secara otomatis sesuai teorema aljabar Boolean.</p>
                     <div class="tool-box">
-                        <h3>🛠️ Generator Struktur Peta Karnaugh</h3>
-                        <input type="text" id="input-hukum" placeholder="Contoh: x*y + x*y'">
+                        <h3>Masukkan Ekspresi Boolean (Contoh: A + B atau X * Y):</h3>
+                        <input type="text" id="input-hukum" placeholder="Masukkan rumus... (misal: A + B)">
                         <div style="margin-top: 15px;">
-                            <button onclick="hitungHukum(event)">Petakan ke K-Map</button>
+                            <button type="button" onclick="hitungHukum(event); return false;">Jalankan Analisis Hukum</button>
                         </div>
                     </div>
                 </div>
@@ -79,9 +79,10 @@
             <section id="section-fungsi" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Evaluator Fungsi Boolean</h2>
-                    <p class="materi-text">Uji nilai keluaran fungsi logika biner berdasarkan kombinasi kondisi input variabel secara instan.</p>
+                    <p class="materi-text">Uji nilai keluaran fungsi logika biner berdasarkan kombinasi kondisi input variabel aktif secara instan.</p>
                     <div class="tool-box">
-                        <input type="text" id="input-fungsi" placeholder="Contoh: A * B + C'">
+                        <h3>Masukkan Fungsi Logika (Contoh: A * B + C'):</h3>
+                        <input type="text" id="input-fungsi" placeholder="Masukkan fungsi... (misal: A * B + C')">
                         <div class="variable-inputs">
                             <label>Nilai X/A: 
                                 <select id="eval-x"><option value="0">0</option><option value="1">1</option></select>
@@ -93,7 +94,7 @@
                                 <select id="eval-z"><option value="0">0</option><option value="1">1</option></select>
                             </label>
                         </div>
-                        <button onclick="hitungFungsi(event)">Evaluasi Fungsi</button>
+                        <button type="button" onclick="hitungFungsi(event); return false;">Evaluasi Fungsi</button>
                     </div>
                 </div>
             </section>
@@ -101,11 +102,12 @@
             <section id="section-tabel" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Generator Tabel Kebenaran</h2>
-                    <p class="materi-text">Memetakan seluruh kemungkinan kombinasi bit masukan biner untuk menghasilkan visualisasi tabel kebenaran.</p>
+                    <p class="materi-text">Memetakan seluruh kemungkinan kombinasi bit masukan biner untuk menghasilkan visualisasi tabel kebenaran yang komprehensif.</p>
                     <div class="tool-box">
-                        <input type="text" id="input-tabel" placeholder="Contoh: A + B * C">
+                        <h3>Masukkan Rumus Logika:</h3>
+                        <input type="text" id="input-tabel" placeholder="Masukkan rumus... (misal: A + B * C)">
                         <div style="margin-top: 15px;">
-                            <button onclick="hitungTabelKebenaran(event)">Generate Tabel Kebenaran</button>
+                            <button type="button" onclick="hitungTabelKebenaran(event); return false;">Generate Tabel Kebenaran</button>
                         </div>
                     </div>
                 </div>
@@ -114,11 +116,12 @@
             <section id="section-rangkaian" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
-                    <p class="materi-text">Menganalisis susunan ekspresi aljabar untuk dipetakan ke dalam bentuk gerbang logika dasar.</p>
+                    <p class="materi-text">Menganalisis susunan ekspresi aljabar untuk dipetakan ke dalam bentuk gerbang logika dasar (AND, OR, NOT).</p>
                     <div class="tool-box">
+                        <h3>Masukkan Rumus Sirkuit:</h3>
                         <input type="text" id="input-rangkaian" placeholder="Masukkan rumus sirkuit...">
                         <div style="margin-top: 15px;">
-                            <button onclick="hitungRangkaian(event)">Visualisasikan Rangkaian</button>
+                            <button type="button" onclick="hitungRangkaian(event); return false;">Visualisasikan Rangkaian</button>
                         </div>
                     </div>
                 </div>
@@ -126,51 +129,52 @@
 
             <section id="section-kmap" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Peta Karnaugh Matrix</h2>
-                    <p class="materi-text">Penyederhanaan visual minterm biner menggunakan matriks kode Gray.</p>
+                    <h2 class="section-title-only">Penyederhanaan Fungsi Boolean dengan K-Map</h2>
+                    <p class="materi-text">Peta Karnaugh (K-Map) adalah metode grafis berupa peta kotak-kotak matriks kode Gray untuk mencari bentuk fungsi biner paling sederhana.</p>
                     <div class="tool-box">
+                        <h3>Masukkan Rumus K-Map:</h3>
                         <input type="text" id="input-kmap" placeholder="Masukkan rumus untuk K-Map...">
                         <div style="margin-top: 15px;">
-                            <button onclick="hitungKMap(event)">Generate K-Map</button>
+                            <button type="button" onclick="hitungKMap(event); return false;">Petakan ke K-Map</button>
                         </div>
                     </div>
                 </div>
             </section>
 
 
-            <div class="solver-dashboard-grid" style="border: 2px dashed #1e3a8a; padding: 20px; border-radius: 12px; margin-top: 40px;">
-                <h3 style="text-align: center; color: #38bdf8; margin-top: 0; margin-bottom: 20px;">📊 PANEL OUTPUT INTERAKTIF (SOLVER BOX)</h3>
+            <div class="solver-dashboard-grid" style="border: 2px dashed #334155; padding: 25px; border-radius: 12px; margin-top: 50px; background-color: #0f172a;">
+                <h3 style="text-align: center; color: #38bdf8; margin-top: 0; margin-bottom: 25px; font-size: 20px; letter-spacing: 0.5px;">📊 PANEL OUTPUT INTERAKTIF (SOLVER BOX)</h3>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
                     
-                    <div class="output-card-box" style="background:#0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px;">
-                        <h4 style="color:#38bdf8; margin-top:0;">🎯 Jawaban / Status Fungsi</h4>
-                        <hr style="border-color:#334155;">
-                        <div id="content-jawaban-dinamis" style="color:#94a3b8; font-size:14px;">Menunggu input...</div>
+                    <div class="output-card-box" style="background:#1e293b; border: 1px solid #334155; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <h4 style="color:#38bdf8; margin-top:0; font-size:16px;">🎯 Jawaban / Status Fungsi</h4>
+                        <hr style="border-color:#334155; margin: 10px 0 15px 0;">
+                        <div id="content-jawaban-dinamis" style="color:#94a3b8; font-size:14px; line-height:1.5;">Menunggu input fungsi...</div>
                     </div>
 
-                    <div class="output-card-box" style="background:#0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px;">
-                        <h4 style="color:#38bdf8; margin-top:0;">⚖️ Analisis Hukum De Morgan</h4>
-                        <hr style="border-color:#334155;">
-                        <div id="content-hukum-dinamis" style="color:#94a3b8; font-size:14px;">Menunggu input...</div>
+                    <div class="output-card-box" style="background:#1e293b; border: 1px solid #334155; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <h4 style="color:#38bdf8; margin-top:0; font-size:16px;">⚖️ Analisis Hukum De Morgan</h4>
+                        <hr style="border-color:#334155; margin: 10px 0 15px 0;">
+                        <div id="content-hukum-dinamis" style="color:#94a3b8; font-size:14px; line-height:1.5;">Menunggu input rumus hukum...</div>
                     </div>
 
-                    <div class="output-card-box" style="background:#0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px;">
-                        <h4 style="color:#38bdf8; margin-top:0;">📋 Tabel Kebenaran Terkait</h4>
-                        <hr style="border-color:#334155;">
-                        <div id="content-table-output-dinamis" style="color:#94a3b8; font-size:14px;">Menunggu input...</div>
+                    <div class="output-card-box" style="background:#1e293b; border: 1px solid #334155; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <h4 style="color:#38bdf8; margin-top:0; font-size:16px;">📋 Tabel Kebenaran Terkait</h4>
+                        <hr style="border-color:#334155; margin: 10px 0 15px 0;">
+                        <div id="content-table-output-dinamis" style="color:#94a3b8; font-size:14px; line-height:1.5;">Menunggu pembuatan tabel...</div>
                     </div>
 
-                    <div class="output-card-box" style="background:#0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px;">
-                        <h4 style="color:#38bdf8; margin-top:0;">🎛️ Alur Jalur Rangkaian Gerbang Logika</h4>
-                        <hr style="border-color:#334155;">
-                        <div id="content-sirkuit-dinamis" style="color:#94a3b8; font-size:14px;">Menunggu input...</div>
+                    <div class="output-card-box" style="background:#1e293b; border: 1px solid #334155; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <h4 style="color:#38bdf8; margin-top:0; font-size:16px;">🎛️ Alur Jalur Rangkaian Gerbang Logika</h4>
+                        <hr style="border-color:#334155; margin: 10px 0 15px 0;">
+                        <div id="content-sirkuit-dinamis" style="color:#94a3b8; font-size:14px; line-height:1.5;">Menunggu pemetaan sirkuit...</div>
                     </div>
 
-                    <div class="output-card-box" style="background:#0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px;">
-                        <h4 style="color:#38bdf8; margin-top:0;">🗺️ Matriks Visualisasi Peta Karnaugh (3-Variabel)</h4>
-                        <hr style="border-color:#334155;">
-                        <div id="content-kmap-matrix-dinamis" style="color:#94a3b8; font-size:14px;">Menunggu input...</div>
+                    <div class="output-card-box" style="background:#1e293b; border: 1px solid #334155; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <h4 style="color:#38bdf8; margin-top:0; font-size:16px;">🗺️ Matriks Visualisasi Peta Karnaugh (3-Variabel)</h4>
+                        <hr style="border-color:#334155; margin: 10px 0 15px 0;">
+                        <div id="content-kmap-matrix-dinamis" style="color:#94a3b8; font-size:14px; line-height:1.5;">Menunggu pemetaan matriks K-Map...</div>
                     </div>
 
                 </div>

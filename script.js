@@ -22,11 +22,14 @@ function evaluasiEkspresi(ekspresi, x, y, z) {
 }
 
 // ==========================================
-// FUNGSI AKSI DENGAN CENTANG HIJAU & TANPA AUTO-SCROLL
+// FUNGSI AKSI: LOCK SCROLL & CENTANG HIJAU
 // ==========================================
 
 // 1. ANALISIS HUKUM DE MORGAN
 function hitungHukum() {
+    // Kunci browser agar tidak melakukan auto-scroll/lompat halaman
+    if (window.event) window.event.preventDefault();
+
     let input = document.getElementById('input-hukum').value.trim();
     let box = document.getElementById('box-hukum-dinamis');
     let content = document.getElementById('content-hukum-dinamis');
@@ -49,18 +52,18 @@ function hitungHukum() {
         hasilDeMorgan = `${input}'`;
     }
 
-    // Menampilkan ikon centang hijau di samping hasil jawaban
     content.innerHTML = `
         <p><b>Ekspresi Awal:</b> (${input})'</p>
         <p style='color:#38bdf8; font-weight:bold;'>✅ <b>Bentuk De Morgan:</b> ${hasilDeMorgan}</p>
     `;
     
-    // Munculkan kotak jawaban tanpa memicu scroll halaman
     box.style.display = 'block';
 }
 
 // 2. EVALUATOR FUNGSI
 function hitungFungsi() {
+    if (window.event) window.event.preventDefault();
+
     let input = document.getElementById('input-fungsi').value.trim();
     let x = document.getElementById('eval-x').value;
     let y = document.getElementById('eval-y').value;
@@ -77,7 +80,7 @@ function hitungFungsi() {
     let hasil = evaluasiEkspresi(input, x, y, z);
     content.innerHTML = `
         <p><b>Fungsi:</b> f = ${input}</p>
-        <p>✅ <b>Hasil Evaluasi:</b> <span style='color:#38bdf8; font-weight:bold;'>${hasil}</span></p>
+        <p style='color:#38bdf8; font-weight:bold;'>✅ <b>Hasil Evaluasi:</b> ${hasil}</p>
     `;
     
     box.style.display = 'block';
@@ -85,6 +88,8 @@ function hitungFungsi() {
 
 // 3. TABEL KEBENARAN
 function hitungTabelKebenaran() {
+    if (window.event) window.event.preventDefault();
+
     let input = document.getElementById('input-tabel').value.trim();
     let box = document.getElementById('box-table-output-dinamis');
     let content = document.getElementById('content-table-output-dinamis');
@@ -119,6 +124,8 @@ function hitungTabelKebenaran() {
 
 // 4. RANGKAIAN LOGIKA
 function hitungRangkaian() {
+    if (window.event) window.event.preventDefault();
+
     let input = document.getElementById('input-rangkaian').value.trim();
     let box = document.getElementById('box-sirkuit-dinamis');
     let content = document.getElementById('content-sirkuit-dinamis');
@@ -136,6 +143,8 @@ function hitungRangkaian() {
 
 // 5. K-MAP
 function hitungKMap() {
+    if (window.event) window.event.preventDefault();
+
     let input = document.getElementById('input-kmap').value.trim();
     let box = document.getElementById('box-kmap-matrix-dinamis');
     let content = document.getElementById('content-kmap-matrix-dinamis');

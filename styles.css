@@ -18,7 +18,7 @@ body {
 
 /* KOLOM 1: SIDEBAR MENU NAVIGATION (FIXED & STICKY) */
 .sidebar {
-    width: 320px; /* Diperlebar sedikit agar akomodatif terhadap pembesaran ikon menu 3x */
+    width: 420px; 
     background-color: #0f172a;
     border-right: 1px solid #334155;
     padding: 25px 20px;
@@ -28,33 +28,34 @@ body {
     height: 100vh;
     box-sizing: border-box;
     z-index: 100;
+    overflow-y: auto; /* Memastikan jika layar pengguna pendek, sidebar bisa di-scroll dengan rapi */
 }
 
-/* FORMAT LOGO SITUS BoS (CENTER & PERBESARAN 3X) */
+/* LOGO SITUS BoS */
 .logo-container-center {
     width: 100%;
     display: flex;
-    justify-content: center; /* Setengah Center Panel */
-    margin-bottom: 50px; /* JARAK SKALA 5: Memberi jarak jauh ke tulisan BoS Panel */
+    justify-content: center;
+    margin-bottom: 50px;
 }
 .site-logo {
-    max-height: 150px; /* Ukuran diperbesar 3 kali lipat dari ukuran dasar 50px */
+    max-height: 150px;
     width: auto;
     border-radius: 10px;
     object-fit: contain;
 }
 
-/* TULISAN BoS PANEL DENGAN SETTING JARAK SKALA 3 */
+/* TULISAN BoS PANEL */
 .sidebar-title {
     color: #38bdf8;
     margin-top: 0;
-    margin-bottom: 30px; /* JARAK SKALA 3: Jarak yang dikurangi menuju ke isi menu pertama */
+    margin-bottom: 30px;
     font-size: 22px;
     letter-spacing: 0.5px;
     text-align: center;
 }
 
-/* DAFTAR MENU SIDEBAR BESERTA INTEGRASI IKON MATERI (PERBESARAN 3X) */
+/* DAFTAR MENU SIDEBAR */
 .sidebar-menu {
     flex-grow: 1;
 }
@@ -64,34 +65,44 @@ body {
     margin: 0;
 }
 .sidebar-menu li {
-    margin-bottom: 15px;
+    margin-bottom: 35px; /* Ditambah sedikit agar memberi ruang bernapas antar blok gambar masif */
 }
 .sidebar-menu a {
     color: #cbd5e1;
     text-decoration: none;
-    font-size: 13.5px;
     display: flex;
-    align-items: center; /* Sejajar dengan teks judul */
-    gap: 15px; /* Jarak antara ikon dan teks menu */
-    padding: 10px 12px;
-    border-radius: 8px;
+    flex-direction: column; /* Mengubah orientasi menjadi Vertikal: Ikon di atas, teks di bawah */
+    align-items: center; /* Center item secara horizontal di dalam link */
+    gap: 12px;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #111827; /* Memberikan latar belakang kontras tipis agar batasan blok menu jelas */
+    border: 1px solid #1e293b;
     transition: all 0.2s ease;
-    font-weight: 500;
-    line-height: 1.4;
 }
 .sidebar-menu a:hover {
     background-color: #1e293b;
     color: #38bdf8;
-    transform: translateX(4px);
+    border-color: #38bdf8;
+    transform: translateY(-3px); /* Hover efek mengangkat ke atas karena susunannya vertikal */
 }
 
-/* IKON ILUSTRASI DI SIDEBAR (PERBESARAN 3X) */
+/* IKON ILUSTRASI DI SIDEBAR - PERBESARAN 3X MASIF (.PNG) */
 .menu-illustration {
-    width: 45px; /* Diperbesar 3 kali lipat dari ukuran mikro standar ikon teks */
-    height: 45px;
+    width: 135px; 
+    height: 135px;
     object-fit: contain;
-    border-radius: 6px;
+    border-radius: 8px;
     flex-shrink: 0;
+}
+
+/* PENFORMATAN TEKS JUDUL MENU DI BAWAH IKON */
+.sidebar-menu a span {
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center; /* Judul berposisi di tengah, tepat di bawah gambar masifnya */
+    color: #e2e8f0;
 }
 
 .sidebar-footer {
@@ -101,20 +112,21 @@ body {
     padding-top: 15px;
     text-align: center;
     font-weight: 500;
+    margin-top: 20px;
 }
 
 /* KOLOM 2 & 3: MAIN KONTEN FLUID AREA */
 .main-content {
-    margin-left: 320px;
+    margin-left: 420px;
     padding: 40px;
     flex-grow: 1;
     box-sizing: border-box;
-    max-width: calc(100% - 320px);
+    max-width: calc(100% - 420px);
 }
 
 /* HEADER UTAMA DI TENGAH (CENTER) */
 .main-header-center {
-    text-align: center; /* Mengubah pemformatan judul situs ke tengah */
+    text-align: center;
     margin-bottom: 40px;
 }
 .main-header-center h1 {
@@ -128,7 +140,7 @@ body {
     font-size: 15px;
     font-family: monospace;
     margin-top: 0;
-    text-align: center; /* Mengubah posisi tulisan slogan ke tengah */
+    text-align: center;
 }
 
 /* KARTU MATERI */

@@ -46,10 +46,10 @@ function hitungHukum() {
         let rhs = parts[1].trim().replace(/\s+/g, '');
 
         // -----------------------------------------------------------------
-        // COCOKKAN KASUS SPESIFIK SESUAI GAMBAR BUKU PANDUAN USER
+        // KASUS SPESIFIK: SESUAI URUTAN RUMUS DI BUKU PANDUAN
         // -----------------------------------------------------------------
         
-        // Kasus Soal (i): ab' + b = a + b (atau variasi komutatifnya)
+        // Kasus Soal 1: ab' + b = a + b (atau variasi komutatifnya)
         if ((lhs === "ab'+b" || lhs === "b+ab'" || lhs === "a*b'+b" || lhs === "b+a*b'") && (rhs === "a+b" || rhs === "b+a")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "ab' + b = a + b", [
                 { ekspresi: "a b' + b", hukum: "Soal Awal" },
@@ -62,7 +62,7 @@ function hitungHukum() {
             continue;
         }
 
-        // Kasus Soal (ii): b(a + b') = ba (atau variasi perkalian ab)
+        // Kasus Soal 2: b(a + b') = ba (atau variasi perkalian ab)
         if ((lhs === "b(a+b')" || lhs === "b(b'+a)" || lhs === "b*(a+b')") && (rhs === "ba" || rhs === "ab" || rhs === "b*a" || rhs === "a*b")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "b (a + b') = ba", [
                 { ekspresi: "b (a + b')", hukum: "Soal Awal" },
@@ -75,7 +75,7 @@ function hitungHukum() {
         }
 
         // -----------------------------------------------------------------
-        // FALLBACK GENERIK: EVALUASI TABEL KEBENARAN YANG SUDAH DIPERBAIKI
+        // FALLBACK GENERIK: EVALUASI KEBENARAN MATRIKS LOGIKA (FIXED)
         // -----------------------------------------------------------------
         try {
             let isEquivalent = cekEkuivalensiGenerik(lhs, rhs);
@@ -106,7 +106,7 @@ function hitungHukum() {
 // Fungsi Generator Komponen UI Langkah Resmi
 function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
     return `
-        <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px;">
+        <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px; text-align: left;">
             <div style="color: #10b981; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px;">
                 🟢 Terbukti
             </div>
@@ -142,7 +142,7 @@ function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
 // Fungsi Generator Komponen UI Langkah Generik
 function buatTemplateHtmlGenerik(index, lhs, rhs) {
     return `
-        <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px;">
+        <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px; text-align: left;">
             <div style="color: #10b981; font-weight: bold; font-size: 16px;">🟢 Terbukti</div>
             <p style="margin: 5px 0 10px 0; color: #cbd5e1; font-size: 14px;">Persamaan <code>${lhs} = ${rhs}</code> ekuivalen secara fungsional.</p>
             
@@ -176,24 +176,30 @@ function toggleLangkahDetail(index) {
     }
 }
 
-// PERBAIKAN UTAMA: Algoritma Parser Pintar Mengubah Notasi Berdampingan Menjadi Perkalian Berbintang (*)
+// PERBAIKAN TOTAL: Pengubah Notasi Boolean String ke Operator Logika JavaScript Valid (&& dan ||)
 function cekEkuivalensiGenerik(ex1, ex2) {
-    const bersihkanSintaks = (str) => {
+    const formatKeLogikaMurni = (str) => {
         let f = str
-            .replace(/·/g, '&')
-            .replace(/\+/g, '|')
-            // Mengubah format ingkaran variabel x' menjadi !x
-            .replace(/([a-zA-Z])'/g, '!$1');
-            
-        // Logika Krusial: Sisipkan operator perkalian '*' di antara dua huruf alfabet berdampingan (misal: ab -> a*b atau ba -> b*a)
-        f = f.replace(/([a-zA-Z!])(?=[a-zA-Z\(])/g, '$1&');
-        f = f.replace(/\)/g, ')&').replace(/&\)/g, ')').replace(/&\|/g, '|').replace(/\|&/g, '|').replace(/&$/g, '');
-        return f;
+            .replace(/·/g, '*')
+            .replace(/([a-zA-Z])'/g, '!$1') // x' -> !x
+            // Sisipkan tanda perkalian '*' di antara variabel yang menempel (ab -> a*b)
+            .replace(/([a-zA-Z!])(?=[a-zA-Z\(])/g, '$1*');
+
+        // Ganti operator string biasa ke operator logika Boolean Engine JS (&& dan ||)
+        // Gunakan fungsi pengganti bertahap agar urutan tanda kurung tidak rusak
+        let hasilLogika = "";
+        for (let char of f) {
+            if (char === '*') hasilLogika += ' && ';
+            else if (char === '+') hasilLogika += ' || ';
+            else hasilLogika += char;
+        }
+        return hasilLogika;
     };
 
-    let f1 = bersihkanSintaks(ex1);
-    let f2 = bersihkanSintaks(ex2);
+    let f1 = formatKeLogikaMurni(ex1);
+    let f2 = formatKeLogikaMurni(ex2);
 
+    // Lakukan pengujian Brute-Force Kebenaran Logika untuk semua kombinasi input variabel
     for (let a = 0; a <= 1; a++) {
         for (let b = 0; b <= 1; b++) {
             for (let c = 0; c <= 1; c++) {
@@ -207,11 +213,12 @@ function cekEkuivalensiGenerik(ex1, ex2) {
 }
 
 function mengevaluasiStringLogika(expr, a, b, c) {
-    // Substitusi nilai biner murni ke dalam variabel penampung string runtime
+    // Gunakan regex berbasis Word Boundary agar variabel huruf tunggal terganti dengan benar tanpa merusak sintaks operator
     let safeExpr = expr
-        .replace(/a/g, a).replace(/b/g, b).replace(/c/g, c)
-        .replace(/x/g, a).replace(/y/g, b).replace(/z/g, c);
+        .replace(/\ba\b/g, a).replace(/\bb\b/g, b).replace(/\bc/g, c)
+        .replace(/\bx/g, a).replace(/\by/g, b).replace(/\bz/g, c);
     try {
+        // Kembalikan nilai biner murni (1 atau 0)
         return Function(`return (${safeExpr})`)() ? 1 : 0;
     } catch(err) {
         return -1;
@@ -219,7 +226,7 @@ function mengevaluasiStringLogika(expr, a, b, c) {
 }
 
 // =========================================================================
-// 2. INTEGRASI PANEL FUNGSIONAL LAINNYA (TIDAK BERUBAH)
+// 2. INTEGRASI PANEL FUNGSIONAL LAINNYA
 // =========================================================================
 function hitungFungsi() {
     const inputFungsi = document.getElementById('input-fungsi').value.trim();
@@ -230,10 +237,11 @@ function hitungFungsi() {
     const content = document.getElementById('content-jawaban-dinamis');
     if(!inputFungsi) { alert("Masukkan ekspresi fungsi!"); return; }
     try {
-        let fClean = inputFungsi.replace(/·/g, '&').replace(/\*/g, '&').replace(/\+/g, '|').replace(/([a-zA-Z])'/g, '!$1');
-        let hasil = mengevaluasiStringLogika(fClean, parseInt(xVal), parseInt(yVal), parseInt(zVal));
+        let fClean = inputFungsi.replace(/·/g, '*').replace(/([a-zA-Z])'/g, '!$1').replace(/([a-zA-Z!])(?=[a-zA-Z\(])/g, '$1*');
+        let fLogika = fClean.replace(/\*/g, ' && ').replace(/\+/g, ' || ');
+        let hasil = mengevaluasiStringLogika(fLogika, parseInt(xVal), parseInt(yVal), parseInt(zVal));
         box.style.display = 'block';
-        content.innerHTML = `<div style="font-family: monospace; font-size: 18px; color: #38bdf8; font-weight: bold;">F = ${hasil}</div>`;
+        content.innerHTML = `<div style="font-family: monospace; font-size: 18px; color: #38bdf8; font-weight: bold; text-align: left;">F = ${hasil}</div>`;
     } catch(e) { box.style.display = 'block'; content.innerHTML = `<span style="color: #ef4444;">❌ Kesalahan format.</span>`; }
 }
 
@@ -244,12 +252,15 @@ function hitungTabelKebenaran() {
     if(!inputTabel) { alert("Masukkan ekspresi tabel kebenaran!"); return; }
     box.style.display = 'block';
     let htmlTabel = `<table style="width:100%; border-collapse:collapse; text-align:center; font-size:14px; background:#0b0f19;"><thead><tr style="background:#1e293b; color:#38bdf8;"><th style="padding:8px; border:1px solid #334155;">x</th><th style="padding:8px; border:1px solid #334155;">y</th><th style="padding:8px; border:1px solid #334155;">z</th><th style="padding:8px; border:1px solid #334155; color:#f8fafc;">F</th></tr></thead><tbody>`;
-    let fClean = inputTabel.replace(/·/g, '&').replace(/\*/g, '&').replace(/\+/g, '|').replace(/([a-zA-Z])'/g, '!$1');
+    
+    let fClean = inputTabel.replace(/·/g, '*').replace(/([a-zA-Z])'/g, '!$1').replace(/([a-zA-Z!])(?=[a-zA-Z\(])/g, '$1*');
+    let fLogika = fClean.replace(/\*/g, ' && ').replace(/\+/g, ' || ');
+
     for (let x = 1; x >= 0; x--) {
         for (let y = 1; y >= 0; y--) {
             for (let z = 1; z >= 0; z--) {
-                let r = mengevaluasiStringLogika(fClean, x, y, z);
-                htmlTabel += `<tr style="border-bottom:1px solid #1e293b;"><td style="padding:8px; border:1px solid #334155;">${x}</td><td style="padding:8px; border:1px solid #334155;">${y}</td><td style="padding:8px; border:1px solid #334155;">${z}</td><td style="padding:8px; border:1px solid #334155; color:#10b981; font-weight:bold;">${r===-1?0:r}</td></tr>`;
+                let r = mengevaluasiStringLogika(fLogika, x, y, z);
+                htmlTabel += `<tr style="border-bottom:1px solid #1e293b;"><td style="padding:8px; border:1px solid #334155; color:#94a3b8;">${x}</td><td style="padding:8px; border:1px solid #334155; color:#94a3b8;">${y}</td><td style="padding:8px; border:1px solid #334155; color:#94a3b8;">${z}</td><td style="padding:8px; border:1px solid #334155; color:#10b981; font-weight:bold;">${r===-1?0:r}</td></tr>`;
             }
         }
     }
@@ -260,11 +271,11 @@ function hitungTabelKebenaran() {
 function hitungRangkaian() {
     const inputRangkaian = document.getElementById('input-rangkaian').value.trim();
     document.getElementById('box-sirkuit-dinamis').style.display = 'block';
-    document.getElementById('content-sirkuit-dinamis').innerHTML = `<div style="background:#0b0f19; padding:12px; font-family:monospace;">[INPUT] ➔ Jalur Logika Utama Terdeteksi: <span style="color:#38bdf8;">"${inputRangkaian}"</span> ➔ [OUTPUT]</div>`;
+    document.getElementById('content-sirkuit-dinamis').innerHTML = `<div style="background:#0b0f19; padding:12px; font-family:monospace; text-align: left;">[INPUT] ➔ Jalur Logika Utama Terdeteksi: <span style="color:#38bdf8;">"${inputRangkaian}"</span> ➔ [OUTPUT]</div>`;
 }
 
 function hitungKMap() {
     const inputKMap = document.getElementById('input-kmap').value.trim();
     document.getElementById('box-kmap-matrix-dinamis').style.display = 'block';
-    document.getElementById('content-kmap-matrix-dinamis').innerHTML = `<p style="color:#cbd5e1; font-size:13px;">Matriks K-Map Berhasil Dipetakan Terbaca dari Input "${inputKMap}".</p>`;
+    document.getElementById('content-kmap-matrix-dinamis').innerHTML = `<p style="color:#cbd5e1; font-size:13px; text-align: left;">Matriks K-Map Berhasil Dipetakan Terbaca dari Input "${inputKMap}".</p>`;
 }

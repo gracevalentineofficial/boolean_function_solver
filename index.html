@@ -205,13 +205,30 @@
 
                     <div class="tool-box">
                         <input type="text" id="input-fungsi" placeholder="Contoh: x*y + y*z'">
-                        <div class="variable-inputs">
-                            <label>x: <select id="eval-x"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>y: <select id="eval-y"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>z: <select id="eval-z"><option value="1">1</option><option value="0">0</option></select></label>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: flex-start; margin-top: 15px; width: 100%;">
+                            
+                            <div class="variable-inputs" style="display: flex; gap: 12px; margin: 0; padding: 0; background: transparent; border: none; align-items: center;">
+                                <label style="color: #cbd5e1; font-weight: 500;">x: <select id="eval-x" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 4px 8px; border-radius: 4px;"><option value="1">1</option><option value="0">0</option></select></label>
+                                <label style="color: #cbd5e1; font-weight: 500;">y: <select id="eval-y" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 4px 8px; border-radius: 4px;"><option value="1">1</option><option value="0">0</option></select></label>
+                                <label style="color: #cbd5e1; font-weight: 500;">z: <select id="eval-z" style="background: #1e293b; color: #fff; border: 1px solid #334155; padding: 4px 8px; border-radius: 4px;"><option value="1">1</option><option value="0">0</option></select></label>
+                            </div>
+
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                                <button type="button" onclick="insertSyntax('&')" style="background: #7c3aed; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">AND (&)</button>
+                                <button type="button" onclick="insertSyntax('|')" style="background: #1e293b; color: white; border: 1px solid #7c3aed; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">OR (|)</button>
+                                <button type="button" onclick="insertSyntax('!')" style="background: #1e293b; color: white; border: 1px solid #7c3aed; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">NOT (!)</button>
+                                <button type="button" onclick="insertSyntax('^')" style="background: #1e293b; color: white; border: 1px solid #7c3aed; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">XOR (^)</button>
+                                <button type="button" onclick="insertSyntax('(')" style="background: #1e293b; color: white; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-family: monospace; cursor: pointer;">(</button>
+                                <button type="button" onclick="insertSyntax(')')" style="background: #1e293b; color: white; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-family: monospace; cursor: pointer;">)</button>
+                                <button type="button" onclick="clearInput()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">Hapus</button>
+                            </div>
+
                         </div>
-                        <button onclick="hitungFungsi()">Evaluasi & Identifikasi</button>
+
+                        <button onclick="hitungFungsi()" style="margin-top: 20px; width: 100%;">Evaluasi & Identifikasi</button>
                     </div>
+                    
                     <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
                         <h4>🎯 Jawaban / Status Fungsi</h4>
                         <div class="box-content" id="content-jawaban-dinamis"></div>

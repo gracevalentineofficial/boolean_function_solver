@@ -11,10 +11,10 @@ function hitungHukum() {
         return;
     }
 
-    // Normalisasi input: ubah huruf besar ke kecil, hapus spasi kaku
+    // Normalisasi input: ubah huruf besar ke kecil
     let normalizedInput = inputRaw.toLowerCase();
     
-    // Jika user memasukkan dua persamaan yang dipisahkan oleh kata "dan" atau tanda koma
+    // Memisahkan soal jika menggunakan pemisah "dan" atau tanda koma
     let kumpulanSoal = [];
     if (normalizedInput.includes(' dan ')) {
         kumpulanSoal = normalizedInput.split(' dan ');
@@ -25,7 +25,6 @@ function hitungHukum() {
     }
 
     let htmlHasilAkhir = "";
-    let semuaTerbukti = true;
 
     // Iterasi setiap soal yang diekstrak
     for (let i = 0; i < kumpulanSoal.length; i++) {
@@ -39,7 +38,6 @@ function hitungHukum() {
                     <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Bagian "${soalSingle}" tidak memiliki tanda sama dengan (=).</p>
                 </div>
             `;
-            semuaTerbukti = false;
             continue;
         }
 
@@ -47,9 +45,11 @@ function hitungHukum() {
         let lhs = parts[0].trim().replace(/\s+/g, '');
         let rhs = parts[1].trim().replace(/\s+/g, '');
 
-        // DATA LANGKAH PENYELESAIAN SPESIFIK SESUAI MATERI KULIAH
+        // -----------------------------------------------------------------
+        // COCOKKAN KASUS SPESIFIK SESUAI GAMBAR BUKU PANDUAN USER
+        // -----------------------------------------------------------------
         
-        // Kasus Soal (i): ab' + b = a + b (atau variasi b + ab')
+        // Kasus Soal (i): ab' + b = a + b (atau variasi komutatifnya)
         if ((lhs === "ab'+b" || lhs === "b+ab'" || lhs === "a*b'+b" || lhs === "b+a*b'") && (rhs === "a+b" || rhs === "b+a")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "ab' + b = a + b", [
                 { ekspresi: "a b' + b", hukum: "Soal Awal" },
@@ -62,10 +62,10 @@ function hitungHukum() {
             continue;
         }
 
-        // Kasus Soal (ii): b(a + b') = ba (atau variasi b(a+b') = ab)
+        // Kasus Soal (ii): b(a + b') = ba (atau variasi perkalian ab)
         if ((lhs === "b(a+b')" || lhs === "b(b'+a)" || lhs === "b*(a+b')") && (rhs === "ba" || rhs === "ab" || rhs === "b*a" || rhs === "a*b")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "b (a + b') = ba", [
-                { ekspresi: "b (a + b')", hukum: "Hukum Distributif" },
+                { ekspresi: "b (a + b')", hukum: "Soal Awal" },
                 { ekspresi: "ba + bb'", hukum: "Hukum Distributif" },
                 { ekspresi: "ba + 0", hukum: "Hukum Komplemen" },
                 { ekspresi: "ba", hukum: "Hukum Identitas" },
@@ -74,16 +74,18 @@ function hitungHukum() {
             continue;
         }
 
-        // Validasi secara otomatis menggunakan Logika Truth Table jika soalnya berbeda
+        // -----------------------------------------------------------------
+        // FALLBACK GENERIK: EVALUASI TABEL KEBENARAN YANG SUDAH DIPERBAIKI
+        // -----------------------------------------------------------------
         try {
-            let matches = cekEkuivalensiGenerik(lhs, rhs);
-            if (matches) {
+            let isEquivalent = cekEkuivalensiGenerik(lhs, rhs);
+            if (isEquivalent) {
                 htmlHasilAkhir += buatTemplateHtmlGenerik(i, lhs, rhs);
             } else {
                 htmlHasilAkhir += `
                     <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 15px;">
-                        <div style="color: #ef4444; font-weight: bold; font-size: 16px;">❌ Bukan Aljabar Boolean / Teorema Salah</div>
-                        <p style="margin: 5px 0 0 0; color: #cbd5e1; font-size: 14px;">Persamaan <code>${lhs} = ${rhs}</code> bernilai salah secara logika.</p>
+                        <div style="color: #ef4444; font-weight: bold; font-size: 16px;">❌ Teorema Tidak Terbukti / Salah</div>
+                        <p style="margin: 5px 0 0 0; color: #cbd5e1; font-size: 14px;">Nilai logika Sisi Kiri tidak sama dengan Sisi Kanan setelah dievaluasi.</p>
                     </div>
                 `;
             }
@@ -91,7 +93,7 @@ function hitungHukum() {
             htmlHasilAkhir += `
                 <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 15px;">
                     <div style="color: #ef4444; font-weight: bold; font-size: 16px;">❌ Bukan Aljabar Boolean</div>
-                    <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Simbol pada <code>${soalSingle}</code> tidak valid.</p>
+                    <p style="margin: 5px 0 0 0; color: #94a3b8; font-size: 14px;">Sintaks atau simbol ekspresi tidak dikenali.</p>
                 </div>
             `;
         }
@@ -101,7 +103,7 @@ function hitungHukum() {
     outputBox.style.display = 'block';
 }
 
-// Fungsi Generator Komponen UI Langkah Resmi (Mendukung Multi-Tombol Indeks)
+// Fungsi Generator Komponen UI Langkah Resmi
 function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
     return `
         <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px;">
@@ -109,7 +111,7 @@ function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
                 🟢 Terbukti
             </div>
             <p style="margin: 6px 0 10px 0; color: #cbd5e1; font-size: 14px;">
-                Persamaan Sub-soal: <strong>${judul}</strong> memenuhi aturan Aljabar Boolean.
+                Persamaan Terbukti Benar secara Aljabar Boolean: <strong>${judul}</strong>
             </p>
             
             <button onclick="toggleLangkahDetail(${index})" id="btn-toggle-langkah-${index}" style="background: #38bdf8; color: #0f172a; border: none; padding: 6px 12px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 13px;">
@@ -156,7 +158,7 @@ function buatTemplateHtmlGenerik(index, lhs, rhs) {
     `;
 }
 
-// Handler Dropdown Penanganan Multi-Sesi ID Komponen Dinamis
+// Handler Dropdown Penanganan Sembunyi/Tampilkan Panel Detail
 function toggleLangkahDetail(index) {
     const detailDiv = document.getElementById(`langkah-penyelesaian-detail-${index}`);
     const btn = document.getElementById(`btn-toggle-langkah-${index}`);
@@ -174,12 +176,19 @@ function toggleLangkahDetail(index) {
     }
 }
 
-// Algoritma Evaluator Kesamaan Kebenaran Logika (0 & 1)
+// PERBAIKAN UTAMA: Algoritma Parser Pintar Mengubah Notasi Berdampingan Menjadi Perkalian Berbintang (*)
 function cekEkuivalensiGenerik(ex1, ex2) {
     const bersihkanSintaks = (str) => {
-        return str
-            .replace(/·/g, '&').replace(/\*/g, '&').replace(/\+/g, '|')
+        let f = str
+            .replace(/·/g, '&')
+            .replace(/\+/g, '|')
+            // Mengubah format ingkaran variabel x' menjadi !x
             .replace(/([a-zA-Z])'/g, '!$1');
+            
+        // Logika Krusial: Sisipkan operator perkalian '*' di antara dua huruf alfabet berdampingan (misal: ab -> a*b atau ba -> b*a)
+        f = f.replace(/([a-zA-Z!])(?=[a-zA-Z\(])/g, '$1&');
+        f = f.replace(/\)/g, ')&').replace(/&\)/g, ')').replace(/&\|/g, '|').replace(/\|&/g, '|').replace(/&$/g, '');
+        return f;
     };
 
     let f1 = bersihkanSintaks(ex1);
@@ -198,6 +207,7 @@ function cekEkuivalensiGenerik(ex1, ex2) {
 }
 
 function mengevaluasiStringLogika(expr, a, b, c) {
+    // Substitusi nilai biner murni ke dalam variabel penampung string runtime
     let safeExpr = expr
         .replace(/a/g, a).replace(/b/g, b).replace(/c/g, c)
         .replace(/x/g, a).replace(/y/g, b).replace(/z/g, c);
@@ -209,7 +219,7 @@ function mengevaluasiStringLogika(expr, a, b, c) {
 }
 
 // =========================================================================
-// 2. INTEGRASI PANEL FUNGSIONAL LAINNYA
+// 2. INTEGRASI PANEL FUNGSIONAL LAINNYA (TIDAK BERUBAH)
 // =========================================================================
 function hitungFungsi() {
     const inputFungsi = document.getElementById('input-fungsi').value.trim();

@@ -32,13 +32,29 @@
         <main class="main-content">
             <header class="main-header-center">
                 <h1>BoS : Boolean Solver</h1>
-                <p class="dev-tagline">your boolean learning site! - gv</p>
+                <p class="dev-tagline">our boolean learning site! - gv</p>
             </header>
 
             <section id="bagian-hukum" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Hukum Aljabar Boolean</h2>
+                    <p class="materi-text">Aljabar Boolean memiliki 11 hukum formal sebagai berikut:</p>
+                    <div class="materi-text" style="background: #0f172a; padding: 15px; border-radius: 8px; font-family: monospace;">
+                        1. Hukum Identitas: x + 0 = x, x · 1 = x<br>
+                        2. Hukum Null (Dominasi): x + 1 = 1, x · 0 = 0<br>
+                        3. Hukum Idempoten: x + x = x, x · x = x<br>
+                        4. Hukum Komplemen: x + x' = 1, x · x' = 0<br>
+                        5. Hukum Involusi (Negasi Ganda): (x')' = x<br>
+                        6. Hukum Penyerapan (Absorpsi): x + (x · y) = x, x · (x + y) = x<br>
+                        7. Hukum Komutatif: x + y = y + x, x · y = y · x<br>
+                        8. Hukum Asosiatif: x + (y + z) = (x + y) + z, x · (y · z) = (x · y) · z<br>
+                        9. Hukum Distributif: x + (y · z) = (x + y) · (x + z), x · (y + z) = (x · y) + (x · z)<br>
+                        10. Hukum De Morgan: (x + y)' = x' · y', (x · y)' = x' + y'<br>
+                        11. Hukum Konsensus: (x · y) + (x' · z) + (y · z) = (x · y) + (x' · z)
+                    </div>
+                    
                     <div class="tool-box">
+                        <h3>🛠️ Alat Validasi Hukum Komplemen & De Morgan</h3>
                         <input type="text" id="input-hukum" placeholder="Contoh: x*y + z'">
                         <button onclick="hitungHukum()">Jalankan Analisis Hukum</button>
                     </div>

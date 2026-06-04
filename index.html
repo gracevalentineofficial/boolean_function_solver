@@ -110,4 +110,35 @@
                 </div>
             </section>
 
-            <section id="bagian
+            <section id="bagian-rangkaian" class="content-section">
+                <div class="section-card">
+                    <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
+                    <div class="tool-box">
+                        <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
+                        <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
+                    </div>
+                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
+                        <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
+                        <div class="box-content" id="content-sirkuit-dinamis"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="bagian-kmap" class="content-section">
+                <div class="section-card">
+                    <h2 class="section-title-only">Penyederhanaan dengan K-Map</h2>
+                    <div class="tool-box">
+                        <input type="text" id="input-kmap" placeholder="Contoh: x*y + x*y'">
+                        <button onclick="hitungKMap()">Petakan ke K-Map</button>
+                    </div>
+                    <div class="dynamic-output-box" id="box-kmap-matrix-dinamis" style="display: none;">
+                        <h4>🗺️ Matriks Visualisasi Peta Karnaugh</h4>
+                        <div class="box-content" id="content-kmap-matrix-dinamis"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

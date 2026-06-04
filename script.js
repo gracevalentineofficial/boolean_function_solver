@@ -9,7 +9,7 @@
 
 /**
  * Menyisipkan simbol operator langsung ke posisi kursor pengguna di input fungsi
- * @param {string} symbol - Simbol logika yang akan dimasukkan (&, |, !, ^, (, ))
+ * @param {string} symbol - Simbol logika/variabel yang akan dimasukkan
  */
 function insertSyntax(symbol) {
     const inputFungsi = document.getElementById('input-fungsi');
@@ -63,16 +63,16 @@ function hitungFungsi() {
         return;
     }
     
-    // Simulasi pemrosesan ekspresi logika (Dapat dikembangkan sesuai backend parsing)
+    // Pemrosesan substitusi nilai variabel aktif (case-insensitive)
     let hasilSubstitusi = inputVal
-        .replace(/x/g, valX)
-        .replace(/y/g, valY)
-        .replace(/z/g, valZ);
+        .replace(/x/gi, valX)
+        .replace(/y/gi, valY)
+        .replace(/z/gi, valZ);
         
     outputBox.style.display = "block";
     contentBox.innerHTML = `
-        <p style="margin: 0 0 8px 0;"><strong>Ekspresi Masuk:</strong> <code style="color: #38bdf8;">f(x,y,z) = ${inputVal}</code></p>
-        <p style="margin: 0 0 8px 0;"><strong>Substitusi Nilai:</strong> <code>f(${valX},${valY},${valZ}) = ${hasilSubstitusi}</code></p>
+        <p style="margin: 0 0 8px 0;"><strong>Ekspresi Masuk:</strong> <code style="color: #38bdf8;">f = ${inputVal}</code></p>
+        <p style="margin: 0 0 8px 0;"><strong>Substitusi Variabel Lokal:</strong> <code> ${hasilSubstitusi}</code></p>
         <p style="margin: 0; color: #4ade80;"><strong>Hasil Evaluasi Akhir:</strong> Teridentifikasi Berhasil (Simulasi Output Aktif)</p>
     `;
 }

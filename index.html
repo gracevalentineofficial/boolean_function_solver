@@ -136,15 +136,62 @@
                 <div class="section-card">
                     <h2 class="section-title-only">Fungsi Boolean</h2>
                     
-                    <div class="materi-text" style="text-align: left; margin-bottom: 25px; line-height: 1.6;">
-                        Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
-                        <div style="margin-top: 8px; margin-bottom: 4px;">Ekspresi terdiri atas:</div>
-                        <ul style="margin: 0; padding-left: 24px; list-style-type: disc;">
-                            <li style="margin-bottom: 4px;">Operator: Menggunakan simbol <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> / <span style="color: #38bdf8; font-weight: bold;">·</span> (AND), serta <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
-                            <li style="margin-bottom: 4px;">Variabel: Huruf alfabet tunggal yang bernilai digital mutlak <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                            <li style="margin-bottom: 4px;">Konstanta: Ketetapan nilai logika biner berupa angka <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                            <li>Pengelompokan: Mengatur prioritas operasi menggunakan tanda kurung <span style="color: #38bdf8; font-weight: bold;">()</span>.</li>
-                        </ul>
+                    <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px; align-items: flex-start;">
+                        
+                        <div class="materi-text" style="flex: 1 1 400px; text-align: left; line-height: 1.6; margin: 0;">
+                            Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
+                            <div style="margin-top: 8px; margin-bottom: 4px;">Ekspresi terdiri atas:</div>
+                            <ul style="margin: 0; padding-left: 24px; list-style-type: disc;">
+                                <li style="margin-bottom: 4px;">Operator: Menggunakan simbol <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> / <span style="color: #38bdf8; font-weight: bold;">·</span> (AND), serta <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
+                                <li style="margin-bottom: 4px;">Variabel: Huruf alfabet tunggal yang bernilai digital mutlak <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
+                                <li style="margin-bottom: 4px;">Konstanta: Ketetapan nilai logika biner berupa angka <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
+                                <li>Pengelompokan: Mengatur prioritas operasi menggunakan tanda kurung <span style="color: #38bdf8; font-weight: bold;">()</span>.</li>
+                            </ul>
+                        </div>
+
+                        <div style="flex: 1.2 1 450px; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden; font-size: 13.5px;">
+                                <thead>
+                                    <tr style="background: #1e293b; color: #38bdf8;">
+                                        <th style="padding: 10px; border: 1px solid #334155; text-align: left;">Operasi</th>
+                                        <th style="padding: 10px; border: 1px solid #334155; text-align: left;">Simbol</th>
+                                        <th style="padding: 10px; border: 1px solid #334155; text-align: left;">Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">AND</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">&, ·, *</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Konjungsi logis</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">OR</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">+, |, v</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Disjungsi logis</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">NOT</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">!, ~, ', ¬</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Negasi logis</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">XOR</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">⊕, ^</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Eksklusif OR</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">NAND</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↑</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT AND</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #38bdf8;">NOR</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↓</td>
+                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT OR</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="tool-box">

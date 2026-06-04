@@ -46,8 +46,8 @@
                                 <tr style="background: #1e293b; color: #38bdf8;">
                                     <th style="padding: 10px; border: 1px solid #334155;">No</th>
                                     <th style="padding: 10px; border: 1px solid #334155;">Nama Hukum</th>
-                                    <th style="padding: 10px; border: 1px solid #334155;">AND (i)</th>
-                                    <th style="padding: 10px; border: 1px solid #334155;">OR (ii)</th>
+                                    <th style="padding: 10px; border: 1px solid #334155;">AND</th>
+                                    <th style="padding: 10px; border: 1px solid #334155;">OR</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,68 +77,7 @@
                     </div>
                 </div>
             </section>
-
-            <section id="bagian-fungsi" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Fungsi Boolean</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-fungsi" placeholder="Contoh: x*y + y*z'">
-                        <div class="variable-inputs">
-                            <label>x: <select id="eval-x"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>y: <select id="eval-y"><option value="1">1</option><option value="0">0</option></select></label>
-                            <label>z: <select id="eval-z"><option value="1">1</option><option value="0">0</option></select></label>
-                        </div>
-                        <button onclick="hitungFungsi()">Evaluasi & Identifikasi</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
-                        <h4>🎯 Jawaban / Status Fungsi</h4>
-                        <div class="box-content" id="content-jawaban-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-tabel" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Tabel Kebenaran</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-tabel" placeholder="Contoh: x*y' + z">
-                        <button onclick="hitungTabelKebenaran()">Generate Tabel Kebenaran</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none;">
-                        <h4>📋 Tabel Kebenaran Terkait</h4>
-                        <div class="box-content" id="content-table-output-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-rangkaian" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
-                        <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
-                        <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
-                        <div class="box-content" id="content-sirkuit-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-kmap" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Penyederhanaan dengan K-Map</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-kmap" placeholder="Contoh: x*y + x*y'">
-                        <button onclick="hitungKMap()">Petakan ke K-Map</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-kmap-matrix-dinamis" style="display: none;">
-                        <h4>🗺️ Matriks Visualisasi Peta Karnaugh</h4>
-                        <div class="box-content" id="content-kmap-matrix-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
+            </main>
     </div>
     <script src="script.js"></script>
 </body>

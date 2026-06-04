@@ -3,7 +3,6 @@
 // ==========================================
 function evaluasiEkspresi(ekspresi, x, y, z) {
     let formatted = ekspresi.toLowerCase().replace(/\s+/g, '');
-    // Auto-translate variabel jika pengguna menggunakan a, b, c
     formatted = formatted.replace(/a/g, 'x').replace(/b/g, 'y').replace(/c/g, 'z');
     formatted = formatted.replace(/x/g, x).replace(/y/g, y).replace(/z/g, z);
 
@@ -22,14 +21,11 @@ function evaluasiEkspresi(ekspresi, x, y, z) {
     }
 }
 
-// ==========================================
-// FUNGSI AKSI UNTUK TIAP TOMBOL UTAMA
-// ==========================================
-
 // 1. ANALISIS HUKUM DE MORGAN
 function hitungHukum() {
     let input = document.getElementById('input-hukum').value.trim();
-    let content = document.getElementById('content-hukum');
+    let box = document.getElementById('box-hukum-dinamis');
+    let content = document.getElementById('content-hukum-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus terlebih dahulu!</span>";
@@ -48,11 +44,9 @@ function hitungHukum() {
         hasilDeMorgan = `${input}'`;
     }
 
-    content.innerHTML = `
-        <p><b>Ekspresi Awal:</b> (${input})'</p>
-        <p style='color:#38bdf8; font-weight:bold;'><b>Hasil De Morgan:</b> ${hasilDeMorgan}</p>
-    `;
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
+    content.innerHTML = `<p><b>Ekspresi Awal:</b> (${input})'</p><p style='color:#38bdf8; font-weight:bold;'><b>Hasil De Morgan:</b> ${hasilDeMorgan}</p>`;
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
 }
 
 // 2. EVALUATOR FUNGSI
@@ -61,7 +55,8 @@ function hitungFungsi() {
     let x = document.getElementById('eval-x').value;
     let y = document.getElementById('eval-y').value;
     let z = document.getElementById('eval-z').value;
-    let content = document.getElementById('content-jawaban');
+    let box = document.getElementById('box-jawaban-dinamis');
+    let content = document.getElementById('content-jawaban-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan fungsi!</span>";
@@ -69,24 +64,23 @@ function hitungFungsi() {
     }
 
     let hasil = evaluasiEkspresi(input, x, y, z);
-    content.innerHTML = `
-        <p><b>Fungsi:</b> f = ${input}</p>
-        <p><b>Hasil Evaluasi:</b> <span style='color:#38bdf8; font-weight:bold;'>${hasil}</span></p>
-    `;
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
+    content.innerHTML = `<p><b>Fungsi:</b> f = ${input}</p><p><b>Hasil Evaluasi:</b> <span style='color:#38bdf8; font-weight:bold;'>${hasil}</span></p>`;
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
 }
 
 // 3. TABEL KEBENARAN
 function hitungTabelKebenaran() {
     let input = document.getElementById('input-tabel').value.trim();
-    let content = document.getElementById('content-table-output');
+    let box = document.getElementById('box-table-output-dinamis');
+    let content = document.getElementById('content-table-output-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus!</span>";
         return;
     }
 
-    let htmlTable = `<table border="1" style="border-collapse:collapse; width:100%; text-align:center;"><thead><tr style="background:#1e293b;"><th>x/a</th><th>y/b</th><th>z/c</th><th>Output</th></tr></thead><tbody>`;
+    let htmlTable = `<table border="1" style="border-collapse:collapse; width:100%; text-align:center;"><thead><tr style="background:#1e293b;"><th>x</th><th>y</th><th>z</th><th>Output</th></tr></thead><tbody>`;
     for (let x = 0; x <= 1; x++) {
         for (let y = 0; y <= 1; y++) {
             for (let z = 0; z <= 1; z++) {
@@ -97,13 +91,15 @@ function hitungTabelKebenaran() {
     }
     htmlTable += `</tbody></table>`;
     content.innerHTML = htmlTable;
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
 }
 
 // 4. SIRKUIT LOGIKA
 function hitungRangkaian() {
     let input = document.getElementById('input-rangkaian').value.trim();
-    let content = document.getElementById('content-sirkuit');
+    let box = document.getElementById('box-sirkuit-dinamis');
+    let content = document.getElementById('content-sirkuit-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus sirkuit!</span>";
@@ -111,13 +107,15 @@ function hitungRangkaian() {
     }
 
     content.innerHTML = `<p>➡️ Logika sirkuit <b>${input}</b> berhasil dipetakan ke dalam gerbang kombinasi internal digital.</p>`;
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
 }
 
 // 5. K-MAP
 function hitungKMap() {
     let input = document.getElementById('input-kmap').value.trim();
-    let content = document.getElementById('content-kmap-matrix');
+    let box = document.getElementById('box-kmap-matrix-dinamis');
+    let content = document.getElementById('content-kmap-matrix-dinamis');
 
     if (!input) {
         content.innerHTML = "<span style='color:#f43f5e;'>⚠️ Masukkan rumus K-Map!</span>";
@@ -136,5 +134,6 @@ function hitungKMap() {
     }
     htmlKMap += `</tbody></table>`;
     content.innerHTML = htmlKMap;
-    document.getElementById('output-zone').scrollIntoView({ behavior: 'smooth' });
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
 }

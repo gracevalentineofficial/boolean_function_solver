@@ -6,6 +6,34 @@
     <title>BoS : Boolean Solver - GRACE</title>
     <link rel="icon" type="image/png" href="logositus.png">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Tambahan style khusus untuk ilustrasi gerbang logika murni CSS */
+        .gate-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border-top: 3px solid #38bdf8;
+        }
+        .gate-symbol {
+            font-family: monospace;
+            font-size: 18px;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            color: #f8fafc;
+            display: block;
+            line-height: 1.2;
+        }
+        .de-morgan-box {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
 
@@ -39,7 +67,6 @@
                 <div class="section-card">
                     <h2 class="section-title-only">Hukum Aljabar Boolean</h2>
                     <p class="materi-text">Tabel Hukum Aljabar Boolean:</p>
-                    
                     <div class="table-container" style="overflow-x: auto; margin: 20px 0;">
                         <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden;">
                             <thead>
@@ -51,82 +78,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Identitas</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + 0 = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · 1 = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">2</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Idempoten</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + x = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · x = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">3</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Komplemen</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + x' = 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · x' = 0</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">4</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Dominansi</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + 1 = 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · 0 = 0</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">5</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Involusi</td>
-                                    <td colspan="2" style="padding: 10px; border: 1px solid #334155; text-align: center; color: #e2e8f0; font-weight: normal;">(x')' = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">6</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Penyerapan</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (x · y) = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (x + y) = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">7</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Komutatif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + y = y + x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · y = y · x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">8</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Asosiatif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (y + z) = (x + y) + z</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (y · z) = (x · y) · z</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">9</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Distributif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (y · z) = (x + y) · (x + z)</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (y + z) = (x · y) + (x · z)</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">10</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">De Morgan</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">(x + y)' = x' · y'</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">(x · y)' = x' + y'</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">11</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">0 / 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">1' = 0</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">0' = 1</td>
-                                </tr>
+                                <tr><td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">1</td><td style="padding: 10px; border: 1px solid #334155;">Identitas</td><td style="padding: 10px; border: 1px solid #334155;">x + 0 = x</td><td style="padding: 10px; border: 1px solid #334155;">x · 1 = x</td></tr>
+                                <tr><td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">2</td><td style="padding: 10px; border: 1px solid #334155;">Idempoten</td><td style="padding: 10px; border: 1px solid #334155;">x + x = x</td><td style="padding: 10px; border: 1px solid #334155;">x · x = x</td></tr>
+                                <tr><td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">3</td><td style="padding: 10px; border: 1px solid #334155;">Komplemen</td><td style="padding: 10px; border: 1px solid #334155;">x + x' = 1</td><td style="padding: 10px; border: 1px solid #334155;">x · x' = 0</td></tr>
+                                <tr><td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">4</td><td style="padding: 10px; border: 1px solid #334155;">Dominansi</td><td style="padding: 10px; border: 1px solid #334155;">x + 1 = 1</td><td style="padding: 10px; border: 1px solid #334155;">x · 0 = 0</td></tr>
                             </tbody>
                         </table>
                     </div>
-                    
                     <div class="tool-box">
-                        <h3>🛠️ Alat Validasi Hukum Komplemen & De Morgan</h3>
+                        <h3>🛠️ Alat Validasi Hukum & De Morgan</h3>
                         <input type="text" id="input-hukum" placeholder="Contoh: ab' + b = a + b">
-                        <button onclick="hitungHukum()">Jalankan Analisis Hukum</button>
+                        <button onclick="hitungHukum()">Sederhanakan Ekspresi Boolean</button>
                     </div>
                     <div class="dynamic-output-box" id="box-hukum-dinamis" style="display: none; margin-top: 15px;">
-                        <h4>⚖️ Hasil Analisis Hukum & Teorema Aljabar Boolean</h4>
+                        <h4>⚖️ Hasil Analisis Runtut</h4>
                         <div class="box-content" id="content-hukum-dinamis"></div>
                     </div>
                 </div>
@@ -135,112 +100,30 @@
             <section id="bagian-fungsi" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Fungsi Boolean</h2>
-                    
                     <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px; align-items: flex-start;">
-                        
                         <div class="materi-text" style="flex: 1 1 400px; text-align: left; line-height: 1.6; margin: 0;">
                             Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
-                            <div style="margin-top: 8px; margin-bottom: 4px;">Ekspresi terdiri atas:</div>
-                            <ul style="margin: 0; padding-left: 24px; list-style-type: disc;">
-                                <li style="margin-bottom: 4px;">Operator: Menggunakan simbol <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> / <span style="color: #38bdf8; font-weight: bold;">·</span> (AND), serta <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
-                                <li style="margin-bottom: 4px;">Variabel: Huruf alfabet tunggal yang bernilai digital mutlak <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                                <li style="margin-bottom: 4px;">Konstanta: Ketetapan nilai logika biner berupa angka <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                                <li>Pengelompokan: Mengatur prioritas operasi menggunakan tanda kurung <span style="color: #38bdf8; font-weight: bold;">()</span>.</li>
+                            <ul style="margin: 10px 0; padding-left: 24px; list-style-type: disc;">
+                                <li style="margin-bottom: 4px;">Operator: <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> (AND), <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
+                                <li>Variabel & Konstanta: <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
                             </ul>
                         </div>
-
                         <div style="flex: 1.4 1 480px; overflow-x: auto;">
-                            <p class="materi-text" style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">Referensi Operator:</p>
-                            
-                            <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden; font-size: 13.5px;">
-                                <thead>
-                                    <tr style="background: #1e293b; color: #38bdf8;">
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Operasi</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Simbol</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Deskripsi</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Contoh</th>
-                                    </tr>
-                                </thead>
+                            <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; font-size: 13px;">
+                                <thead><tr style="background: #1e293b; color: #38bdf8;"><th style="padding: 8px; border: 1px solid #334155;">Operasi</th><th style="padding: 8px; border: 1px solid #334155;">Simbol</th><th style="padding: 8px; border: 1px solid #334155;">Contoh</th></tr></thead>
                                 <tbody>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">AND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">&, ·, *, AND, &&</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Konjungsi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A & B, A * B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">+, |, v, OR, ||</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Disjungsi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A | B, A + B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NOT</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">!, ~, ', ¬, NOT</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Negasi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">!A, A'</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">XOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">⊕, ^, XOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Eksklusif OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ⊕ B, A ^ B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NAND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↑, NAND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT AND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ↑ B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↓, NOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ↓ B</td>
-                                    </tr>
+                                    <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">AND</td><td style="padding: 6px; border: 1px solid #334155;">&, *, ·</td><td style="padding: 6px; border: 1px solid #334155;">A & B</td></tr>
+                                    <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">OR</td><td style="padding: 6px; border: 1px solid #334155;">+, |</td><td style="padding: 6px; border: 1px solid #334155;">A + B</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
                     <div class="tool-box">
-                        <input type="text" id="input-fungsi" placeholder="Contoh: !((!A + B) * (!B + C))">
-                        
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-start; margin-top: 15px; width: 100%;">
-                            
-                            <div class="variable-inputs" style="display: flex; gap: 12px; margin: 0; padding: 0; background: transparent; border: none; align-items: center; flex-shrink: 0;">
-                                <label style="color: #cbd5e1; font-weight: 500;">x: <select id="eval-x" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                                <label style="color: #cbd5e1; font-weight: 500;">y: <select id="eval-y" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                                <label style="color: #cbd5e1; font-weight: 500;">z: <select id="eval-z" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                            </div>
-
-                            <button type="button" onclick="insertSyntax('&')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">AND (&)</button>
-                            <button type="button" onclick="insertSyntax('|')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">OR (|)</button>
-                            <button type="button" onclick="insertSyntax('!')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NOT (!)</button>
-                            <button type="button" onclick="insertSyntax('^')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">XOR (^)</button>
-                            <button type="button" onclick="insertSyntax(' ↑ ')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NAND (↑)</button>
-                            <button type="button" onclick="insertSyntax(' ↓ ')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NOR (↓)</button>
-                            
-                            <button type="button" onclick="insertSyntax('(')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">(</button>
-                            <button type="button" onclick="insertSyntax(')')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">)</button>
-                            
-                            <button type="button" onclick="insertSyntax('A')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">A</button>
-                            <button type="button" onclick="insertSyntax('B')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">B</button>
-                            <button type="button" onclick="insertSyntax('C')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">C</button>
-                            <button type="button" onclick="insertSyntax('D')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">D</button>
-
-                            <button type="button" onclick="insertSyntax('0')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">0</button>
-                            <button type="button" onclick="insertSyntax('1')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">1</button>
-                            
-                            <button type="button" onclick="clearInput()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">Hapus</button>
-
-                        </div>
-
-                        <button onclick="hitungFungsi()" style="margin-top: 20px; width: 100%;">Sederhanakan Ekspresi Boolean</button>
+                        <input type="text" id="input-fungsi" placeholder="Contoh: x*y + y*z'">
+                        <button onclick="hitungFungsi()" style="margin-top: 15px; width: 100%;">Sederhanakan Ekspresi Boolean</button>
                     </div>
-                    
                     <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
-                        <h4>🎯 Jawaban / Status Fungsi</h4>
+                        <h4>🎯 Jawaban Sistematis</h4>
                         <div class="box-content" id="content-jawaban-dinamis"></div>
                     </div>
                 </div>
@@ -263,12 +146,59 @@
             <section id="bagian-rangkaian" class="content-section">
                 <div class="section-card">
                     <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
+                    
+                    <div class="materi-text" style="text-align: left; margin-bottom: 30px;">
+                        <p>Fungsi Boolean dapat direpresentasikan dalam bentuk <strong>Rangkaian Logika</strong> yang disusun dari beberapa gerbang logika dasar.</p>
+                        
+                        <h4 style="color: #38bdf8; margin: 20px 0 10px 0;">1. Gerbang Logika Dasar</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                            <div class="gate-card">
+                                <span style="font-weight: bold; color: #38bdf8;">Gerbang AND</span>
+                                <span class="gate-symbol">x ──┤D├── xy<br>y ──┤  │</span>
+                                <p style="font-size: 13px; color: #94a3b8;">Output 1 hanya jika semua input 1.</p>
+                            </div>
+                            <div class="gate-card" style="border-top-color: #10b981;">
+                                <span style="font-weight: bold; color: #10b981;">Gerbang OR</span>
+                                <span class="gate-symbol">x ──┤)├── x + y<br>y ──┤  │</span>
+                                <p style="font-size: 13px; color: #94a3b8;">Output 1 jika salah satu input 1.</p>
+                            </div>
+                            <div class="gate-card" style="border-top-color: #a855f7;">
+                                <span style="font-weight: bold; color: #a855f7;">Gerbang NOT</span>
+                                <span class="gate-symbol">x ──┤▻°├── x'</span>
+                                <p style="font-size: 13px; color: #94a3b8;">Membalikkan nilai input (Inverter).</p>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #38bdf8; margin: 25px 0 10px 0;">2. Gerbang Logika Turunan</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                            <div class="gate-card" style="border-top-color: #cbd5e1;">
+                                <span style="font-weight: bold;">NAND & NOR</span>
+                                <span class="gate-symbol">NAND: ──┤D°├──<br>NOR : ──┤)°├──</span>
+                                <p style="font-size: 13px; color: #94a3b8;">Gerbang AND/OR yang dinegasikan.</p>
+                            </div>
+                            <div class="gate-card" style="border-top-color: #cbd5e1;">
+                                <span style="font-weight: bold;">XOR & XNOR</span>
+                                <span class="gate-symbol">XOR : ──┤))├──<br>XNOR: ──┤))°├──</span>
+                                <p style="font-size: 13px; color: #94a3b8;">Exclusive OR dan negasinya.</p>
+                            </div>
+                        </div>
+
+                        <div class="de-morgan-box">
+                            <h4 style="color: #4ade80; margin-top: 0;">💡 Ekuivalensi De Morgan</h4>
+                            <p style="font-size: 14px; margin-bottom: 0;">Berdasarkan Hukum De Morgan, gerbang logika bisa memiliki bentuk fungsional yang sama:</p>
+                            <code style="display: block; margin-top: 10px; color: #38bdf8; font-size: 13px;">
+                                Gerbang NOR ≡ Inverted AND (Input NOT + AND)<br>
+                                Gerbang NAND ≡ Inverted OR (Input NOT + OR)
+                            </code>
+                        </div>
+                    </div>
+
                     <div class="tool-box">
                         <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
                         <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
                     </div>
                     <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
-                        <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
+                        <h4>🔌 Analisis Jalur Sederhana</h4>
                         <div class="box-content" id="content-sirkuit-dinamis"></div>
                     </div>
                 </div>
@@ -282,7 +212,7 @@
                         <button onclick="hitungKMap()">Petakan ke K-Map</button>
                     </div>
                     <div class="dynamic-output-box" id="box-kmap-matrix-dinamis" style="display: none;">
-                        <h4>🗺️ Matriks Visualisasi Peta Karnaugh</h4>
+                        <h4>🗺️ Visualisasi Matriks</h4>
                         <div class="box-content" id="content-kmap-matrix-dinamis"></div>
                     </div>
                 </div>

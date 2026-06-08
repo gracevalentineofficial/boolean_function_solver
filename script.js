@@ -7,15 +7,9 @@
 // 1. INTEGRASI FITUR VIRTUAL PAD / TOMBOL CEPAT
 // ==========================================
 
-/**
- * Menyisipkan simbol operator langsung ke posisi kursor pengguna di input fungsi
- * @param {string} symbol - Simbol logika/variabel yang akan dimasukkan
- */
 function insertSyntax(symbol) {
     const inputFungsi = document.activeElement;
-    // Memastikan penyisipan bekerja di input mana pun yang sedang fokus (fungsi, hukum, atau tabel)
     if (!inputFungsi || !['input-fungsi', 'input-hukum', 'input-tabel', 'input-rangkaian', 'input-kmap'].includes(inputFungsi.id)) {
-        // Fallback jika tidak ada input yang fokus, default ke input-fungsi
         const defaultInput = document.getElementById('input-fungsi');
         if (defaultInput) insertToElement(defaultInput, symbol);
         return;
@@ -35,12 +29,9 @@ function insertToElement(element, symbol) {
     element.setSelectionRange(newCursorPos, newCursorPos);
 }
 
-/**
- * Membersihkan seluruh teks di dalam input yang sedang aktif
- */
 function clearInput() {
     const inputFungsi = document.activeElement;
-    if (inputFungsi && ['input-fungsi', 'input-hukum', 'input-tabel'].includes(inputFungsi.id)) {
+    if (inputFungsi && ['input-fungsi', 'input-hukum', 'input-tabel', 'input-rangkaian'].includes(inputFungsi.id)) {
         inputFungsi.value = '';
         inputFungsi.focus();
     } else {
@@ -57,9 +48,6 @@ function clearInput() {
 // 2. LOGIKA UTAMA ANALISIS & EVALUASI BOOLEAN
 // ==========================================
 
-/**
- * Menangani evaluasi nilai fungsi berdasarkan input variabel x, y, z
- */
 function hitungFungsi() {
     const inputVal = document.getElementById('input-fungsi').value.trim();
     const valX = document.getElementById('eval-x').value;
@@ -87,9 +75,6 @@ function hitungFungsi() {
     `;
 }
 
-/**
- * Menangani validasi Hukum Aljabar Boolean (Komplemen & De Morgan)
- */
 function hitungHukum() {
     const inputRaw = document.getElementById('input-hukum').value.trim();
     const outputBox = document.getElementById('box-hukum-dinamis');
@@ -248,38 +233,23 @@ function cekEkuivalensiGenerik(ex1, ex2) {
 }
 
 
-// =========================================================================
-// 3. BARU & UTAMA: GENERATOR TABEL KEBENARAN BOOLEAN DINAMIS (SMART PARSER)
-// =========================================================================
+// ==========================================
+// 3. GENERATOR TABEL KEBENARAN BOOLEAN DINAMIS
+// ==========================================
 
-/**
- * Mengonversi ekspresi teks aljabar Boolean menjadi format logika evaluasi JavaScript murni.
- * Mendukung perkalian implisit (ex: xy -> x*y), penanda petik negasi (ex: x' -> !x), serta berbagai simbol operator.
- */
 function formatKeLogikaMurni(str) {
     let f = str.toLowerCase().replace(/\s+/g, '');
-    
-    // 1. Normalisasi simbol alternatif ke bentuk standar perkalian (*) dan penjumlahan (+)
     f = f.replace(/·/g, '*').replace(/&&/g, '*').replace(/&/g, '*')
          .replace(/\|\|/g, '+').replace(/\|/g, '+');
-         
-    // 2. Mengubah format ingkaran petik/notasi komplemen (x' -> !x)
     f = f.replace(/([a-z0-9\)])'/g, '!$1');
-    
-    // Perbaikan khusus untuk kurung yang dinegasikan: !(a+b)
     let patternPetikKurung = /\(([^)]+)\)'/g;
     while (patternPetikKurung.test(f)) {
         f = f.replace(patternPetikKurung, "!($1)");
     }
-
-    // 3. Menyisipkan tanda perkalian implisit di antara variabel atau kurung yang menempel (ex: ab -> a*b, a(!b) -> a*!b)
     f = f.replace(/([a-z0-9\!)]+)(?=[a-z0-9\!(\n])/g, function(match) {
-        // Jangan sisipkan '*' jika karakter pencocokan diakhiri operator atau tanda seru tunggal
         if (match.endsWith('!') || match.endsWith('+') || match.endsWith('*')) return match;
         return match + '*';
     });
-
-    // 4. Transformasi akhir ke operator logika pemrograman JavaScript asli
     let hasilLogika = "";
     for (let char of f) {
         if (char === '*') hasilLogika += ' && ';
@@ -289,9 +259,6 @@ function formatKeLogikaMurni(str) {
     return hasilLogika;
 }
 
-/**
- * Menghitung dan merender tabel kebenaran secara dinamis sesuai matriks input akademis
- */
 function hitungTabelKebenaran() {
     const inputTabel = document.getElementById('input-tabel').value.trim();
     const box = document.getElementById('box-table-output-dinamis');
@@ -303,17 +270,11 @@ function hitungTabelKebenaran() {
     }
     
     box.style.display = 'block';
-    
     try {
-        // Melakukan kompilasi string ke format logika JavaScript
         let formulaLogika = formatKeLogikaMurni(inputTabel);
-        
-        // Deteksi otomatis variabel yang aktif di dalam string input (maksimal x, y, z atau a, b, c)
         let karakterInput = inputTabel.toLowerCase();
         let menggunakanXYZ = /x|y|z/.test(karakterInput);
         let menggunakanABC = /a|b|c/.test(karakterInput);
-        
-        // Default ke x, y, z jika tidak terdeteksi atau bercampur
         let varLabels = (menggunakanABC && !menggunakanXYZ) ? ['a', 'b', 'c'] : ['x', 'y', 'z'];
         
         let htmlTabel = `
@@ -332,18 +293,11 @@ function hitungTabelKebenaran() {
                 <tbody>
         `;
         
-        // Mengikuti standar tabel kebenaran akademis: urutan menurun dari biner 000 sampai 111 (atau sebaliknya)
-        // Agar presisi dengan buku cetak, kita loop dari kombinasi 0 ke 1 secara terstruktur
         for (let v1 = 0; v1 <= 1; v1++) {
             for (let v2 = 0; v2 <= 1; v2++) {
                 for (let v3 = 0; v3 <= 1; v3++) {
-                    // Evaluasi logika biner
                     let hasilBiner = mengevaluasiStringLogika(formulaLogika, v1, v2, v3);
-                    
-                    // Ganti nilai error dengan fallback 0
                     if (hasilBiner === -1) hasilBiner = 0;
-                    
-                    // Styling baris aktif (jika bernilai 1 diberi efek warna hijau tipis agar scannable)
                     let rowBg = hasilBiner === 1 ? 'rgba(16, 185, 129, 0.05)' : 'transparent';
                     let resultColor = hasilBiner === 1 ? '#10b981' : '#ef4444';
                     
@@ -358,21 +312,14 @@ function hitungTabelKebenaran() {
                 }
             }
         }
-        
         htmlTabel += `</tbody></table>`;
         content.innerHTML = htmlTabel;
-        
     } catch (e) {
-        content.innerHTML = `
-            <div style="background: #1e293b; padding: 12px; border-radius: 6px; border-left: 4px solid #ef4444; text-align: left; color: #ef4444; font-weight: bold;">
-                ❌ Kesalahan Format Sintaks: Mohon periksa kembali keselarasan tanda kurung atau operator Anda.
-            </div>
-        `;
+        content.innerHTML = `<div style="background: #1e293b; padding: 12px; border-radius: 6px; border-left: 4px solid #ef4444; text-align: left; color: #ef4444; font-weight: bold;">❌ Kesalahan Format Sintaks.</div>`;
     }
 }
 
 function mengevaluasiStringLogika(expr, a, b, c) {
-    // Penggantian variabel yang aman menggunakan batasan kata \b untuk mencegah tabrakan karakter
     let safeExpr = expr
         .replace(/\ba\b/g, a).replace(/\bb\b/g, b).replace(/\bc\b/g, c)
         .replace(/\bx/g, a).replace(/\by/g, b).replace(/\bz/g, c);
@@ -385,13 +332,124 @@ function mengevaluasiStringLogika(expr, a, b, c) {
 
 
 // =========================================================================
-// 4. PANEL LAYANAN SKEMATIK & DIAGRAM
+// 4. PERBAIKAN TOTAL: MODUL MATERI & ILUSTRASI GERBANG RANGKAIAN LOGIKA MURNI
 // =========================================================================
 
+/**
+ * Merender modul materi teks ringkas beserta representasi visual ilustrasi gerbang 
+ * dasar & gerbang turunan yang diketik manual menggunakan representasi grafis CSS murni.
+ */
 function hitungRangkaian() {
     const inputRangkaian = document.getElementById('input-rangkaian').value.trim();
-    document.getElementById('box-sirkuit-dinamis').style.display = 'block';
-    document.getElementById('content-sirkuit-dinamis').innerHTML = `<div style="background:#0b0f19; padding:12px; font-family:monospace; text-align: left;">[INPUT] ➔ Jalur Logika Utama Terdeteksi: <span style="color:#38bdf8;">"${inputRangkaian}"</span> ➔ [OUTPUT]</div>`;
+    const outputBox = document.getElementById('box-sirkuit-dinamis');
+    const contentBox = document.getElementById('content-sirkuit-dinamis');
+    
+    outputBox.style.display = 'block';
+
+    // Header Deteksi Input Pengguna
+    let htmlMateri = `
+        <div style="background: #0f172a; padding: 12px; border-radius: 6px; margin-bottom: 18px; border: 1px dashed #334155; text-align: left; font-family: monospace;">
+            🔌 <strong>Jalur Ekspresi Aktif:</strong> <span style="color: #38bdf8;">"${inputRangkaian || 'Belum ada input'}"</span>
+        </div>
+        
+        <div style="text-align: left; color: #cbd5e1; line-height: 1.6;">
+            <h4 style="color: #38bdf8; margin: 0 0 10px 0; font-size: 16px; border-bottom: 1px solid #334155; padding-bottom: 4px;">📌 Representasi Rangkaian Logika</h4>
+            <p style="margin: 0 0 15px 0; font-size: 14px;">Fungsi Boolean dapat direpresentasika ke dalam bentuk skematik sirkuit digital menggunakan <strong>Gerbang Logika</strong>.</p>
+            
+            <h5 style="color: #f8fafc; margin: 15px 0 8px 0; font-size: 14px; font-weight: bold;">1. Gerbang Logika Dasar</h5>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px; border-top: 3px solid #38bdf8;">
+                    <span style="font-weight: bold; color: #38bdf8; font-size: 13px;">Gerbang AND (Dua-Masukan)</span>
+                    <div style="margin: 10px 0; font-family: monospace; font-size: 16px; background: #0f172a; padding: 8px; border-radius: 4px; text-align: center; color: #f8fafc;">
+                        x ──┤<b style="color: #38bdf8;">D</b>├── xy
+                        <br>y ──┤  │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Output hanya bernilai 1 jika seluruh input bernilai 1 (perkalian).</span>
+                </div>
+
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px; border-top: 3px solid #10b981;">
+                    <span style="font-weight: bold; color: #10b981; font-size: 13px;">Gerbang OR (Dua-Masukan)</span>
+                    <div style="margin: 10px 0; font-family: monospace; font-size: 16px; background: #0f172a; padding: 8px; border-radius: 4px; text-align: center; color: #f8fafc;">
+                        x ──┤<b style="color: #10b981;">)</b>├── x + y
+                        <br>y ──┤  │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Output bernilai 1 jika salah satu atau seluruh input bernilai 1 (penjumlahan).</span>
+                </div>
+
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px; border-top: 3px solid #a855f7;">
+                    <span style="font-weight: bold; color: #a855f7; font-size: 13px;">Gerbang NOT (Inverter)</span>
+                    <div style="margin: 10px 0; font-family: monospace; font-size: 16px; background: #0f172a; padding: 8px; border-radius: 4px; text-align: center; color: #f8fafc;">
+                        x ──┤<b style="color: #a855f7;">▻°</b>├── x'
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Berfungsi membalikkan nilai input (0 menjadi 1, dan sebaliknya).</span>
+                </div>
+            </div>
+
+            <h5 style="color: #f8fafc; margin: 15px 0 8px 0; font-size: 14px; font-weight: bold;">2. Gerbang Logika Turunan</h5>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px;">
+                    <span style="font-weight: bold; color: #cbd5e1; font-size: 13px;">Gerbang NAND</span>
+                    <div style="margin: 8px 0; font-family: monospace; font-size: 14px; background: #0f172a; padding: 6px; border-radius: 4px; text-align: center;">
+                        x ──┤D°├── (xy)'
+                        <br>y ──┤  │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Kombinasi gerbang AND dan NOT.</span>
+                </div>
+
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px;">
+                    <span style="font-weight: bold; color: #cbd5e1; font-size: 13px;">Gerbang NOR</span>
+                    <div style="margin: 8px 0; font-family: monospace; font-size: 14px; background: #0f172a; padding: 6px; border-radius: 4px; text-align: center;">
+                        x ──┤)°├── (x+y)'
+                        <br>y ──┤  │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Kombinasi gerbang OR dan NOT.</span>
+                </div>
+
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px;">
+                    <span style="font-weight: bold; color: #cbd5e1; font-size: 13px;">Gerbang XOR</span>
+                    <div style="margin: 8px 0; font-family: monospace; font-size: 14px; background: #0f172a; padding: 6px; border-radius: 4px; text-align: center;">
+                        x ──┤))├── x ⊕ y
+                        <br>y ──┤  │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Exclusive OR: 1 jika input berbeda.</span>
+                </div>
+
+                <div style="background: #1e293b; padding: 12px; border-radius: 6px;">
+                    <span style="font-weight: bold; color: #cbd5e1; font-size: 13px;">Gerbang XNOR</span>
+                    <div style="margin: 8px 0; font-family: monospace; font-size: 14px; background: #0f172a; padding: 6px; border-radius: 4px; text-align: center;">
+                        x ──┤))°├── (x ⊕ y)'
+                        <br>y ──┤   │
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;">Exclusive NOR: 1 jika input sama.</span>
+                </div>
+            </div>
+
+            <h5 style="color: #f8fafc; margin: 18px 0 8px 0; font-size: 14px; font-weight: bold;">3. Analisis Ekuivalensi Sirkuit (Hukum De Morgan)</h5>
+            <div style="background: #111827; padding: 12px; border-radius: 6px; border: 1px solid #1e293b; font-size: 13px;">
+                <p style="margin: 0 0 10px 0;">Dengan mengimplementasikan Hukum De Morgan, kita dapat merancang gerbang alternatif yang bernilai fungsional sama:</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 8px; font-family: monospace;">
+                    <div style="background: #0f172a; padding: 8px; border-radius: 4px; border-left: 3px solid #ef4444;">
+                        <strong>Gerbang NOR:</strong> <code>──┤)°├── (x+y)'</code> 
+                        <br><span style="color: #94a3b8; font-size: 12px;">Ekuivalen dengan Gerbang Inverted AND:</span>
+                        <br><code>x' ──┤D├── x'y'</code>
+                        <br><code>y' ──┤  │</code>
+                    </div>
+
+                    <div style="background: #0f172a; padding: 8px; border-radius: 4px; border-left: 3px solid #eab308;">
+                        <strong>Gerbang NAND:</strong> <code>──┤D°├── (xy)'</code> 
+                        <br><span style="color: #94a3b8; font-size: 12px;">Ekuivalen dengan Gerbang Inverted OR:</span>
+                        <br><code>x' ──┤)├── x' + y'</code>
+                        <br><code>y' ──┤  │</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    contentBox.innerHTML = htmlMateri;
 }
 
 function hitungKMap() {

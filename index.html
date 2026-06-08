@@ -248,13 +248,65 @@
 
             <section id="bagian-tabel" class="content-section">
                 <div class="section-card">
-                    <h2 class="section-title-only">Tabel Kebenaran</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-tabel" placeholder="Contoh: x*y' + z">
-                        <button onclick="hitungTabelKebenaran()">Generate Tabel Kebenaran</button>
+                    <h2 class="section-title-only">Tabel Kebenaran & Bentuk Kanonik</h2>
+                    
+                    <div class="materi-text" style="line-height: 1.6; margin-bottom: 25px; text-align: left;">
+                        <p>Setiap fungsi Boolean dapat direpresentasikan melalui <strong>Tabel Kebenaran</strong> dan diekspresikan dalam bentuk kanonik spesifik:</p>
+                        <ul style="margin: 8px 0; padding-left: 24px; list-style-type: disc;">
+                            <li style="margin-bottom: 8px;">
+                                <strong style="color: #38bdf8;">SOP (Sum of Products):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi <strong>1</strong>. Setiap kombinasi disebut <strong>Minterm ($m$)</strong>. Variabel bernilai 1 ditulis normal, sedangkan bernilai 0 di-NOT-kan (ditambah aksen $'$). Lambang operasi menggunakan Sigma ($\sum$).
+                            </li>
+                            <li style="margin-bottom: 8px;">
+                                <strong style="color: #38bdf8;">POS (Product of Sums):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi <strong>0</strong>. Setiap kombinasi disebut <strong>Maxterm ($M$)</strong>. Variabel bernilai 0 ditulis normal, sedangkan bernilai 1 di-NOT-kan. Lambang operasi menggunakan Pi ($\prod$).
+                            </li>
+                        </ul>
                     </div>
-                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none;">
-                        <h4>📋 Tabel Kebenaran Terkait</h4>
+
+                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                        <button onclick="switchSkema(1)" id="btn-skema-1" style="flex: 1; background: #38bdf8; color: #0f172a; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                            📊 Skema 1: Input Manual Nilai Sel
+                        </button>
+                        <button onclick="switchSkema(2)" id="btn-skema-2" style="flex: 1; background: #1e293b; color: #cbd5e1; padding: 12px; border: 1px solid #334155; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                            ⚙️ Skema 2: Otomatis dari Fungsi
+                        </button>
+                    </div>
+
+                    <div id="panel-skema-1" class="tool-box" style="display: block;">
+                        <h3 style="margin-top: 0; color: #38bdf8;">Skema 1: Pembuat Kanonik dari Sel Tabel</h3>
+                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Tentukan jumlah variabel dan nama kolom terlebih dahulu untuk menyusun baris tabel kebenaran.</p>
+                        
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; align-items: flex-end;">
+                            <div style="flex: 1; min-width: 150px;">
+                                <label style="display: block; color: #cbd5e1; margin-bottom: 6px; font-size: 13px;">Jumlah Variabel:</label>
+                                <select id="skema1-jumlah-var" style="width: 100%; background: #0f172a; color: white; border: 1px solid #334155; padding: 8px; border-radius: 6px; outline: none;">
+                                    <option value="2">2 Variabel</option>
+                                    <option value="3" selected>3 Variabel</option>
+                                    <option value="4">4 Variabel</option>
+                                </select>
+                            </div>
+                            <div style="flex: 2; min-width: 250px;">
+                                <label style="display: block; color: #cbd5e1; margin-bottom: 6px; font-size: 13px;">Nama Variabel (pisahkan dengan koma):</label>
+                                <input type="text" id="skema1-nama-var" value="A, B, C" style="margin: 0; padding: 8px;">
+                            </div>
+                            <button onclick="generateGridSkema1()" style="white-space: nowrap; height: 40px; margin: 0;">Buat Template Tabel</button>
+                        </div>
+
+                        <div id="container-grid-skema1" style="margin-top: 20px; overflow-x: auto;"></div>
+                        
+                        <button id="btn-hitung-skema1" onclick="prosesSkema1()" style="display: none; margin-top: 20px; width: 100%; background: #10b981; color: white;">
+                            Analisis & Tarik Hasil Kanonik SOP/POS
+                        </button>
+                    </div>
+
+                    <div id="panel-skema-2" class="tool-box" style="display: none;">
+                        <h3 style="margin-top: 0; color: #38bdf8;">Skema 2: Generator Tabel Kebenaran & Kanonik</h3>
+                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Masukkan fungsi Boolean bebas untuk memproduksi tabel kebenaran lengkap secara otomatis.</p>
+                        <input type="text" id="input-tabel" placeholder="Contoh: A*B + C' atau x*y' + z">
+                        <button onclick="hitungTabelKebenaran()" style="width: 100%;">Generate Tabel Kebenaran & Bentuk Kanonik</button>
+                    </div>
+
+                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none; margin-top: 20px;">
+                        <h4>📋 Tabel Kebenaran & Struktur Kanonik Hasil Analisis</h4>
                         <div class="box-content" id="content-table-output-dinamis"></div>
                     </div>
                 </div>

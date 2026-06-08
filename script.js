@@ -133,7 +133,7 @@ function hitungHukum() {
         }
 
         if ((lhs === "b(a+b')" || lhs === "b(b'+a)" || lhs === "b*(a+b')") && (rhs === "ba" || rhs === "ab" || rhs === "b*a" || rhs === "a*b")) {
-            htmlHasilAkhir += buatTemplateHtmlLangkah(i, "b (a + b') = ba", [
+            htmlHasilAkhir += buatTemplateHtmlLangkah(i, "b (a + b')", [
                 { ekspresi: "b (a + b')", hukum: "Soal Awal" },
                 { ekspresi: "ba + bb'", hukum: "Hukum Distributif" },
                 { ekspresi: "ba + 0", hukum: "Hukum Komplemen" },
@@ -581,4 +581,17 @@ function hitungKMap() {
             m0=0 | m1=1 <br> m2=1 | m3=0
         </div>
     `;
+}
+
+/**
+ * Menangani penutupan Welcome Screen Pop-Up Modal
+ */
+function closeWelcomeModal() {
+    const modal = document.getElementById('welcome-modal');
+    if (modal) {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300); // Durasi transisi pemudaran CSS 300ms
+    }
 }

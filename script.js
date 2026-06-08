@@ -79,7 +79,6 @@ function hitungFungsi() {
 
 /**
  * Menangani validasi Hukum Aljabar Boolean (Komplemen & De Morgan)
- * INTEGRASI SUKSES: Menggabungkan format tabel runtut & dropdown interaktif dari versi lama
  */
 function hitungHukum() {
     const inputRaw = document.getElementById('input-hukum').value.trim();
@@ -91,10 +90,7 @@ function hitungHukum() {
         return;
     }
 
-    // Normalisasi input: ubah huruf besar ke kecil
     let normalizedInput = inputRaw.toLowerCase();
-    
-    // Memisahkan soal jika menggunakan pemisah "dan" atau tanda koma
     let kumpulanSoal = [];
     if (normalizedInput.includes(' dan ')) {
         kumpulanSoal = normalizedInput.split(' dan ');
@@ -106,7 +102,6 @@ function hitungHukum() {
 
     let htmlHasilAkhir = "";
 
-    // Iterasi setiap soal yang diekstrak
     for (let i = 0; i < kumpulanSoal.length; i++) {
         let soalSingle = kumpulanSoal[i].trim();
         if (!soalSingle) continue;
@@ -125,9 +120,6 @@ function hitungHukum() {
         let lhs = parts[0].trim().replace(/\s+/g, '');
         let rhs = parts[1].trim().replace(/\s+/g, '');
 
-        // -----------------------------------------------------------------
-        // KASUS SPESIFIK 1: ab' + b = a + b (Sesuai Struktur Buku Panduan)
-        // -----------------------------------------------------------------
         if ((lhs === "ab'+b" || lhs === "b+ab'" || lhs === "a*b'+b" || lhs === "b+a*b'") && (rhs === "a+b" || rhs === "b+a")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "ab' + b = a + b", [
                 { ekspresi: "a b' + b", hukum: "Soal Awal" },
@@ -140,9 +132,6 @@ function hitungHukum() {
             continue;
         }
 
-        // -----------------------------------------------------------------
-        // KASUS SPESIFIK 2: b(a + b') = ba (Sesuai Struktur Buku Panduan)
-        // -----------------------------------------------------------------
         if ((lhs === "b(a+b')" || lhs === "b(b'+a)" || lhs === "b*(a+b')") && (rhs === "ba" || rhs === "ab" || rhs === "b*a" || rhs === "a*b")) {
             htmlHasilAkhir += buatTemplateHtmlLangkah(i, "b (a + b') = ba", [
                 { ekspresi: "b (a + b')", hukum: "Soal Awal" },
@@ -154,9 +143,6 @@ function hitungHukum() {
             continue;
         }
 
-        // -----------------------------------------------------------------
-        // FALLBACK GENERIK: EVALUASI BRUTE-FORCE KEBENARAN MATRIKS LOGIKA
-        // -----------------------------------------------------------------
         try {
             let isEquivalent = cekEkuivalensiGenerik(lhs, rhs);
             if (isEquivalent) {
@@ -183,9 +169,6 @@ function hitungHukum() {
     outputBox.style.display = 'block';
 }
 
-/**
- * Fungsi Generator Komponen UI Langkah Resmi (Dropdown dengan Tabel Penyelesaian)
- */
 function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
     return `
         <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px; text-align: left;">
@@ -221,9 +204,6 @@ function buatTemplateHtmlLangkah(index, judul, daftarLangkah) {
     `;
 }
 
-/**
- * Fungsi Generator Komponen UI Langkah Generik
- */
 function buatTemplateHtmlGenerik(index, lhs, rhs) {
     return `
         <div style="background: #1e293b; padding: 15px; border-radius: 6px; border-left: 4px solid #10b981; margin-bottom: 15px; text-align: left;">
@@ -242,9 +222,6 @@ function buatTemplateHtmlGenerik(index, lhs, rhs) {
     `;
 }
 
-/**
- * Handler Dropdown Penanganan Sembunyi/Tampilkan Panel Detail
- */
 function toggleLangkahDetail(index) {
     const detailDiv = document.getElementById(`langkah-penyelesaian-detail-${index}`);
     const btn = document.getElementById(`btn-toggle-langkah-${index}`);
@@ -262,9 +239,6 @@ function toggleLangkahDetail(index) {
     }
 }
 
-/**
- * Pengubah Notasi Boolean String ke Operator Logika JavaScript Valid (&& dan ||)
- */
 function cekEkuivalensiGenerik(ex1, ex2) {
     const formatKeLogikaMurni = (str) => {
         let f = str
@@ -296,9 +270,6 @@ function cekEkuivalensiGenerik(ex1, ex2) {
     return true;
 }
 
-/**
- * Pembantu Evaluasi String Logika Boolean ke Nilai Biner Murni (1/0)
- */
 function mengevaluasiStringLogika(expr, a, b, c) {
     let safeExpr = expr
         .replace(/\ba\b/g, a).replace(/\bb\b/g, b).replace(/\bc/g, c)
@@ -310,34 +281,266 @@ function mengevaluasiStringLogika(expr, a, b, c) {
     }
 }
 
+
+// ==========================================
+// 3. LOGIKA LANJUTAN: TABEL KEBENARAN, SOP, DAN POS
+// ==========================================
+
 /**
- * Menangani pembuatan generator Tabel Kebenaran secara dinamis
+ * SKEMA 1: Membuat matriks baris dan kolom berdasarkan jumlah variabel yang diinput user
+ */
+function buatStrukturTabelSkema1() {
+    const jumlahVar = parseInt(document.getElementById('jumlah-variabel-skema1').value);
+    const containerTabel = document.getElementById('container-tabel-skema1');
+    
+    // Tentukan nama variabel berdasarkan jumlahnya
+    let varNames = ['X', 'Y', 'Z', 'W'].slice(0, jumlahVar);
+    let totalBaris = Math.pow(2, jumlahVar);
+    
+    let html = `
+        <p style="margin: 10px 0; font-size: 14px; color: #cbd5e1;">Silakan isi nilai output <strong>(0 atau 1)</strong> pada kolom <strong>F</strong> untuk setiap baris:</p>
+        <div style="overflow-x: auto;">
+            <table id="tabel-input-skema1" style="width: 100%; border-collapse: collapse; text-align: center; background: #0f172a; color: #e2e8f0; font-size: 13px; border-radius: 6px; overflow: hidden;">
+                <thead>
+                    <tr style="background: #1e293b; color: #38bdf8;">
+                        <th style="padding: 8px; border: 1px solid #334155;">No (Desimal)</th>
+                        ${varNames.map(v => `<th style="padding: 8px; border: 1px solid #334155;">${v}</th>`).join('')}
+                        <th style="padding: 8px; border: 1px solid #334155; color: #f43f5e;">F (Output)</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    for (let i = 0; i < totalBaris; i++) {
+        html += `<tr>`;
+        html += `<td style="padding: 6px; border: 1px solid #334155; font-weight: bold; background: #1e293b;">${i}</td>`;
+        
+        // Generate kombinasi bit biner
+        for (let j = jumlahVar - 1; j >= 0; j--) {
+            let bit = (i >> j) & 1;
+            html += `<td style="padding: 6px; border: 1px solid #334155; font-family: monospace;">${bit}</td>`;
+        }
+        
+        // Input elemen seleksi untuk kolom F
+        html += `
+            <td style="padding: 6px; border: 1px solid #334155;">
+                <select class="output-row-skema1" data-index="${i}" style="background: #1e293b; color: #fff; border: 1px solid #f43f5e; padding: 2px 6px; border-radius: 4px; outline: none; font-weight: bold;">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                </select>
+            </td>
+        `;
+        html += `</tr>`;
+    }
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+        <button onclick="prosesTabelSOPPOS_Skema1()" style="margin-top: 15px; width: 100%; background: #10b981; color: #fff;">Proses Kanonik SOP & POS (Skema 1)</button>
+    `;
+    
+    containerTabel.innerHTML = html;
+}
+
+/**
+ * SKEMA 1: Memproses hasil ekstraksi tabel manual menjadi representasi SOP dan POS
+ */
+function prosesTabelSOPPOS_Skema1() {
+    const jumlahVar = parseInt(document.getElementById('jumlah-variabel-skema1').value);
+    const selectElements = document.querySelectorAll('.output-row-skema1');
+    const outputBox = document.getElementById('box-table-output-dinamis');
+    const contentBox = document.getElementById('content-table-output-dinamis');
+    
+    let varNames = ['X', 'Y', 'Z', 'W'].slice(0, jumlahVar);
+    let minterms = [];
+    let maxterms = [];
+    
+    selectElements.forEach((el, index) => {
+        let val = parseInt(el.value);
+        if (val === 1) minterms.push(index);
+        else maxterms.push(index);
+    });
+    
+    let hasilKanonik = hitungEkspresiSOPPOS(varNames, minterms, maxterms);
+    
+    outputBox.style.display = "block";
+    contentBox.innerHTML = generateHtmlHasilSOPPOS("Hasil Analisis Input Tabel Manual (Skema 1)", hasilKanonik);
+}
+
+/**
+ * SKEMA 2: Menghasilkan tabel kebenaran otomatis beserta SOP dan POS dari formula fungsi string
  */
 function hitungTabelKebenaran() {
-    const inputVal = document.getElementById('input-tabel').value.trim();
+    let inputVal = document.getElementById('input-tabel').value.trim();
     const outputBox = document.getElementById('box-table-output-dinamis');
     const contentBox = document.getElementById('content-table-output-dinamis');
     
     if (inputVal === "") {
-        alert("Silakan masukkan ekspresi untuk tabel kebenaran!");
+        alert("Silakan masukkan ekspresi fungsi Boolean terlebih dahulu!");
         return;
     }
     
+    // Deteksi variabel secara otomatis dari teks alfabet (case-insensitive)
+    let detectedVars = [];
+    let cleanExpr = inputVal.toUpperCase();
+    
+    for (let char of cleanExpr) {
+        if (char >= 'A' && char <= 'Z' && !detectedVars.includes(char)) {
+            detectedVars.push(char);
+        }
+    }
+    
+    // Sorting alfabet agar urutan kolom konsisten
+    detectedVars.sort();
+    
+    if (detectedVars.length === 0) {
+        alert("Ekspresi tidak valid! Tidak ditemukan variabel huruf.");
+        return;
+    }
+    
+    let totalBaris = Math.pow(2, detectedVars.length);
+    let minterms = [];
+    let maxterms = [];
+    
+    // Normalisasi sintaks ekspresi agar kompatibel dengan engine parser JavaScript
+    let parsedExpr = cleanExpr
+        .replace(/·/g, '*')
+        .replace(/’/g, "'")
+        .replace(/([A-Z])'/g, '!$1') // Mengubah A' menjadi !A
+        .replace(/([A-Z!])(?=[A-Z\(])/g, '$1*'); // Mengubah kedekatan variabel AB menjadi A*B
+        
+    let jsExpr = "";
+    for (let char of parsedExpr) {
+        if (char === '*') jsExpr += ' && ';
+        else if (char === '+') jsExpr += ' || ';
+        else jsExpr += char;
+    }
+    
+    // Bangun visualisasi tabel kebenaran HTML
+    let htmlTable = `
+        <p style="margin: 0 0 10px 0; font-size: 14px;">Tabel Kebenaran Otomatis untuk ekspresi: <code style="color:#38bdf8;">f = ${inputVal}</code></p>
+        <div style="overflow-x: auto; margin-bottom: 20px;">
+            <table style="width:100%; border-collapse:collapse; background:#0f172a; text-align:center; font-size:13px; border-radius: 6px; overflow: hidden;">
+                <thead>
+                    <tr style="background:#1e293b; color:#38bdf8;">
+                        <th style="padding:8px; border:1px solid #334155;">No</th>
+                        ${detectedVars.map(v => `<th style="padding:8px; border:1px solid #334155;">${v}</th>`).join('')}
+                        <th style="padding:8px; border:1px solid #334155; color: #4ade80;">F (Hasil)</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    for (let i = 0; i < totalBaris; i++) {
+        let varValues = {};
+        htmlTable += `<tr>`;
+        htmlTable += `<td style="padding:6px; border:1px solid #334155; font-weight:bold; background:#1e293b;">${i}</td>`;
+        
+        // Petakan bit biner ke masing-masing variabel
+        for (let j = detectedVars.length - 1; j >= 0; j--) {
+            let bit = (i >> j) & 1;
+            let currentVar = detectedVars[detectedVars.length - 1 - j];
+            varValues[currentVar] = bit;
+            htmlTable += `<td style="padding:6px; border:1px solid #334155; font-family:monospace;">${bit}</td>`;
+        }
+        
+        // Evaluasi ekspresi logika dinamis
+        let workingExpr = jsExpr;
+        for (let v in varValues) {
+            // Gunakan regex batas kata agar variabel tidak saling tindih substitusi
+            let regex = new RegExp('\\b' + v + '\\b', 'g');
+            workingExpr = workingExpr.replace(regex, varValues[v]);
+        }
+        
+        let outVal = 0;
+        try {
+            outVal = Function(`return (${workingExpr})`)() ? 1 : 0;
+        } catch (e) {
+            outVal = 0; // Fallback nilai default aman jika error parsing
+        }
+        
+        if (outVal === 1) minterms.push(i);
+        else maxterms.push(i);
+        
+        htmlTable += `<td style="padding:6px; border:1px solid #334155; font-weight:bold; color:${outVal === 1 ? '#4ade80' : '#94a3b8'}; background: #111827;">${outVal}</td>`;
+        htmlTable += `</tr>`;
+    }
+    
+    htmlTable += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    let hasilKanonik = hitungEkspresiSOPPOS(detectedVars, minterms, maxterms);
+    
     outputBox.style.display = "block";
-    contentBox.innerHTML = `
-        <p style="margin: 0 0 10px 0;">Membuat matriks kombinasi bit biner untuk ekspresi: <code>${inputVal}</code></p>
-        <table style="width:100%; border-collapse:collapse; background:#1e293b; text-align:center; font-size:13px;">
-            <tr style="background:#334155; color:#38bdf8;">
-                <th style="padding:6px; border:1px solid #475569;">X</th>
-                <th style="padding:6px; border:1px solid #475569;">Y</th>
-                <th style="padding:6px; border:1px solid #475569;">Z</th>
-                <th style="padding:6px; border:1px solid #475569;">Hasil</th>
-            </tr>
-            <tr><td style="padding:6px; border:1px solid #475569;">0</td><td style="padding:6px; border:1px solid #475569;">0</td><td style="padding:6px; border:1px solid #475569;">0</td><td style="padding:6px; border:1px solid #475569;">0</td></tr>
-            <tr><td style="padding:6px; border:1px solid #475569;">1</td><td style="padding:6px; border:1px solid #475569;">1</td><td style="padding:6px; border:1px solid #475569;">1</td><td style="padding:6px; border:1px solid #475569;">1</td></tr>
-        </table>
+    contentBox.innerHTML = htmlTable + generateHtmlHasilSOPPOS("Hasil Bentuk Kanonik (Skema 2)", hasilKanonik);
+}
+
+/**
+ * UTILITY: Fungsi internal matematika untuk mengolah himpunan minterm/maxterm menjadi string lambang literatur
+ */
+function hitungEkspresiSOPPOS(varNames, minterms, maxterms) {
+    // 1. Format SOP
+    let sopTerms = [];
+    minterms.forEach(m => {
+        let term = "";
+        for (let j = varNames.length - 1; j >= 0; j--) {
+            let bit = (m >> j) & 1;
+            let currentVar = varNames[varNames.length - 1 - j];
+            term += (bit === 1) ? currentVar : currentVar + "'";
+        }
+        sopTerms.push(term);
+    });
+    let stringSOP = sopTerms.length > 0 ? sopTerms.join(" + ") : "0";
+    let lambangSOP = minterms.length > 0 ? `Σm(${minterms.join(", ")})` : "Σm(tidak ada)";
+
+    // 2. Format POS
+    let posTerms = [];
+    maxterms.forEach(M => {
+        let termComponents = [];
+        for (let j = varNames.length - 1; j >= 0; j--) {
+            let bit = (M >> j) & 1;
+            let currentVar = varNames[varNames.length - 1 - j];
+            termComponents.push((bit === 0) ? currentVar : currentVar + "'");
+        }
+        posTerms.push(`(${termComponents.join(" + ")})`);
+    });
+    let stringPOS = posTerms.length > 0 ? posTerms.join(" · ") : "1";
+    let lambangPOS = maxterms.length > 0 ? `ΠM(${maxterms.join(", ")})` : "ΠM(tidak ada)";
+
+    return { stringSOP, lambangSOP, stringPOS, lambangPOS };
+}
+
+/**
+ * UTILITY: Generator komponen desain antarmuka keluaran SOP & POS
+ */
+function generateHtmlHasilSOPPOS(judul, hasil) {
+    return `
+        <div style="margin-top: 15px; border-top: 2px dashed #334155; padding-top: 15px; text-align: left;">
+            <h5 style="color: #38bdf8; margin: 0 0 12px 0; font-size: 15px; font-weight: bold;">${judul}</h5>
+            
+            <div style="background: #0f172a; padding: 12px; border-radius: 6px; border-left: 4px solid #4ade80; margin-bottom: 12px;">
+                <div style="color: #4ade80; font-weight: bold; font-size: 13.5px; margin-bottom: 4px;">Sum-of-Products (SOP) / Bentuk Kanonik I</div>
+                <div style="font-family: monospace; color: #e2e8f0; font-size: 14px; margin-bottom: 4px;"><strong>Notasi Minterm:</strong> f = ${hasil.lambangSOP}</div>
+                <div style="font-family: monospace; color: #cbd5e1; font-size: 13.5px; word-break: break-all;"><strong>Ekspresi Lengkap:</strong> f = ${hasil.stringSOP}</div>
+            </div>
+            
+            <div style="background: #0f172a; padding: 12px; border-radius: 6px; border-left: 4px solid #f43f5e;">
+                <div style="color: #f43f5e; font-weight: bold; font-size: 13.5px; margin-bottom: 4px;">Product-of-Sums (POS) / Bentuk Kanonik II</div>
+                <div style="font-family: monospace; color: #e2e8f0; font-size: 14px; margin-bottom: 4px;"><strong>Notasi Maxterm:</strong> f = ${hasil.lambangPOS}</div>
+                <div style="font-family: monospace; color: #cbd5e1; font-size: 13.5px; word-break: break-all;"><strong>Ekspresi Lengkap:</strong> f = ${hasil.stringPOS}</div>
+            </div>
+        </div>
     `;
 }
+
+
+// ==========================================
+// 4. LOGIKA VISUALISASI LAIN (FUNGSI PENUNJANG CADANGAN)
+// ==========================================
 
 /**
  * Menangani pemetaan alur jalur Rangkaian Gerbang Logika

@@ -6,6 +6,40 @@
     <title>BoS : Boolean Solver - GRACE</title>
     <link rel="icon" type="image/png" href="logositus.png">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Gaya tambahan khusus elemen interaktif di dalam tabel kebenaran */
+        .select-f {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            outline: none;
+        }
+        .select-f:focus {
+            background: #0f172a;
+        }
+        .table-output {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .table-output th, .table-output td {
+            padding: 10px;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        .table-output th {
+            background: #1e293b;
+            color: #38bdf8;
+        }
+    </style>
 </head>
 <body>
 
@@ -137,7 +171,6 @@
                     <h2 class="section-title-only">Fungsi Boolean</h2>
                     
                     <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px; align-items: flex-start;">
-                        
                         <div class="materi-text" style="flex: 1 1 400px; text-align: left; line-height: 1.6; margin: 0;">
                             Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
                             <div style="margin-top: 8px; margin-bottom: 4px;">Ekspresi terdiri atas:</div>
@@ -151,7 +184,6 @@
 
                         <div style="flex: 1.4 1 480px; overflow-x: auto;">
                             <p class="materi-text" style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">Referensi Operator:</p>
-                            
                             <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden; font-size: 13.5px;">
                                 <thead>
                                     <tr style="background: #1e293b; color: #38bdf8;">
@@ -207,7 +239,6 @@
                         <input type="text" id="input-fungsi" placeholder="Contoh: !((!A + B) * (!B + C))">
                         
                         <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-start; margin-top: 15px; width: 100%;">
-                            
                             <div class="variable-inputs" style="display: flex; gap: 12px; margin: 0; padding: 0; background: transparent; border: none; align-items: center; flex-shrink: 0;">
                                 <label style="color: #cbd5e1; font-weight: 500;">x: <select id="eval-x" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
                                 <label style="color: #cbd5e1; font-weight: 500;">y: <select id="eval-y" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
@@ -233,7 +264,6 @@
                             <button type="button" onclick="insertSyntax('1')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">1</button>
                             
                             <button type="button" onclick="clearInput()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">Hapus</button>
-
                         </div>
 
                         <button onclick="hitungFungsi()" style="margin-top: 20px; width: 100%;">Sederhanakan Ekspresi Boolean</button>
@@ -286,14 +316,14 @@
                             </div>
                             <div style="flex: 2; min-width: 250px;">
                                 <label style="display: block; color: #cbd5e1; margin-bottom: 6px; font-size: 13px;">Nama Variabel (pisahkan dengan koma):</label>
-                                <input type="text" id="skema1-nama-var" value="A, B, C" style="margin: 0; padding: 8px;">
+                                <input type="text" id="skema1-nama-var" value="A, B, C" style="margin: 0; padding: 8px; width: 100%; box-sizing: border-box; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 6px;">
                             </div>
-                            <button onclick="generateGridSkema1()" style="white-space: nowrap; height: 40px; margin: 0;">Buat Template Tabel</button>
+                            <button onclick="generateGridSkema1()" style="white-space: nowrap; height: 40px; margin: 0; background: #38bdf8; color: #000; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; padding: 0 16px;">Buat Template Tabel</button>
                         </div>
 
                         <div id="container-grid-skema1" style="margin-top: 20px; overflow-x: auto;"></div>
                         
-                        <button id="btn-hitung-skema1" onclick="prosesSkema1()" style="display: none; margin-top: 20px; width: 100%; background: #10b981; color: white;">
+                        <button id="btn-hitung-skema1" onclick="prosesSkema1()" style="display: none; margin-top: 20px; width: 100%; background: #10b981; color: white; padding: 12px; border: none; font-weight: bold; border-radius: 6px; cursor: pointer;">
                             Analisis & Tarik Hasil Kanonik SOP/POS
                         </button>
                     </div>
@@ -301,12 +331,12 @@
                     <div id="panel-skema-2" class="tool-box" style="display: none;">
                         <h3 style="margin-top: 0; color: #38bdf8;">Skema 2: Generator Tabel Kebenaran & Kanonik</h3>
                         <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Masukkan fungsi Boolean bebas untuk memproduksi tabel kebenaran lengkap secara otomatis.</p>
-                        <input type="text" id="input-tabel" placeholder="Contoh: A*B + C' atau x*y' + z">
-                        <button onclick="hitungTabelKebenaran()" style="width: 100%;">Generate Tabel Kebenaran & Bentuk Kanonik</button>
+                        <input type="text" id="input-tabel" placeholder="Contoh: A*B + C' atau x*y' + z" style="width: 100%; padding: 10px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px;">
+                        <button onclick="hitungTabelKebenaran()" style="width: 100%; background: #38bdf8; color: #000; padding: 12px; border: none; font-weight: bold; border-radius: 6px; cursor: pointer;">Generate Tabel Kebenaran & Bentuk Kanonik</button>
                     </div>
 
-                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none; margin-top: 20px;">
-                        <h4>📋 Tabel Kebenaran & Struktur Kanonik Hasil Analisis</h4>
+                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none; margin-top: 20px; background: #1e293b; padding: 20px; border-radius: 8px; border-left: 4px solid #38bdf8;">
+                        <h4 style="margin-top: 0; color: #38bdf8;">📋 Tabel Kebenaran & Struktur Kanonik Hasil Analisis</h4>
                         <div class="box-content" id="content-table-output-dinamis"></div>
                     </div>
                 </div>
@@ -341,6 +371,188 @@
             </section>
         </main>
     </div>
+
+    <script>
+        // --- 1. MANAJEMEN TAB SWITCH SKEMA ---
+        function switchSkema(skemaNum) {
+            const btn1 = document.getElementById('btn-skema-1');
+            const btn2 = document.getElementById('btn-skema-2');
+            const panel1 = document.getElementById('panel-skema-1');
+            const panel2 = document.getElementById('panel-skema-2');
+            const outputBox = document.getElementById('box-table-output-dinamis');
+
+            // Reset visibilitas kotak output setiap kali berpindah skema
+            outputBox.style.display = "none";
+
+            if (skemaNum === 1) {
+                btn1.style.background = "#38bdf8";
+                btn1.style.color = "#0f172a";
+                btn1.style.border = "none";
+
+                btn2.style.background = "#1e293b";
+                btn2.style.color = "#cbd5e1";
+                btn2.style.border = "1px solid #334155";
+
+                panel1.style.display = "block";
+                panel2.style.display = "none";
+            } else {
+                btn2.style.background = "#38bdf8";
+                btn2.style.color = "#0f172a";
+                btn2.style.border = "none";
+
+                btn1.style.background = "#1e293b";
+                btn1.style.color = "#cbd5e1";
+                btn1.style.border = "1px solid #334155";
+
+                panel2.style.display = "block";
+                panel1.style.display = "none";
+            }
+        }
+
+        // Sinkronisasi otomatis nilai input nama variabel saat mengubah jumlah variabel di dropdown
+        document.getElementById('skema1-jumlah-var').addEventListener('change', function() {
+            const num = parseInt(this.value);
+            const defaults = ["A", "B", "C", "D"];
+            document.getElementById('skema1-nama-var').value = defaults.slice(0, num).join(', ');
+        });
+
+        // --- 2. LOGIKA GENERATOR GRID TEMPLATE (SKEMA 1) ---
+        function generateGridSkema1() {
+            const numVars = parseInt(document.getElementById('skema1-jumlah-var').value);
+            let varNamesInput = document.getElementById('skema1-nama-var').value;
+            let varNames = varNamesInput.split(',').map(v => v.trim()).filter(v => v !== "");
+
+            // Validasi jika input nama kosong atau tidak sesuai jumlah
+            if (varNames.length !== numVars) {
+                varNames = [];
+                for (let i = 0; i < numVars; i++) {
+                    varNames.push(String.fromCharCode(65 + i));
+                }
+                document.getElementById('skema1-nama-var').value = varNames.join(', ');
+            }
+
+            const totalRows = Math.pow(2, numVars);
+            let gridHtml = `<table class="table-output"><thead><tr><th style="width: 60px;">Row</th>`;
+
+            // Membuat header kolom variabel input
+            varNames.forEach(name => {
+                gridHtml += `<th>${name}</th>`;
+            });
+            // Membuat header fungsi output f
+            gridHtml += `<th>f(${varNames.join(', ')})</th></tr></thead><tbody>`;
+
+            // Membuat baris baris kombinasi biner
+            for (let i = 0; i < totalRows; i++) {
+                gridHtml += `<tr><td><strong>m${i}</strong></td>`;
+                for (let j = numVars - 1; j >= 0; j--) {
+                    const bit = (i >> j) & 1;
+                    gridHtml += `<td>${bit}</td>`;
+                }
+                // Menambahkan dropdown select f yang interaktif
+                gridHtml += `<td>
+                    <select class="select-f" data-row="${i}">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                </td></tr>`;
+            }
+            gridHtml += `</tbody></table>`;
+
+            document.getElementById('container-grid-skema1').innerHTML = gridHtml;
+            
+            // Tampilkan tombol hitung manual jika user ingin menggunakannya, 
+            // namun di sini kita juga memasang trigger otomatis (real-time) demi kenyamanan UI
+            document.getElementById('btn-hitung-skema1').style.display = "block";
+
+            // Tambah event listener ke setiap elemen select baru agar langsung mengalkulasi saat diganti
+            document.querySelectorAll('.select-f').forEach(select => {
+                select.addEventListener('change', prosesSkema1);
+            });
+
+            // Jalankan kalkulasi awal
+            prosesSkema1();
+        }
+
+        // --- 3. PROSES KALKULASI INTEGRASI KANONIK (SKEMA 1) ---
+        function prosesSkema1() {
+            const numVars = parseInt(document.getElementById('skema1-jumlah-var').value);
+            const varNames = document.getElementById('skema1-nama-var').value.split(',').map(v => v.trim());
+            const selects = document.querySelectorAll('.select-f');
+            
+            if(selects.length === 0) return;
+
+            let minterms = [];
+            let maxterms = [];
+            let sopTerms = [];
+            let posTerms = [];
+
+            selects.forEach(select => {
+                const rowIndex = parseInt(select.getAttribute('data-row'));
+                const val = parseInt(select.value);
+
+                // Ekstraksi representasi biner baris tersebut
+                let bits = [];
+                for (let j = numVars - 1; j >= 0; j--) {
+                    bits.push((rowIndex >> j) & 1);
+                }
+
+                if (val === 1) {
+                    minterms.push(rowIndex);
+                    // SOP: Variabel bernilai 0 di-NOT-kan (A')
+                    let term = bits.map((bit, idx) => bit === 1 ? varNames[idx] : varNames[idx] + "'").join('');
+                    sopTerms.push(term);
+                } else {
+                    maxterms.push(rowIndex);
+                    // POS: Variabel bernilai 1 di-NOT-kan (A') dihubungkan tanda tambah (+)
+                    let term = bits.map((bit, idx) => bit === 0 ? varNames[idx] : varNames[idx] + "'").join(' + ');
+                    posTerms.push(`(${term})`);
+                }
+            });
+
+            // Menyusun hasil ke dalam box output dinamis
+            let hasilHtml = `<div style="line-height: 1.8;">`;
+            hasilHtml += `<p style="margin-bottom: 10px;"><strong style="color:#10b981;">Bentuk SOP Baku (Minterm):</strong><br><code style="background:#0f172a; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:4px;">${sopTerms.length > 0 ? sopTerms.join(' + ') : '0'}</code></p>`;
+            hasilHtml += `<p style="margin-bottom: 20px;"><strong>Notasi Minterm (SOP):</strong> f = ∑(${minterms.join(', ') || 'tidak ada'})</p>`;
+            hasilHtml += `<hr style="border:0; border-top:1px solid #334155; margin:15px 0;">`;
+            hasilHtml += `<p style="margin-bottom: 10px;"><strong style="color:#ef4444;">Bentuk POS Baku (Maxterm):</strong><br><code style="background:#0f172a; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:4px;">${posTerms.length > 0 ? posTerms.join('') : '1'}</code></p>`;
+            hasilHtml += `<p style="margin-bottom: 5px;"><strong>Notasi Maxterm (POS):</strong> f = ∏(${maxterms.join(', ') || 'tidak ada'})</p>`;
+            hasilHtml += `</div>`;
+
+            document.getElementById('content-table-output-dinamis').innerHTML = hasilHtml;
+            document.getElementById('box-table-output-dinamis').style.display = "block";
+        }
+
+        // --- 4. PLACEHOLDER UNTUK STUB FUNGSI LAIN (SKEMA 2 & VALIDASI) ---
+        function hitungTabelKebenaran() {
+            const inputExpr = document.getElementById('input-tabel').value;
+            if(!inputExpr.trim()) {
+                alert("Harap masukkan ekspresi logika pada kolom Skema 2 terlebih dahulu!");
+                return;
+            }
+            // Simulasi parsing fungsi otomatis
+            document.getElementById('content-table-output-dinamis').innerHTML = `
+                <p>Mengevaluasi ekspresi: <code>${inputExpr}</code></p>
+                <p style="color: #94a3b8; font-size:13px;">[Info] Fitur parsing ekspresi string otomatis terikat pada rancangan internal parser <em>script.js</em> Anda.</p>
+            `;
+            document.getElementById('box-table-output-dinamis').style.display = "block";
+        }
+
+        // Tombol pembantu masukan teks ekspresi
+        function insertSyntax(val) {
+            const input = document.getElementById('input-fungsi');
+            input.value += val;
+            input.focus();
+        }
+        function clearInput() {
+            document.getElementById('input-fungsi').value = "";
+        }
+
+        // Stub fungsi halaman lain agar tidak melempar eror reference
+        function hitungHukum() { alert("Fungsi analisis hukum dijalankan melalui script.js"); }
+        function hitungFungsi() { alert("Fungsi penyederhanaan dijalankan melalui script.js"); }
+        function hitungRangkaian() { alert("Fungsi visualisasi rangkaian dijalankan melalui script.js"); }
+        function hitungKMap() { alert("Fungsi pemetaan K-Map dijalankan melalui script.js"); }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

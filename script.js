@@ -563,12 +563,14 @@ function hitungRangkaian() {
 
 /**
  * Menangani visualisasi pemetaan Karnaugh Map (K-Map) secara Fleksibel (Dinamis 3 & 4 Variabel)
- * Algoritma Solver berbasis Penyederhanaan Implikan Logika Riil
+ * FIX: Menyesuaikan ID Selector dengan berkas index.html asli ('box-kmap-dinamis' & 'content-kmap-dinamis')
  */
 function hitungKMap() {
     const inputVal = document.getElementById('input-kmap').value.trim();
-    const outputBox = document.getElementById('box-kmap-matrix-dinamis');
-    const contentBox = document.getElementById('content-kmap-matrix-dinamis');
+    
+    // DI SINI ADALAH PERBAIKAN UTAMANYA: ID disesuaikan agar teks langsung muncul!
+    const outputBox = document.getElementById('box-kmap-dinamis');
+    const contentBox = document.getElementById('content-kmap-dinamis');
     
     if (inputVal === "") {
         alert("Silakan masukkan nomor minterm (contoh: 0,1,4,6 atau 0,2,5,7,8,10,13,15)!");
@@ -585,7 +587,7 @@ function hitungKMap() {
         return;
     }
 
-    // 2. Deteksi jumlah variabel maksimal (3 variabel jika maks < 8, 4 variabel jika maks 8-15)
+    // 2. Deteksi jumlah variabel maksimal
     let maxMinterm = Math.max(...minterms);
     let numVars = 3;
     if (maxMinterm >= 8 && maxMinterm <= 15) {

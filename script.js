@@ -562,7 +562,8 @@ function hitungRangkaian() {
 }
 
 /**
- * Menangani visualisasi pemetaan Karnaugh Map (K-Map)
+ * Menangani visualisasi pemetaan Karnaugh Map (K-Map) secara Fleksibel (Dinamis 3 & 4 Variabel)
+ * Algoritma Solver berbasis Penyederhanaan Implikan Logika Riil
  */
 function hitungKMap() {
     const inputVal = document.getElementById('input-kmap').value.trim();
@@ -570,17 +571,207 @@ function hitungKMap() {
     const contentBox = document.getElementById('content-kmap-matrix-dinamis');
     
     if (inputVal === "") {
-        alert("Silakan masukkan ekspresi penyederhanaan K-Map!");
+        alert("Silakan masukkan nomor minterm (contoh: 0,1,4,6 atau 0,2,5,7,8,10,13,15)!");
         return;
     }
     
+    // 1. Parsing input minterm menjadi deretan angka integer bersih
+    let minterms = inputVal.split(',')
+                           .map(num => parseInt(num.trim()))
+                           .filter(num => !isNaN(num) && num >= 0);
+                           
+    if (minterms.length === 0) {
+        alert("Format input tidak valid! Gunakan deretan angka desimal yang dipisahkan oleh koma.");
+        return;
+    }
+
+    // 2. Deteksi jumlah variabel maksimal (3 variabel jika maks < 8, 4 variabel jika maks 8-15)
+    let maxMinterm = Math.max(...minterms);
+    let numVars = 3;
+    if (maxMinterm >= 8 && maxMinterm <= 15) {
+        numVars = 4;
+    } else if (maxMinterm > 15) {
+        alert("Batas maksimal kalkulator K-Map saat ini adalah 4 Variabel (Minterm 0 sampai 15).");
+        return;
+    }
+
+    // 3. Deteksi atau inisialisasi nama label variabel secara fleksibel
+    // Default menggunakan W,X,Y,Z jika 4 var, atau A,B,C jika 3 var.
+    let varLabels = numVars === 4 ? ['W', 'X', 'Y', 'Z'] : ['A', 'B', 'C'];
+
+    let totalCells = Math.pow(2, numVars);
+    let rows = numVars === 4 ? 4 : 2;
+    let cols = 4;
+
+    // Pemetaan indeks baris dan kolom berdasarkan urutan sistem Gray Code (00, 01, 11, 10)
+    const grayRow = rows === 4 ? [0, 1, 3, 2] : [0, 1];
+    const grayCol = [0, 1, 3, 2];
+
+    // Struktur boks matriks tata letak K-Map desimal
+    let mapLayout = [];
+    let gridValues = [];
+
+    for (let r = 0; r < rows; r++) {
+        mapLayout[r] = [];
+        gridValues[r] = [];
+        for (let c = 0; c < cols; c++) {
+            let mintermValue = 0;
+            if (numVars === 4) {
+                // Gabungan bit baris (W,X) dan bit kolom (Y,Z)
+                mintermValue = (grayRow[r] << 2) | grayCol[c];
+            } else {
+                // Gabungan bit baris (A) dan bit kolom (B,C)
+                mintermValue = (grayRow[r] << 2) | grayCol[c];
+            }
+            mapLayout[r][c] = mintermValue;
+            gridValues[r][c] = minterms.includes(mintermValue) ? 1 : 0;
+        }
+    }
+
+    // 4. PROSES ALGORITMA SOLVER BOOLEAN (Mini Quine-McCluskey Engine)
+    let primeImplicants = [];
+    
+    // Konversi minterm ke bentuk string biner berpasangan
+    let binaryTerms = {};
+    for (let i = 0; i < totalCells; i++) {
+        if (minterms.includes(i)) {
+            binaryTerms[i] = i.toString(2).padStart(numVars, '0');
+        }
+    }
+
+    // Fungsi pembantu mengecek perbedaan bit tunggal untuk penggabungan grup K-Map
+    const combineGroups = (terms) => {
+        let newTerms = {};
+        let combined = new Set();
+        let keys = Object.keys(terms);
+
+        for (let i = 0; i < keys.length; i++) {
+            for (let j = i + 1; j < keys.length; j++) {
+                let k1 = keys[i], k2 = keys[j];
+                let t1 = terms[k1], t2 = terms[k2];
+                
+                let diffCount = 0;
+                let diffIdx = -1;
+                for (let b = 0; b < numVars; b++) {
+                    if (t1[b] !== t2[b]) {
+                        diffCount++;
+                        diffIdx = b;
+                    }
+                }
+                
+                if (diffCount === 1) {
+                    let nextTerm = t1.substring(0, diffIdx) + '-' + t1.substring(diffIdx + 1);
+                    let newKey = k1 + "," + k2;
+                    newTerms[newKey] = nextTerm;
+                    combined.add(k1);
+                    combined.add(k2);
+                }
+            }
+        }
+
+        // Ambil term yang tidak sempat tergabung sebagai implikan utama baku
+        for (let k of keys) {
+            if (!combined.has(k)) {
+                primeImplicants.push(terms[k]);
+            }
+        }
+        return newTerms;
+    };
+
+    // Eksekusi iterasi penggabungan grup sel berpasangan (Grup 2, Grup 4, Grup 8)
+    let currentLevelTerms = binaryTerms;
+    while (Object.keys(currentLevelTerms).length > 0) {
+        currentLevelTerms = combineGroups(currentLevelTerms);
+    }
+
+    // Eliminasi duplikat implikan biner
+    primeImplicants = [...new Set(primeImplicants)];
+
+    // Terjemahkan string biner (ex: '1-01') menjadi notasi alfabet variabel fleksibel
+    let termStrings = [];
+    primeImplicants.forEach(implican => {
+        let str = "";
+        for (let b = 0; b < numVars; b++) {
+            if (implican[b] === '1') {
+                str += varLabels[b];
+            } else if (implican[b] === '0') {
+                str += varLabels[b] + "'";
+            }
+        }
+        if (str === "") str = "1"; // Jika mencakup seluruh area sel tabel
+        termStrings.push(str);
+    });
+
+    // Menghapus term redundan tersisa (Ujung-ujung lingkaran overlap)
+    let hasilSederhana = [...new Set(termStrings)].join(" + ");
+    if (minterms.length === totalCells) hasilSederhana = "1";
+    if (minterms.length === 0) hasilSederhana = "0";
+
+    // 5. RENDER ANTARMUKA TABEL MATRIKS DINAMIS KE KANVAS HTML
     outputBox.style.display = "block";
-    contentBox.innerHTML = `
-        <p style="margin: 0 0 10px 0;">Matriks Peta Karnaugh untuk ekspresi <code>${inputVal}</code>:</p>
-        <div style="font-family: monospace; background:#0f172a; padding:10px; border-radius:4px; border:1px solid #334155;">
-            m0=0 | m1=1 <br> m2=1 | m3=0
+    
+    // Label sumbu dinamis berdasarkan nama variabel terdeteksi
+    let labelBaris = numVars === 4 ? `${varLabels[0]}${varLabels[1]}` : `${varLabels[0]}`;
+    let labelKolom = numVars === 4 ? `${varLabels[2]}${varLabels[3]}` : `${varLabels[1]}${varLabels[2]}`;
+
+    let htmlMatriks = `
+        <p style="margin: 0 0 12px 0; font-size: 14px; color: #cbd5e1;">
+            Matriks Peta Karnaugh <strong>${numVars} Variabel</strong> untuk $\\Sigma m(${minterms.join(', ')})$:
+        </p>
+        
+        <div style="overflow-x: auto; margin-bottom: 15px;">
+            <table style="border-collapse: collapse; text-align: center; margin: 0 auto; background: #0f172a; font-family: monospace; font-size: 13px; color: #e2e8f0; min-width: 320px;">
+                <thead>
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #334155; background: #1e293b; color: #38bdf8; font-weight: bold; font-size: 14px;">${labelBaris} \\ ${labelKolom}</th>
+                        <th style="padding: 10px; border: 1px solid #334155; background: #1e293b; color: #94a3b8;">00</th>
+                        <th style="padding: 10px; border: 1px solid #334155; background: #1e293b; color: #94a3b8;">01</th>
+                        <th style="padding: 10px; border: 1px solid #334155; background: #1e293b; color: #94a3b8;">11</th>
+                        <th style="padding: 10px; border: 1px solid #334155; background: #1e293b; color: #94a3b8;">10</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    // Array teks pendukung penanda bit baris biner
+    const textRowBits = rows === 4 ? ["00", "01", "11", "10"] : ["0", "1"];
+
+    for (let r = 0; r < rows; r++) {
+        htmlMatriks += `<tr>`;
+        // Header Baris kiri (Nilai biner bit)
+        htmlMatriks += `<td style="padding: 10px; border: 1px solid #334155; background: #1e293b; font-weight: bold; color: #38bdf8;">${textRowBits[r]}</td>`;
+        
+        for (let c = 0; c < cols; c++) {
+            let val = gridValues[r][c];
+            let cellMinterm = mapLayout[r][c];
+            
+            // Efek highlight warna hijau neon/cyberpunk jika sel bernilai logika aktif (1)
+            let cellStyle = val === 1 
+                ? `background: rgba(16, 185, 129, 0.15); color: #4ade80; font-weight: bold; border: 1.5px solid #10b981;` 
+                : `background: #0f172a; color: #475569; border: 1px solid #334155;`;
+                
+            htmlMatriks += `
+                <td style="padding: 14px 10px; ${cellStyle} position: relative;">
+                    <span style="font-size: 16px;">${val}</span>
+                    <span style="position: absolute; bottom: 2px; right: 4px; font-size: 8.5px; color: #475569;">m${cellMinterm}</span>
+                </td>
+            `;
+        }
+        htmlMatriks += `</tr>`;
+    }
+
+    htmlMatriks += `
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #1e293b; padding: 12px; border-radius: 6px; border-left: 4px solid #38bdf8; text-align: left; margin-top: 15px;">
+            <div style="color: #38bdf8; font-weight: bold; font-size: 13px; margin-bottom: 4px;">Hasil Formula Penyederhanaan Minimal (SOP)</div>
+            <div style="font-family: monospace; color: #f8fafc; font-size: 16px; font-weight: bold; word-break: break-all;">F = ${hasilSederhana}</div>
         </div>
     `;
+    
+    contentBox.innerHTML = htmlMatriks;
 }
 
 /**

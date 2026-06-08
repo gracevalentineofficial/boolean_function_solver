@@ -3,344 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoS : Boolean Solver - GRACE</title>
-    <link rel="icon" type="image/png" href="logositus.png">
-    <link rel="stylesheet" href="styles.css">
+    <title>Tabel Kebenaran & Bentuk Kanonik</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 { color: var(--text-main); margin-bottom: 8px; }
+        p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+        ul { color: var(--text-muted); font-size: 14px; }
+        strong { color: var(--primary); }
+
+        /* Tab System */
+        .tab-container {
+            display: flex;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: #111827;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        /* Panel Wrapper */
+        .panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: none;
+        }
+
+        .panel.active { display: block; }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-action:hover { background-color: var(--primary-hover); }
+
+        /* Table & Output Style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #0f172a;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+        }
+
+        th { background-color: #1e293b; }
+
+        .output-box {
+            margin-top: 24px;
+            padding: 16px;
+            background: #0f172a;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+        }
+
+        .select-f {
+            background: #1e293b;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo-container-center">
-                    <img src="logositus.png" alt="Logo BoS" class="site-logo">
-                </div>
-                <h2 class="sidebar-title">BoS Panel</h2>
-            </div>
-            <nav class="sidebar-menu">
-                <ul>
-                    <li><a href="#bagian-hukum"><img src="ikonhukum.png" alt="Ikon Hukum" class="menu-illustration"><span>Hukum Aljabar Boolean</span></a></li>
-                    <li><a href="#bagian-fungsi"><img src="fungsibool.png" alt="Ikon Fungsi" class="menu-illustration"><span>Fungsi Boolean</span></a></li>
-                    <li><a href="#bagian-tabel"><img src="tabelkebenaran.png" alt="Ikon Tabel" class="menu-illustration"><span>Tabel Kebenaran</span></a></li>
-                    <li><a href="#bagian-rangkaian"><img src="rangkaianlogika.png" alt="Ikon Rangkaian" class="menu-illustration"><span>Rangkaian & Gerbang Logika</span></a></li>
-                    <li><a href="#bagian-kmap"><img src="kmap.png" alt="Ikon KMap" class="menu-illustration"><span>Penyederhanaan K-Map</span></a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer"><p>Powered by Grace Valentine</p></div>
-        </aside>
+<div class="container">
+    <h2>Tabel Kebenaran & Bentuk Kanonik</h2>
+    <p>Setiap fungsi Boolean dapat direpresentasikan melalui <strong>Tabel Kebenaran</strong> dan diekspresikan dalam bentuk kanonik spesifik:</p>
+    <ul>
+        <li><strong>SOP (Sum of Products):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi 1. Setiap kombinasi disebut Minterm ($m$). Variabel bernilai 1 ditulis normal, sedangkan bernilai 0 di-NOT-kan (ditambah aksen '). Lambang operasi menggunakan Sigma ($\sum$).</li>
+        <li><strong>POS (Product of Sums):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi 0. Setiap kombinasi disebut Maxterm ($M$). Variabel bernilai 0 ditulis normal, sedangkan bernilai 1 di-NOT-kan. Lambang operasi menggunakan Pi ($\prod$).</li>
+    </ul>
 
-        <main class="main-content">
-            <header class="main-header-center">
-                <h1>BoS : Boolean Solver</h1>
-                <p class="dev-tagline">our boolean algebra learning site! - gv</p>
-            </header>
-
-            <section id="bagian-hukum" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Hukum Aljabar Boolean</h2>
-                    <p class="materi-text">Tabel Hukum Aljabar Boolean:</p>
-                    
-                    <div class="table-container" style="overflow-x: auto; margin: 20px 0;">
-                        <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden;">
-                            <thead>
-                                <tr style="background: #1e293b; color: #38bdf8;">
-                                    <th style="padding: 12px; border: 1px solid #334155; text-align: center; width: 80px;">No</th>
-                                    <th style="padding: 12px; border: 1px solid #334155; text-align: center;">Nama Hukum</th>
-                                    <th style="padding: 12px; border: 1px solid #334155; text-align: center;">OR</th>
-                                    <th style="padding: 12px; border: 1px solid #334155; text-align: center;">AND</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Identitas</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + 0 = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · 1 = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">2</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Idempoten</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + x = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · x = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">3</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Komplemen</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + x' = 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · x' = 0</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">4</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Dominansi</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + 1 = 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · 0 = 0</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">5</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Involusi</td>
-                                    <td colspan="2" style="padding: 10px; border: 1px solid #334155; text-align: center; color: #e2e8f0; font-weight: normal;">(x')' = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">6</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Penyerapan</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (x · y) = x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (x + y) = x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">7</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Komutatif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + y = y + x</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · y = y · x</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">8</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Asosiatif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (y + z) = (x + y) + z</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (y · z) = (x · y) · z</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">9</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">Distributif</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x + (y · z) = (x + y) · (x + z)</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">x · (y + z) = (x · y) + (x · z)</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">10</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">De Morgan</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">(x + y)' = x' · y'</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">(x · y)' = x' + y'</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #334155; text-align: center; font-weight: bold;">11</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">0 / 1</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">1' = 0</td>
-                                    <td style="padding: 10px; border: 1px solid #334155;">0' = 1</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="tool-box">
-                        <h3>🛠️ Alat Validasi Hukum Komplemen & De Morgan</h3>
-                        <input type="text" id="input-hukum" placeholder="Contoh: ab' + b = a + b">
-                        <button onclick="hitungHukum()">Jalankan Analisis Hukum</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-hukum-dinamis" style="display: none; margin-top: 15px;">
-                        <h4>⚖️ Hasil Analisis Hukum & Teorema Aljabar Boolean</h4>
-                        <div class="box-content" id="content-hukum-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-fungsi" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Fungsi Boolean</h2>
-                    
-                    <div style="display: flex; flex-wrap: wrap; gap: 30px; margin-bottom: 25px; align-items: flex-start;">
-                        
-                        <div class="materi-text" style="flex: 1 1 400px; text-align: left; line-height: 1.6; margin: 0;">
-                            Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
-                            <div style="margin-top: 8px; margin-bottom: 4px;">Ekspresi terdiri atas:</div>
-                            <ul style="margin: 0; padding-left: 24px; list-style-type: disc;">
-                                <li style="margin-bottom: 4px;">Operator: Menggunakan simbol <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> / <span style="color: #38bdf8; font-weight: bold;">·</span> (AND), serta <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
-                                <li style="margin-bottom: 4px;">Variabel: Huruf alfabet tunggal yang bernilai digital mutlak <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                                <li style="margin-bottom: 4px;">Konstanta: Ketetapan nilai logika biner berupa angka <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
-                                <li>Pengelompokan: Mengatur prioritas operasi menggunakan tanda kurung <span style="color: #38bdf8; font-weight: bold;">()</span>.</li>
-                            </ul>
-                        </div>
-
-                        <div style="flex: 1.4 1 480px; overflow-x: auto;">
-                            <p class="materi-text" style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">Referensi Operator:</p>
-                            
-                            <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; overflow: hidden; font-size: 13.5px;">
-                                <thead>
-                                    <tr style="background: #1e293b; color: #38bdf8;">
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Operasi</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Simbol</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Deskripsi</th>
-                                        <th style="padding: 10px; border: 1px solid #334155; text-align: center;">Contoh</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">AND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">&, ·, *, AND, &&</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Konjungsi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A & B, A * B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">+, |, v, OR, ||</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Disjungsi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A | B, A + B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NOT</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">!, ~, ', ¬, NOT</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Negasi logis</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">!A, A'</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">XOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">⊕, ^, XOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">Eksklusif OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ⊕ B, A ^ B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NAND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↑, NAND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT AND</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ↑ B</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-weight: bold; color: #e2e8f0;">NOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace;">↓, NOR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155;">NOT OR</td>
-                                        <td style="padding: 8px 10px; border: 1px solid #334155; font-family: monospace; color: #cbd5e1;">A ↓ B</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="tool-box">
-                        <input type="text" id="input-fungsi" placeholder="Contoh: !((!A + B) * (!B + C))">
-                        
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-start; margin-top: 15px; width: 100%;">
-                            
-                            <div class="variable-inputs" style="display: flex; gap: 12px; margin: 0; padding: 0; background: transparent; border: none; align-items: center; flex-shrink: 0;">
-                                <label style="color: #cbd5e1; font-weight: 500;">x: <select id="eval-x" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                                <label style="color: #cbd5e1; font-weight: 500;">y: <select id="eval-y" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                                <label style="color: #cbd5e1; font-weight: 500;">z: <select id="eval-z" style="background: #1e293b; color: #fff; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 4px; outline: none;"><option value="1">1</option><option value="0">0</option></select></label>
-                            </div>
-
-                            <button type="button" onclick="insertSyntax('&')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">AND (&)</button>
-                            <button type="button" onclick="insertSyntax('|')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">OR (|)</button>
-                            <button type="button" onclick="insertSyntax('!')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NOT (!)</button>
-                            <button type="button" onclick="insertSyntax('^')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">XOR (^)</button>
-                            <button type="button" onclick="insertSyntax(' ↑ ')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NAND (↑)</button>
-                            <button type="button" onclick="insertSyntax(' ↓ ')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">NOR (↓)</button>
-                            
-                            <button type="button" onclick="insertSyntax('(')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">(</button>
-                            <button type="button" onclick="insertSyntax(')')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">)</button>
-                            
-                            <button type="button" onclick="insertSyntax('A')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">A</button>
-                            <button type="button" onclick="insertSyntax('B')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">B</button>
-                            <button type="button" onclick="insertSyntax('C')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">C</button>
-                            <button type="button" onclick="insertSyntax('D')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: max-content; flex-shrink: 0;">D</button>
-
-                            <button type="button" onclick="insertSyntax('0')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">0</button>
-                            <button type="button" onclick="insertSyntax('1')" style="background: #1e293b; color: white; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 6px; font-family: monospace; cursor: pointer; width: max-content; flex-shrink: 0;">1</button>
-                            
-                            <button type="button" onclick="clearInput()" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; width: max-content; flex-shrink: 0;">Hapus</button>
-
-                        </div>
-
-                        <button onclick="hitungFungsi()" style="margin-top: 20px; width: 100%;">Sederhanakan Ekspresi Boolean</button>
-                    </div>
-                    
-                    <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
-                        <h4>🎯 Jawaban / Status Fungsi</h4>
-                        <div class="box-content" id="content-jawaban-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-tabel" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Tabel Kebenaran & Bentuk Kanonik</h2>
-                    
-                    <div class="materi-text" style="line-height: 1.6; margin-bottom: 25px; text-align: left;">
-                        <p>Setiap fungsi Boolean dapat direpresentasikan melalui <strong>Tabel Kebenaran</strong> dan diekspresikan dalam bentuk kanonik spesifik:</p>
-                        <ul style="margin: 8px 0; padding-left: 24px; list-style-type: disc;">
-                            <li style="margin-bottom: 8px;">
-                                <strong style="color: #38bdf8;">SOP (Sum of Products):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi <strong>1</strong>. Setiap kombinasi disebut <strong>Minterm ($m$)</strong>. Variabel bernilai 1 ditulis normal, sedangkan bernilai 0 di-NOT-kan (ditambah aksen $'$). Lambang operasi menggunakan Sigma ($\sum$).
-                            </li>
-                            <li style="margin-bottom: 8px;">
-                                <strong style="color: #38bdf8;">POS (Product of Sums):</strong> Dibentuk dari kombinasi input yang menghasilkan nilai fungsi <strong>0</strong>. Setiap kombinasi disebut <strong>Maxterm ($M$)</strong>. Variabel bernilai 0 ditulis normal, sedangkan bernilai 1 di-NOT-kan. Lambang operasi menggunakan Pi ($\prod$).
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
-                        <button onclick="switchSkema(1)" id="btn-skema-1" style="flex: 1; background: #38bdf8; color: #0f172a; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                            📊 Skema 1: Input Manual Nilai Sel
-                        </button>
-                        <button onclick="switchSkema(2)" id="btn-skema-2" style="flex: 1; background: #1e293b; color: #cbd5e1; padding: 12px; border: 1px solid #334155; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
-                            ⚙️ Skema 2: Otomatis dari Fungsi
-                        </button>
-                    </div>
-
-                    <div id="panel-skema-1" class="tool-box" style="display: block;">
-                        <h3 style="margin-top: 0; color: #38bdf8;">Skema 1: Pembuat Kanonik dari Sel Tabel</h3>
-                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Tentukan jumlah variabel dan nama kolom terlebih dahulu untuk menyusun baris tabel kebenaran.</p>
-                        
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; align-items: flex-end;">
-                            <div style="flex: 1; min-width: 150px;">
-                                <label style="display: block; color: #cbd5e1; margin-bottom: 6px; font-size: 13px;">Jumlah Variabel:</label>
-                                <select id="skema1-jumlah-var" style="width: 100%; background: #0f172a; color: white; border: 1px solid #334155; padding: 8px; border-radius: 6px; outline: none;">
-                                    <option value="2">2 Variabel</option>
-                                    <option value="3" selected>3 Variabel</option>
-                                    <option value="4">4 Variabel</option>
-                                </select>
-                            </div>
-                            <div style="flex: 2; min-width: 250px;">
-                                <label style="display: block; color: #cbd5e1; margin-bottom: 6px; font-size: 13px;">Nama Variabel (pisahkan dengan koma):</label>
-                                <input type="text" id="skema1-nama-var" value="A, B, C" style="margin: 0; padding: 8px;">
-                            </div>
-                            <button onclick="generateGridSkema1()" style="white-space: nowrap; height: 40px; margin: 0;">Buat Template Tabel</button>
-                        </div>
-
-                        <div id="container-grid-skema1" style="margin-top: 20px; overflow-x: auto;"></div>
-                        
-                        <button id="btn-hitung-skema1" onclick="prosesSkema1()" style="display: none; margin-top: 20px; width: 100%; background: #10b981; color: white;">
-                            Analisis & Tarik Hasil Kanonik SOP/POS
-                        </button>
-                    </div>
-
-                    <div id="panel-skema-2" class="tool-box" style="display: none;">
-                        <h3 style="margin-top: 0; color: #38bdf8;">Skema 2: Generator Tabel Kebenaran & Kanonik</h3>
-                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Masukkan fungsi Boolean bebas untuk memproduksi tabel kebenaran lengkap secara otomatis.</p>
-                        <input type="text" id="input-tabel" placeholder="Contoh: A*B + C' atau x*y' + z">
-                        <button onclick="hitungTabelKebenaran()" style="width: 100%;">Generate Tabel Kebenaran & Bentuk Kanonik</button>
-                    </div>
-
-                    <div class="dynamic-output-box" id="box-table-output-dinamis" style="display: none; margin-top: 20px;">
-                        <h4>📋 Tabel Kebenaran & Struktur Kanonik Hasil Analisis</h4>
-                        <div class="box-content" id="content-table-output-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-rangkaian" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
-                        <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
-                        <h4>🔌 Alur Jalur Rangkaian Gerbang Logika</h4>
-                        <div class="box-content" id="content-sirkuit-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="bagian-kmap" class="content-section">
-                <div class="section-card">
-                    <h2 class="section-title-only">Penyederhanaan dengan K-Map</h2>
-                    <div class="tool-box">
-                        <input type="text" id="input-kmap" placeholder="Contoh: x*y + x*y'">
-                        <button onclick="hitungKMap()">Petakan ke K-Map</button>
-                    </div>
-                    <div class="dynamic-output-box" id="box-kmap-matrix-dinamis" style="display: none;">
-                        <h4>🗺️ Matriks Visualisasi Peta Karnaugh</h4>
-                        <div class="box-content" id="content-kmap-matrix-dinamis"></div>
-                    </div>
-                </div>
-            </section>
-        </main>
+    <div class="tab-container">
+        <button class="tab-btn active" id="btn-skema1">📊 Skema 1: Input Manual Nilai Sel</button>
+        <button class="tab-btn" id="btn-skema2">⚙️ Skema 2: Otomatis dari Fungsi</button>
     </div>
-    <script src="script.js"></script>
+
+    <div class="panel active" id="panel-skema1">
+        <h3>Skema 1: Pembuat Kanonik dari Sel Tabel</h3>
+        <p>Tentukan jumlah variabel dan nama kolom terlebih dahulu untuk menyusun baris tabel kebenaran.</p>
+        
+        <div class="form-group">
+            <label for="jumlah-variabel">Jumlah Variabel:</label>
+            <select id="jumlah-variabel">
+                <option value="2">2 Variabel</option>
+                <option value="3">3 Variabel</option>
+                <option value="4" selected>4 Variabel</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="nama-variabel">Nama Variabel (pisahkan dengan koma):</label>
+            <input type="text" id="nama-variabel" value="A, B, C, D">
+        </div>
+
+        <button class="btn-action" id="btn-buat-tabel">Buat Template Tabel</button>
+
+        <div id="container-tabel"></div>
+        <div id="output-kanonik-s1" class="output-box" style="display:none;"></div>
+    </div>
+
+    <div class="panel" id="panel-skema2">
+        <h3>Skema 2: Otomatis dari Fungsi</h3>
+        <p>Masukkan fungsi Boolean standar untuk menghasilkan tabel kebenaran secara otomatis (Fitur ini dapat dikembangkan berbasis parser ekspresi logika).</p>
+        <div class="form-group">
+            <label for="input-ekspresi">Masukkan Ekspresi (Contoh: A AND B or C):</label>
+            <input type="text" id="input-ekspresi" placeholder="E.g., (A && B) || !C">
+        </div>
+        <button class="btn-action" id="btn-hitung-skema2">Proses Ekspresi</button>
+    </div>
+</div>
+
+<script>
+    // --- LOGIKA MANAJEMEN TAB (SKEMA) ---
+    const btnSkema1 = document.getElementById('btn-skema1');
+    const btnSkema2 = document.getElementById('btn-skema2');
+    const panelSkema1 = document.getElementById('panel-skema1');
+    const panelSkema2 = document.getElementById('panel-skema2');
+
+    btnSkema1.addEventListener('click', () => {
+        btnSkema1.classList.add('active');
+        btnSkema2.classList.remove('active');
+        panelSkema1.classList.add('active');
+        panelSkema2.classList.remove('active');
+    });
+
+    btnSkema2.addEventListener('click', () => {
+        btnSkema2.classList.add('active');
+        btnSkema1.classList.remove('active');
+        panelSkema2.classList.add('active');
+        panelSkema1.classList.remove('active');
+    });
+
+
+    // --- LOGIKA KALKULATOR SKEMA 1 ---
+    const btnBuatTabel = document.getElementById('btn-buat-tabel');
+    const containerTabel = document.getElementById('container-tabel');
+    const outputKanonikS1 = document.getElementById('output-kanonik-s1');
+
+    btnBuatTabel.addEventListener('click', () => {
+        const numVars = parseInt(document.getElementById('jumlah-variabel').value);
+        const varNamesInput = document.getElementById('nama-variabel').value;
+        let varNames = varNamesInput.split(',').map(v => v.trim()).filter(v => v !== "");
+
+        // Penanganan jika input nama variabel tidak sinkron dengan jumlahnya
+        if(varNames.length !== numVars) {
+            varNames = [];
+            for(let i=0; i<numVars; i++) {
+                varNames.push(String.fromCharCode(65 + i)); // Default A, B, C, D...
+            }
+            document.getElementById('nama-variabel').value = varNames.join(', ');
+        }
+
+        const totalRows = Math.pow(2, numVars);
+        let tableHtml = `<table><thead><tr>`;
+        
+        // Header untuk Variabel
+        varNames.forEach(name => {
+            tableHtml += `<th>${name}</th>`;
+        });
+        // Header untuk Fungsi f
+        tableHtml += `<th>f(${varNames.join(', ')})</th></tr></thead><tbody>`;
+
+        // Generasi Baris Tabel Kombinasi Biner
+        for (let i = 0; i < totalRows; i++) {
+            tableHtml += `<tr>`;
+            for (let j = numVars - 1; j >= 0; j--) {
+                const bit = (i >> j) & 1;
+                tableHtml += `<td>${bit}</td>`;
+            }
+            // Kolom Input interaktif Dropdown Nilai f (0 atau 1)
+            tableHtml += `<td>
+                <select class="select-f" data-row="${i}">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                </select>
+            </td></tr>`;
+        }
+        tableHtml += `</tbody></table>`;
+        
+        containerTabel.innerHTML = tableHtml;
+        outputKanonikS1.style.display = "block";
+        
+        // Pasang trigger hitung ulang setiap kali isi dropdown sel berubah
+        document.querySelectorAll('.select-f').forEach(select => {
+            select.addEventListener('change', hitungKanonik);
+        });
+
+        hitungKanonik(); // Jalankan kalkulasi awal (default semua 0)
+    });
+
+    function hitungKanonik() {
+        const numVars = parseInt(document.getElementById('jumlah-variabel').value);
+        const varNames = document.getElementById('nama-variabel').value.split(',').map(v => v.trim());
+        const selects = document.querySelectorAll('.select-f');
+        
+        let minterms = [];
+        let maxterms = [];
+        let sopTerms = [];
+        let posTerms = [];
+
+        selects.forEach((select) => {
+            const rowIndex = parseInt(select.getAttribute('data-row'));
+            const value = parseInt(select.value);
+
+            // Dapatkan nilai bit per baris
+            let bits = [];
+            for (let j = numVars - 1; j >= 0; j--) {
+                bits.push((rowIndex >> j) & 1);
+            }
+
+            if (value === 1) {
+                minterms.push(rowIndex);
+                // Pembentukan Term SOP
+                let term = bits.map((bit, idx) => bit === 1 ? varNames[idx] : varNames[idx] + "'").join('');
+                sopTerms.push(term);
+            } else {
+                maxterms.push(rowIndex);
+                // Pembentukan Term POS
+                let term = bits.map((bit, idx) => bit === 0 ? varNames[idx] : varNames[idx] + "'").join(' + ');
+                posTerms.push(`(${term})`);
+            }
+        });
+
+        // Tampilkan Hasil Pemrosesan Kalkulator
+        let hasilHtml = `<h4>Hasil Bentuk Kanonik:</h4>`;
+        
+        // Render SOP
+        hasilHtml += `<p><strong>SOP Baku:</strong> ${sopTerms.length > 0 ? sopTerms.join(' + ') : '0'}</p>`;
+        hasilHtml += `<p><strong>Notasi Minterm ($\sum$):</strong> $\sum$(${minterms.join(', ') || 'tidak ada'})</p><br>`;
+        
+        // Render POS
+        hasilHtml += `<p><strong>POS Baku:</strong> ${posTerms.length > 0 ? posTerms.join('') : '1'}</p>`;
+        hasilHtml += `<p><strong>Notasi Maxterm ($\prod$):</strong> $\prod$(${maxterms.join(', ') || 'tidak ada'})</p>`;
+
+        outputKanonikS1.innerHTML = hasilHtml;
+
+        // Trigger rendering ulang jika Anda menggunakan library eksternal MathJax/KaTeX
+        if (window.MathJax) {
+            MathJax.typesetPromise([outputKanonikS1]);
+        }
+    }
+</script>
+
 </body>
 </html>

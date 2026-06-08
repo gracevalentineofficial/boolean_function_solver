@@ -47,13 +47,13 @@ function clearInput() {
 // ==========================================
 
 /**
- * Menangani evaluasi nilai fungsi berdasarkan input variabel x, y, z
+ * Menangani evaluasi nilai fungsi berdasarkan input variabel x, y, z secara dinamis (SELESAI)
  */
 function hitungFungsi() {
     const inputVal = document.getElementById('input-fungsi').value.trim();
-    const valX = document.getElementById('eval-x').value;
-    const valY = document.getElementById('eval-y').value;
-    const valZ = document.getElementById('eval-z').value;
+    const valX = parseInt(document.getElementById('eval-x').value);
+    const valY = parseInt(document.getElementById('eval-y').value);
+    const valZ = parseInt(document.getElementById('eval-z').value);
     
     const outputBox = document.getElementById('box-jawaban-dinamis');
     const contentBox = document.getElementById('content-jawaban-dinamis');
@@ -63,17 +63,46 @@ function hitungFungsi() {
         return;
     }
     
-    // Pemrosesan substitusi nilai variabel aktif (case-insensitive)
-    let hasilSubstitusi = inputVal
-        .replace(/x/gi, valX)
-        .replace(/y/gi, valY)
-        .replace(/z/gi, valZ);
+    // 1. Standarisasi input menjadi huruf kapital (case-insensitive)
+    let cleanExpr = inputVal.toUpperCase();
+    
+    // 2. Normalisasi sintaks agar kompatibel dengan engine logika JavaScript
+    let parsedExpr = cleanExpr
+        .replace(/·/g, '*')
+        .replace(/’/g, "'")
+        .replace(/!/g, "'") // Antisipasi jika user mengetik tanda seru di awal
+        .replace(/([X-Z])'/g, '!$1')            // Mengubah X' menjadi !X, Y' menjadi !Y, dst.
+        .replace(/([X-Z!])(?=[X-Z\(])/g, '$1*'); // Mengubah variabel dempet (ex: XY) menjadi X*Y
+
+    // 3. Konversi simbol perkalian dan penjumlahan menjadi operator logika JS
+    let jsExpr = "";
+    for (let char of parsedExpr) {
+        if (char === '*') jsExpr += ' && ';
+        else if (char === '+') jsExpr += ' || ';
+        else jsExpr += char;
+    }
+    
+    // 4. Substitusi nilai biner dari drop-down (0 atau 1) menggunakan regex batas kata (\b)
+    let workingExpr = jsExpr
+        .replace(/\bX\b/g, valX)
+        .replace(/\bY\b/g, valY)
+        .replace(/\bZ\b/g, valZ);
+        
+    // 5. Evaluasi string menggunakan objek Function komputasi biner asli
+    let outVal = 0;
+    let statusEvaluasi = "";
+    try {
+        outVal = Function(`return (${workingExpr})`)() ? 1 : 0;
+        statusEvaluasi = `<span style="color: #4ade80; font-weight: bold; font-size: 16px;">${outVal}</span>`;
+    } catch (e) {
+        statusEvaluasi = `<span style="color: #ef4444; font-weight: bold;">Error (Periksa kembali susunan kurung atau simbol Anda)</span>`;
+    }
         
     outputBox.style.display = "block";
     contentBox.innerHTML = `
         <p style="margin: 0 0 8px 0;"><strong>Ekspresi Masuk:</strong> <code style="color: #38bdf8;">f = ${inputVal}</code></p>
-        <p style="margin: 0 0 8px 0;"><strong>Substitusi Variabel Lokal:</strong> <code> ${hasilSubstitusi}</code></p>
-        <p style="margin: 0; color: #4ade80;"><strong>Hasil Evaluasi Akhir:</strong> Teridentifikasi Berhasil (Simulasi Output Aktif)</p>
+        <p style="margin: 0 0 8px 0;"><strong>Substitusi Variabel Nyata:</strong> <code>f(X=${valX}, Y=${valY}, Z=${valZ})</code></p>
+        <p style="margin: 0;"><strong>Hasil Evaluasi Akhir:</strong> ${statusEvaluasi}</p>
     `;
 }
 
@@ -568,7 +597,6 @@ function hitungRangkaian() {
 function hitungKMap() {
     const inputVal = document.getElementById('input-kmap').value.trim();
     
-    // DI SINI ADALAH PERBAIKAN UTAMANYA: ID disesuaikan agar teks langsung muncul!
     const outputBox = document.getElementById('box-kmap-dinamis');
     const contentBox = document.getElementById('content-kmap-dinamis');
     
@@ -614,12 +642,7 @@ function hitungKMap() {
         mapLayout[r] = [];
         gridValues[r] = [];
         for (let c = 0; c < cols; c++) {
-            let mintermValue = 0;
-            if (numVars === 4) {
-                mintermValue = (grayRow[r] << 2) | grayCol[c];
-            } else {
-                mintermValue = (grayRow[r] << 2) | grayCol[c];
-            }
+            let mintermValue = (grayRow[r] << 2) | grayCol[c];
             mapLayout[r][c] = mintermValue;
             gridValues[r][c] = minterms.includes(mintermValue) ? 1 : 0;
         }

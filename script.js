@@ -101,10 +101,10 @@ function hitungTabelKebenaran() {
     content.innerHTML = html;
 }
 
-// --- SIMULATOR UTAMA DENGAN LOGIKA CONTOH 9 ---
+// --- SIMULATOR UTAMA DENGAN LOGIKA CONTOH 9 (FIXED BUGS) ---
 function hitungRangkaian() {
     const inputRaw = document.getElementById('input-rangkaian').value.trim();
-    const box = document.getElementById('box-sirkuit-dinamis');
+    const box = document.getElementById('box-sirimis' || 'box-sirkuit-dinamis');
     const content = document.getElementById('content-sirkuit-dinamis');
 
     if (!inputRaw) {
@@ -112,11 +112,12 @@ function hitungRangkaian() {
         return;
     }
 
-    box.style.display = 'block';
+    // Memastikan kontainer output muncul di layar browser
+    if (box) box.style.display = 'block';
 
-    // Membuang string "f(w,x,y,z) =" jika diketik oleh pengguna agar parsing bersih
+    // Bersihkan penulisan string dari awalan f(w,x,y,z) agar parsing variabel akurat
     let cleanInput = inputRaw.replace(/f\(.*?\)\s*=\s*/gi, ''); 
-    let terms = cleanInput.split(/\s*+\s*/); // Membagi berdasarkan terminal OR (+)
+    let terms = cleanInput.split(/\s*+\s*/); // Memisahkan string berdasarkan operator OR (+)
 
     let htmlSirkuit = `
         <div style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #1e293b; text-align: left;">
@@ -132,7 +133,7 @@ function hitungRangkaian() {
                 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│<br>
     `;
 
-    // Mengurai jalurnya satu demi satu secara dinamis
+    // Looping struktur baris kawat biner untuk setiap gerbang perkalian term AND
     terms.forEach((term, idx) => {
         let currentTerm = term.trim();
         if(!currentTerm) return;
@@ -146,7 +147,7 @@ function hitungRangkaian() {
         let isYNot = currentTerm.includes("y'");
         let isZNot = currentTerm.includes("z'");
 
-        // Menentukan apakah masukan membutuhkan gerbang NOT (inverter)
+        // Deteksi komponen inverter (NOT gate) per kawat jalur bus data
         let gateInputText = (isXNot || isYNot || isZNot) ? `┤▻°├──` : `──────`;
 
         htmlSirkuit += `
@@ -156,7 +157,7 @@ function hitungRangkaian() {
         `;
     });
 
-    // Menyatukan terminal keluaran AND ke gerbang OR besar
+    // Jalur penggabungan akhir dari terminal AND menuju terminal input Gerbang OR besar
     htmlSirkuit += `
                 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───┤<b style="color:#10b981;">&nbsp;OR&nbsp;</b>├───► <b style="color:#fff;">F = ${cleanInput}</b><br>
                 &nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴<br>
@@ -168,7 +169,10 @@ function hitungRangkaian() {
         </div>
     `;
 
-    content.innerHTML = htmlSirkuit;
+    // KOREKSI UTAMA: Mengganti target innerHTML ke variabel objek 'content' yang tepat
+    if (content) {
+        content.innerHTML = htmlSirkuit;
+    }
 }
 
 function hitungKMap() {

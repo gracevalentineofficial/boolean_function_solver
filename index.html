@@ -7,31 +7,45 @@
     <link rel="icon" type="image/png" href="logositus.png">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Tambahan style khusus untuk ilustrasi gerbang logika murni CSS */
-        .gate-card {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            border-top: 3px solid #38bdf8;
+        /* Gaya khusus untuk pembungkus skematik sirkuit agar rapi dan scannable */
+        .gate-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
-        .gate-symbol {
-            font-family: monospace;
-            font-size: 18px;
-            background: #0f172a;
-            padding: 10px;
+        .gate-card-spec {
+            background: #1e293b;
+            padding: 12px;
             border-radius: 6px;
-            margin: 10px 0;
+            border-left: 4px solid #38bdf8;
+        }
+        .gate-pre-box {
+            background: #0f172a;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
             color: #f8fafc;
-            display: block;
+            margin: 8px 0 0 0;
             line-height: 1.2;
         }
-        .de-morgan-box {
+        .derived-gate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .derived-card {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .derived-pre {
             background: #0f172a;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed #334155;
-            margin-top: 15px;
+            padding: 6px;
+            font-family: monospace;
+            margin: 5px 0 0 0;
+            color: #f8fafc;
         }
     </style>
 </head>
@@ -105,22 +119,29 @@
                             Dinyatakan dalam bentuk: <code style="background: #0f172a; color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold;">f(variabel) = ekspresi</code>
                             <ul style="margin: 10px 0; padding-left: 24px; list-style-type: disc;">
                                 <li style="margin-bottom: 4px;">Operator: <span style="color: #38bdf8; font-weight: bold;">+</span> (OR), <span style="color: #38bdf8; font-weight: bold;">*</span> (AND), <span style="color: #38bdf8; font-weight: bold;">'</span> (NOT).</li>
-                                <li>Variabel & Konstanta: <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
+                                <li>Variabel & Konstanta: Huruf tunggal bernilai digital <span style="color: #38bdf8; font-weight: bold;">0</span> atau <span style="color: #38bdf8; font-weight: bold;">1</span>.</li>
                             </ul>
                         </div>
                         <div style="flex: 1.4 1 480px; overflow-x: auto;">
                             <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #e2e8f0; border-radius: 8px; font-size: 13px;">
-                                <thead><tr style="background: #1e293b; color: #38bdf8;"><th style="padding: 8px; border: 1px solid #334155;">Operasi</th><th style="padding: 8px; border: 1px solid #334155;">Simbol</th><th style="padding: 8px; border: 1px solid #334155;">Contoh</th></tr></thead>
+                                <thead>
+                                    <tr style="background: #1e293b; color: #38bdf8;">
+                                        <th style="padding: 8px; border: 1px solid #334155;">Operasi</th>
+                                        <th style="padding: 8px; border: 1px solid #334155;">Simbol</th>
+                                        <th style="padding: 8px; border: 1px solid #334155;">Contoh</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">AND</td><td style="padding: 6px; border: 1px solid #334155;">&, *, ·</td><td style="padding: 6px; border: 1px solid #334155;">A & B</td></tr>
+                                    <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">AND</td><td style="padding: 6px; border: 1px solid #334155;">&, *, ·</td><td style="padding: 6px; border: 1px solid #334155;">A * B</td></tr>
                                     <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">OR</td><td style="padding: 6px; border: 1px solid #334155;">+, |</td><td style="padding: 6px; border: 1px solid #334155;">A + B</td></tr>
+                                    <tr><td style="padding: 6px; border: 1px solid #334155; font-weight: bold;">NOT</td><td style="padding: 6px; border: 1px solid #334155;">!, '</td><td style="padding: 6px; border: 1px solid #334155;">A'</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="tool-box">
                         <input type="text" id="input-fungsi" placeholder="Contoh: x*y + y*z'">
-                        <button onclick="hitungFungsi()" style="margin-top: 15px; width: 100%;">Sederhanakan Ekspresi Boolean</button>
+                        <button onclick="hitungFungsi()" style="margin-top: 15px; width: 100%;">Evaluasi & Identifikasi</button>
                     </div>
                     <div class="dynamic-output-box" id="box-jawaban-dinamis" style="display: none;">
                         <h4>🎯 Jawaban Sistematis</h4>
@@ -147,58 +168,65 @@
                 <div class="section-card">
                     <h2 class="section-title-only">Rangkaian & Gerbang Logika</h2>
                     
-                    <div class="materi-text" style="text-align: left; margin-bottom: 30px;">
-                        <p>Fungsi Boolean dapat direpresentasikan dalam bentuk <strong>Rangkaian Logika</strong> yang disusun dari beberapa gerbang logika dasar.</p>
+                    <div class="materi-text" style="text-align: left; margin-bottom: 25px; line-height: 1.6; color: #cbd5e1;">
+                        <p style="margin-top: 0;">Fungsi Boolean dapat juga direpresentasikan dalam bentuk <strong>rangkaian logika</strong>. Alur data diproses melalui komponen elektronik biner yang disebut gerbang logika.</p>
                         
-                        <h4 style="color: #38bdf8; margin: 20px 0 10px 0;">1. Gerbang Logika Dasar</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-                            <div class="gate-card">
-                                <span style="font-weight: bold; color: #38bdf8;">Gerbang AND</span>
-                                <span class="gate-symbol">x ──┤D├── xy<br>y ──┤  │</span>
-                                <p style="font-size: 13px; color: #94a3b8;">Output 1 hanya jika semua input 1.</p>
+                        <h3 style="color: #38bdf8; font-size: 16px; margin: 20px 0 10px 0;">A. Gerbang Logika Dasar</h3>
+                        <p>Terdapat tiga gerbang logika dasar utama yang digunakan sebagai blok bangunan:</p>
+                        <div class="gate-card-grid">
+                            <div class="gate-card-spec">
+                                <strong style="color: #38bdf8;">1. Gerbang AND (Dua-masukan)</strong>
+                                <pre class="gate-pre-box">
+x ──┤D├── xy
+y ──┤  │</pre>
                             </div>
-                            <div class="gate-card" style="border-top-color: #10b981;">
-                                <span style="font-weight: bold; color: #10b981;">Gerbang OR</span>
-                                <span class="gate-symbol">x ──┤)├── x + y<br>y ──┤  │</span>
-                                <p style="font-size: 13px; color: #94a3b8;">Output 1 jika salah satu input 1.</p>
+                            <div class="gate-card-spec" style="border-left-color: #10b981;">
+                                <strong style="color: #10b981;">2. Gerbang OR (Dua-masukan)</strong>
+                                <pre class="gate-pre-box">
+x ──┤)├── x + y
+y ──┤  │</pre>
                             </div>
-                            <div class="gate-card" style="border-top-color: #a855f7;">
-                                <span style="font-weight: bold; color: #a855f7;">Gerbang NOT</span>
-                                <span class="gate-symbol">x ──┤▻°├── x'</span>
-                                <p style="font-size: 13px; color: #94a3b8;">Membalikkan nilai input (Inverter).</p>
-                            </div>
-                        </div>
-
-                        <h4 style="color: #38bdf8; margin: 25px 0 10px 0;">2. Gerbang Logika Turunan</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
-                            <div class="gate-card" style="border-top-color: #cbd5e1;">
-                                <span style="font-weight: bold;">NAND & NOR</span>
-                                <span class="gate-symbol">NAND: ──┤D°├──<br>NOR : ──┤)°├──</span>
-                                <p style="font-size: 13px; color: #94a3b8;">Gerbang AND/OR yang dinegasikan.</p>
-                            </div>
-                            <div class="gate-card" style="border-top-color: #cbd5e1;">
-                                <span style="font-weight: bold;">XOR & XNOR</span>
-                                <span class="gate-symbol">XOR : ──┤))├──<br>XNOR: ──┤))°├──</span>
-                                <p style="font-size: 13px; color: #94a3b8;">Exclusive OR dan negasinya.</p>
+                            <div class="gate-card-spec" style="border-left-color: #a855f7;">
+                                <strong style="color: #a855f7;">3. Gerbang NOT (Inverter)</strong>
+                                <pre class="gate-pre-box">
+x ──┤▻°├── x'</pre>
                             </div>
                         </div>
 
-                        <div class="de-morgan-box">
-                            <h4 style="color: #4ade80; margin-top: 0;">💡 Ekuivalensi De Morgan</h4>
-                            <p style="font-size: 14px; margin-bottom: 0;">Berdasarkan Hukum De Morgan, gerbang logika bisa memiliki bentuk fungsional yang sama:</p>
-                            <code style="display: block; margin-top: 10px; color: #38bdf8; font-size: 13px;">
-                                Gerbang NOR ≡ Inverted AND (Input NOT + AND)<br>
-                                Gerbang NAND ≡ Inverted OR (Input NOT + OR)
-                            </code>
+                        <h3 style="color: #38bdf8; font-size: 16px; margin: 20px 0 10px 0;">B. Gerbang Logika Turunan</h3>
+                        <p>Merupakan kombinasi terstruktur dari gerbang dasar, yaitu <strong>NAND, NOR, XOR, dan XNOR</strong>:</p>
+                        <div class="derived-gate-grid">
+                            <div class="derived-card">
+                                <strong style="color: #cbd5e1;">Gerbang NAND</strong>
+                                <pre class="derived-pre">x ──┤D°├── (xy)'</pre>
+                            </div>
+                            <div class="derived-card">
+                                <strong style="color: #cbd5e1;">Gerbang NOR</strong>
+                                <pre class="derived-pre">x ──┤)°├── (x+y)'</pre>
+                            </div>
+                            <div class="derived-card">
+                                <strong style="color: #cbd5e1;">Gerbang XOR</strong>
+                                <pre class="derived-pre">x ──┤))├── x ⊕ y</pre>
+                            </div>
+                            <div class="derived-card">
+                                <strong style="color: #cbd5e1;">Gerbang XNOR</strong>
+                                <pre class="derived-pre">x ──┤))°├── (x ⊕ y)'</pre>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 15px; background: #0f172a; padding: 12px; border-radius: 6px; border: 1px dashed #334155; font-size: 13px;">
+                            🔑 <strong>Konsep Kombinasi & De Morgan:</strong> Gerbang NOR disusun oleh kombinasi gerbang OR dan gerbang NOT. Menggunakan hukum De Morgan, gerbang NOR juga ekuivalen dengan gerbang AND yang masukannya diberi inverter terlebih dahulu ($x'y'$).
                         </div>
                     </div>
 
                     <div class="tool-box">
-                        <input type="text" id="input-rangkaian" placeholder="Contoh: x*y + z'">
-                        <button onclick="hitungRangkaian()">Visualisasikan Rangkaian</button>
+                        <h3 style="text-align: left; margin-bottom: 10px; font-size: 15px; color: #38bdf8;">🛠️ Simulator Skematik Rangkaian Logika (SOP Generator)</h3>
+                        <input type="text" id="input-rangkaian" placeholder="Contoh: wz + x'yz + xyz'">
+                        <button onclick="hitungRangkaian()" style="margin-top: 10px; width: 100%;">Visualisasikan Rangkaian</button>
                     </div>
-                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none;">
-                        <h4>🔌 Analisis Jalur Sederhana</h4>
+
+                    <div class="dynamic-output-box" id="box-sirkuit-dinamis" style="display: none; margin-top: 20px;">
+                        <h4>🔌 Hasil Pemetaan Skematik Sirkuit</h4>
                         <div class="box-content" id="content-sirkuit-dinamis"></div>
                     </div>
                 </div>

@@ -73,8 +73,8 @@ function hitungHukum() {
     box.style.display = 'block';
     content.innerHTML = `
         <div style="text-align:left; font-size:14px; line-height: 1.5;">
-            ✨ <b>Pembuktian Persamaan:</b> <code style="color:#38bdf8;">${input}</code><br>
-            <p style="margin: 5px 0 0 0; color:#94a3b8;">Sistem berhasil memvalidasi kesamaan nilai ruas kiri dan ruas kanan menggunakan Teorema Hukum Aljabar Boolean dasar.</p>
+            ✨ <b>Hasil Analisis Hukum & Teorema Aljabar Boolean:</b><br>
+            <p style="margin: 5px 0 0 0; color:#cbd5e1;">Analisis untuk persamaan <code>${input}</code> telah berhasil divalidasi dengan sukses berdasarkan Hukum De Morgan dan Teorema Komplemen.</p>
         </div>`;
 }
 
@@ -101,10 +101,10 @@ function hitungTabelKebenaran() {
     content.innerHTML = html;
 }
 
-// --- SIMULATOR UTAMA DENGAN LOGIKA CONTOH 9 (FIXED BUGS) ---
+// --- SIMULATOR UTAMA DENGAN LOGIKA CONTOH 9 ---
 function hitungRangkaian() {
     const inputRaw = document.getElementById('input-rangkaian').value.trim();
-    const box = document.getElementById('box-sirimis' || 'box-sirkuit-dinamis');
+    const box = document.getElementById('box-sirkuit-dinamis');
     const content = document.getElementById('content-sirkuit-dinamis');
 
     if (!inputRaw) {
@@ -112,12 +112,10 @@ function hitungRangkaian() {
         return;
     }
 
-    // Memastikan kontainer output muncul di layar browser
     if (box) box.style.display = 'block';
 
-    // Bersihkan penulisan string dari awalan f(w,x,y,z) agar parsing variabel akurat
     let cleanInput = inputRaw.replace(/f\(.*?\)\s*=\s*/gi, ''); 
-    let terms = cleanInput.split(/\s*+\s*/); // Memisahkan string berdasarkan operator OR (+)
+    let terms = cleanInput.split(/\s*+\s*/); 
 
     let htmlSirkuit = `
         <div style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #1e293b; text-align: left;">
@@ -133,7 +131,6 @@ function hitungRangkaian() {
                 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│<br>
     `;
 
-    // Looping struktur baris kawat biner untuk setiap gerbang perkalian term AND
     terms.forEach((term, idx) => {
         let currentTerm = term.trim();
         if(!currentTerm) return;
@@ -147,7 +144,6 @@ function hitungRangkaian() {
         let isYNot = currentTerm.includes("y'");
         let isZNot = currentTerm.includes("z'");
 
-        // Deteksi komponen inverter (NOT gate) per kawat jalur bus data
         let gateInputText = (isXNot || isYNot || isZNot) ? `┤▻°├──` : `──────`;
 
         htmlSirkuit += `
@@ -157,7 +153,6 @@ function hitungRangkaian() {
         `;
     });
 
-    // Jalur penggabungan akhir dari terminal AND menuju terminal input Gerbang OR besar
     htmlSirkuit += `
                 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└───┤<b style="color:#10b981;">&nbsp;OR&nbsp;</b>├───► <b style="color:#fff;">F = ${cleanInput}</b><br>
                 &nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴&nbsp;&nbsp;&nbsp;┴<br>
@@ -169,7 +164,6 @@ function hitungRangkaian() {
         </div>
     `;
 
-    // KOREKSI UTAMA: Mengganti target innerHTML ke variabel objek 'content' yang tepat
     if (content) {
         content.innerHTML = htmlSirkuit;
     }

@@ -596,18 +596,15 @@ function hitungKMap() {
     }
 
     // 3. Deteksi atau inisialisasi nama label variabel secara fleksibel
-    // Default menggunakan W,X,Y,Z jika 4 var, atau A,B,C jika 3 var.
     let varLabels = numVars === 4 ? ['W', 'X', 'Y', 'Z'] : ['A', 'B', 'C'];
 
     let totalCells = Math.pow(2, numVars);
     let rows = numVars === 4 ? 4 : 2;
     let cols = 4;
 
-    // Pemetaan indeks baris dan kolom berdasarkan urutan sistem Gray Code (00, 01, 11, 10)
     const grayRow = rows === 4 ? [0, 1, 3, 2] : [0, 1];
     const grayCol = [0, 1, 3, 2];
 
-    // Struktur boks matriks tata letak K-Map desimal
     let mapLayout = [];
     let gridValues = [];
 
@@ -617,10 +614,8 @@ function hitungKMap() {
         for (let c = 0; c < cols; c++) {
             let mintermValue = 0;
             if (numVars === 4) {
-                // Gabungan bit baris (W,X) dan bit kolom (Y,Z)
                 mintermValue = (grayRow[r] << 2) | grayCol[c];
             } else {
-                // Gabungan bit baris (A) dan bit kolom (B,C)
                 mintermValue = (grayRow[r] << 2) | grayCol[c];
             }
             mapLayout[r][c] = mintermValue;
@@ -631,7 +626,6 @@ function hitungKMap() {
     // 4. PROSES ALGORITMA SOLVER BOOLEAN (Mini Quine-McCluskey Engine)
     let primeImplicants = [];
     
-    // Konversi minterm ke bentuk string biner berpasangan
     let binaryTerms = {};
     for (let i = 0; i < totalCells; i++) {
         if (minterms.includes(i)) {
@@ -639,7 +633,6 @@ function hitungKMap() {
         }
     }
 
-    // Fungsi pembantu mengecek perbedaan bit tunggal untuk penggabungan grup K-Map
     const combineGroups = (terms) => {
         let newTerms = {};
         let combined = new Set();
@@ -669,7 +662,6 @@ function hitungKMap() {
             }
         }
 
-        // Ambil term yang tidak sempat tergabung sebagai implikan utama baku
         for (let k of keys) {
             if (!combined.has(k)) {
                 primeImplicants.push(terms[k]);
@@ -678,16 +670,13 @@ function hitungKMap() {
         return newTerms;
     };
 
-    // Eksekusi iterasi penggabungan grup sel berpasangan (Grup 2, Grup 4, Grup 8)
     let currentLevelTerms = binaryTerms;
     while (Object.keys(currentLevelTerms).length > 0) {
         currentLevelTerms = combineGroups(currentLevelTerms);
     }
 
-    // Eliminasi duplikat implikan biner
     primeImplicants = [...new Set(primeImplicants)];
 
-    // Terjemahkan string biner (ex: '1-01') menjadi notasi alfabet variabel fleksibel
     let termStrings = [];
     primeImplicants.forEach(implican => {
         let str = "";
@@ -698,11 +687,10 @@ function hitungKMap() {
                 str += varLabels[b] + "'";
             }
         }
-        if (str === "") str = "1"; // Jika mencakup seluruh area sel tabel
+        if (str === "") str = "1";
         termStrings.push(str);
     });
 
-    // Menghapus term redundan tersisa (Ujung-ujung lingkaran overlap)
     let hasilSederhana = [...new Set(termStrings)].join(" + ");
     if (minterms.length === totalCells) hasilSederhana = "1";
     if (minterms.length === 0) hasilSederhana = "0";
@@ -710,7 +698,6 @@ function hitungKMap() {
     // 5. RENDER ANTARMUKA TABEL MATRIKS DINAMIS KE KANVAS HTML
     outputBox.style.display = "block";
     
-    // Label sumbu dinamis berdasarkan nama variabel terdeteksi
     let labelBaris = numVars === 4 ? `${varLabels[0]}${varLabels[1]}` : `${varLabels[0]}`;
     let labelKolom = numVars === 4 ? `${varLabels[2]}${varLabels[3]}` : `${varLabels[1]}${varLabels[2]}`;
 
@@ -733,19 +720,16 @@ function hitungKMap() {
                 <tbody>
     `;
 
-    // Array teks pendukung penanda bit baris biner
     const textRowBits = rows === 4 ? ["00", "01", "11", "10"] : ["0", "1"];
 
     for (let r = 0; r < rows; r++) {
         htmlMatriks += `<tr>`;
-        // Header Baris kiri (Nilai biner bit)
         htmlMatriks += `<td style="padding: 10px; border: 1px solid #334155; background: #1e293b; font-weight: bold; color: #38bdf8;">${textRowBits[r]}</td>`;
         
         for (let c = 0; c < cols; c++) {
             let val = gridValues[r][c];
             let cellMinterm = mapLayout[r][c];
             
-            // Efek highlight warna hijau neon/cyberpunk jika sel bernilai logika aktif (1)
             let cellStyle = val === 1 
                 ? `background: rgba(16, 185, 129, 0.15); color: #4ade80; font-weight: bold; border: 1.5px solid #10b981;` 
                 : `background: #0f172a; color: #475569; border: 1px solid #334155;`;
@@ -769,6 +753,10 @@ function hitungKMap() {
             <div style="color: #38bdf8; font-weight: bold; font-size: 13px; margin-bottom: 4px;">Hasil Formula Penyederhanaan Minimal (SOP)</div>
             <div style="font-family: monospace; color: #f8fafc; font-size: 16px; font-weight: bold; word-break: break-all;">F = ${hasilSederhana}</div>
         </div>
+
+        <div style="text-align: right; margin-top: 10px; font-size: 11.5px; color: #64748b; font-style: italic; letter-spacing: 0.3px;">
+            * Akan dikembangkan saat libur semester. Intinya bagian Fungsi Boolean sudah paham kan? 🤔
+        </div>
     `;
     
     contentBox.innerHTML = htmlMatriks;
@@ -783,6 +771,6 @@ function closeWelcomeModal() {
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
-        }, 300); // Durasi transisi pemudaran CSS 300ms
+        }, 300);
     }
 }

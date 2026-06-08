@@ -39,6 +39,51 @@
             background: #1e293b;
             color: #38bdf8;
         }
+
+        /* Gaya Khusus untuk Pop-up Modal Komik */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(15, 23, 42, 0.85); /* Backing gelap serasi dengan tema */
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #1e293b;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #38bdf8;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .close-btn {
+            color: #94a3b8;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: #ef4444;
+        }
+        .comic-img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -303,7 +348,7 @@
 
                     <div id="panel-skema-1" class="tool-box" style="display: block;">
                         <h3 style="margin-top: 0; color: #38bdf8;">Skema 1: Pembuat Kanonik dari Sel Tabel</h3>
-                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Tentukan jumlah variabel dan nama kolom terlebih dahulu untuk menyusun baris tabel kebenaran.</p>
+                        <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Tentukan jumlah variabel and nama kolom terlebih dahulu untuk menyusun baris tabel kebenaran.</p>
                         
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; align-items: flex-end;">
                             <div style="flex: 1; min-width: 150px;">
@@ -369,8 +414,51 @@
                     </div>
                 </div>
             </section>
+
+            <section id="bagian-komik" class="content-section">
+                <div class="section-card" style="text-align: center;">
+                    <h2 class="section-title-only">Komik Pembelajaran Matematika Diskrit</h2>
+                    <p class="materi-text" style="margin-bottom: 20px;">Klik tombol di bawah ini untuk melihat komik interaktif penerapan Aljabar Boolean!</p>
+                    <button id="openModalBtn" style="background: #38bdf8; color: #0f172a; padding: 12px 24px; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 15px; transition: all 0.2s;">
+                        🖼️ Buka Komik Matdis
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
+
+    <div id="comicModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h3 style="color: #38bdf8; margin-top: 0; margin-bottom: 10px;">Media Komik Aljabar Boolean</h3>
+            <img src="popupmatdis.jpg" alt="Komik Matematika Diskrit" class="comic-img">
+        </div>
+    </div>
+
+    <script>
+        // Ambil elemen modal dan tombol pembuka/penutup
+        const modal = document.getElementById("comicModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.getElementById("closeModalBtn");
+
+        // Ketika tombol "Buka Komik" diklik
+        openBtn.addEventListener("click", () => {
+            modal.style.display = "block";
+        });
+
+        // Ketika tanda silang (X) diklik
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // Ketika pengguna mengklik area luar kotak modal (background buram)
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
 
     <script>
         // --- 1. MANAJEMEN TAB SWITCH SKEMA ---
@@ -503,7 +591,7 @@
                     sopTerms.push(term);
                 } else {
                     maxterms.push(rowIndex);
-                    // POS: Variabel bernilai 1 di-NOT-kan (A') dihubungkan tanda tambah (+)
+                    // POS: Variabel bernilai 0 di-NOT-kan (A') dihubungkan tanda tambah (+)
                     let term = bits.map((bit, idx) => bit === 0 ? varNames[idx] : varNames[idx] + "'").join(' + ');
                     posTerms.push(`(${term})`);
                 }
@@ -514,7 +602,7 @@
             hasilHtml += `<p style="margin-bottom: 10px;"><strong style="color:#10b981;">Bentuk SOP Baku (Minterm):</strong><br><code style="background:#0f172a; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:4px;">${sopTerms.length > 0 ? sopTerms.join(' + ') : '0'}</code></p>`;
             hasilHtml += `<p style="margin-bottom: 20px;"><strong>Notasi Minterm (SOP):</strong> f = ∑(${minterms.join(', ') || 'tidak ada'})</p>`;
             hasilHtml += `<hr style="border:0; border-top:1px solid #334155; margin:15px 0;">`;
-            hasilHtml += `<p style="margin-bottom: 10px;"><strong style="color:#ef4444;">Bentuk POS Baku (Maxterm):</strong><br><code style="background:#0f172a; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:4px;">${posTerms.length > 0 ? posTerms.join('') : '1'}</code></p>`;
+            hasilHtml += `<p style="margin-bottom: 10px;"><strong style="color:#ie4444;">Bentuk POS Baku (Maxterm):</strong><br><code style="background:#0f172a; padding:4px 8px; border-radius:4px; display:inline-block; margin-top:4px;">${posTerms.length > 0 ? posTerms.join('') : '1'}</code></p>`;
             hasilHtml += `<p style="margin-bottom: 5px;"><strong>Notasi Maxterm (POS):</strong> f = ∏(${maxterms.join(', ') || 'tidak ada'})</p>`;
             hasilHtml += `</div>`;
 
